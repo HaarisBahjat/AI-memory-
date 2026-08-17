@@ -1,0 +1,62 @@
+# ============================================================
+# AI Wellness Longitudinal Memory System (LMS)
+# requirements.txt
+# ============================================================
+# Phase 1 dependencies — foundational libraries for:
+#   - FastAPI server + async runtime
+#   - Supabase PostgreSQL (asyncpg + SQLAlchemy 2.0)
+#   - pgvector support for Layer 3 semantic memory
+#   - Redis for Layer 1 sensory session memory
+#   - OpenAI for embeddings + LLM chat
+#   - NumPy for time-decay math
+# ============================================================
+
+# --- Web Framework & Server ---
+fastapi==0.115.0              # High-performance async Python API framework
+uvicorn[standard]==0.30.6     # ASGI server with hot-reload & WebSocket support
+
+# --- Data Validation & Settings ---
+pydantic==2.8.2               # Rust-backed ultra-fast schema validation (Phase 1–10)
+pydantic-settings==2.4.0      # .env file parsing via Pydantic BaseSettings
+
+# --- Database: PostgreSQL (Supabase) ---
+sqlalchemy==2.0.35            # Async ORM — maps Python classes to Supabase tables
+# asyncpg==0.29.0
+# ⚠️  WINDOWS INSTALL NOTE: asyncpg requires C++ compiler.
+#     If you have Anaconda, install first via:
+#         conda install -c conda-forge asyncpg -y
+#     Then run: pip install -r requirements.txt
+#     On Linux/Mac pip install works directly.
+asyncpg>=0.29.0               # High-performance async PostgreSQL driver
+pgvector==0.3.2               # SQLAlchemy/asyncpg support for pgvector vector columns (Layer 3)
+
+# --- Caching: Redis (Layer 1 Sensory Memory) ---
+redis==5.1.1                  # Full async Redis client for session buffer management
+
+# --- AI: OpenAI (Embeddings + LLM) ---
+openai==1.50.2                # OpenAI SDK: text-embedding-3-small + gpt-4o-mini
+
+# --- Math & Vector Operations ---
+numpy==2.1.1                  # Exponential time-decay scoring: S_adj = S_raw * e^(-λΔt)
+                               # Phase 7 benchmarking also uses numpy for precision/recall math
+
+# --- Async HTTP (for any external API calls in Phase 10 wearables) ---
+httpx==0.27.2                 # Async HTTP client — used in Phase 10 for Fitbit/Oura REST APIs
+
+# --- Security & Auth (Phase 2 onwards) ---
+python-jose[cryptography]==3.3.0  # JWT token creation and validation
+bcrypt>=4.1.0                     # Direct bcrypt password hashing (no passlib wrapper needed)
+python-multipart==0.0.10          # Required for FastAPI form data parsing (OAuth2 form login)
+email-validator>=2.0.0            # Required by Pydantic EmailStr field in auth schemas
+
+# --- Background Jobs (Phase 7 Nightly Consolidation) ---
+celery==5.4.0                 # Distributed task queue for nightly 02:00 UTC cron jobs
+redis[hiredis]==5.1.1         # Celery broker backend (also serves Layer 1 Sensory Memory)
+
+# --- Logging & Observability (Phase 9) ---
+structlog==24.4.0             # Structured JSON logging (used throughout all phases)
+
+# --- Testing ---
+pytest==8.3.3                 # Test runner
+pytest-asyncio==0.24.0        # Async test support for FastAPI async endpoints
+httpx==0.27.2                 # Also used by TestClient for FastAPI endpoint testing
