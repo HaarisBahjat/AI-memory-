@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment files — NEVER commit real credentials
+.env
+*.env.local
+
+# Pytest / test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# IDE / OS
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
+
+# PDF build artifacts (generated, not source)
+*.pdf
+
+# Jupyter
+.ipynb_checkpoints/
+
+# MyPy
+.mypy_cache/
