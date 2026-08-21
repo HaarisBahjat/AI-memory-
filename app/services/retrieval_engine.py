@@ -259,12 +259,16 @@ async def fetch_semantic_memories(
             category,
             created_at,
             reinforcement_count,
+            is_pinned,
             1 - (embedding <-> :query_vector::vector) AS similarity_score
         FROM semantic_memories
         WHERE user_id = :user_id
-        ORDER BY embedding <-> :query_vector::vector
+        ORDER BY is_pinned DESC, embedding <-> :query_vector::vector
         LIMIT :top_k
     """)
+    # Phase 4: ORDER BY is_pinned DESC ensures pinned memories are fetched
+    # first within the top_k window, guaranteeing they're never crowded out
+    # by a high volume of non-pinned high-similarity candidates.
 
     try:
         result = await db.execute(raw_query, {
@@ -314,29 +318,41 @@ def filter_by_decay(
     for mem in memories:
         raw_score = float(mem.get("similarity_score", 0))
         created_at = mem.get("created_at")
+        is_pinned: bool = bool(mem.get("is_pinned", False))
 
         if not isinstance(created_at, datetime):
             # Handle string timestamps from Supabase
             created_at = datetime.fromisoformat(str(created_at))
 
-        adjusted = apply_time_decay(raw_score, created_at)
+        if is_pinned:
+            # Phase 4: Pinned memories bypass time-decay entirely.
+            # They are always injected into LLM context regardless of age.
+            # S_adjusted = S_raw (decay factor = 1.0)
+            adjusted = raw_score
+            mem["decay_bypassed"] = True
+        else:
+            adjusted = apply_time_decay(raw_score, created_at)
+            mem["decay_bypassed"] = False
+
         mem["adjusted_score"] = round(adjusted, 4)
         mem["raw_score"] = round(raw_score, 4)
 
         if adjusted >= cutoff:
             scored.append(mem)
 
-    # Sort by adjusted score (highest first)
-    scored.sort(key=lambda x: x["adjusted_score"], reverse=True)
+    # Sort: pinned memories float to the top, then by adjusted score
+    scored.sort(key=lambda x: (x.get("is_pinned", False), x["adjusted_score"]), reverse=True)
 
     # Limit to max_memories for context window budget
     kept = scored[:max_memories]
 
+    pinned_count = sum(1 for m in kept if m.get("is_pinned", False))
     log.info(
         "Memory filter applied",
         total_candidates=len(memories),
         passed_threshold=len(scored),
         injected=len(kept),
+        pinned_injected=pinned_count,
         threshold=cutoff,
     )
     return kept
