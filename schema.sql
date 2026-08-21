@@ -9,6 +9,7 @@
 -- PHASE COVERAGE:
 --   Phase 1 : semantic_memories, episodes, biometrics_stream, users
 --   Phase 2 : refresh_tokens table (JWT stateless revocation)
+--   Phase 4 : is_pinned column on semantic_memories (bypass time-decay)
 --   Phase 7  : archived_at column on episodes (cold storage)
 --   Phase 9  : consolidation_logs table
 --   Phase 10 : biometrics_stream becomes the TimescaleDB-like table
@@ -176,6 +177,7 @@ CREATE TABLE IF NOT EXISTS semantic_memories (
     text                 TEXT NOT NULL,
     embedding            vector(1536),    -- OpenAI text-embedding-3-small output
     reinforcement_count  INT DEFAULT 1,   -- Incremented on deduplication hit (Phase 7)
+    is_pinned            BOOLEAN NOT NULL DEFAULT FALSE,  -- Phase 4: bypass time-decay when TRUE
     created_at           TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -194,6 +196,28 @@ CREATE INDEX IF NOT EXISTS idx_semantic_memories_user
 -- Composite index: filter by user + category (Phase 7 dedup queries)
 CREATE INDEX IF NOT EXISTS idx_semantic_memories_user_category
     ON semantic_memories(user_id, category);
+
+-- Partial index: fast retrieval of pinned memories (Phase 4)
+-- Enables the ORDER BY is_pinned DESC path to hit index without full scan
+CREATE INDEX IF NOT EXISTS idx_semantic_memories_pinned
+    ON semantic_memories(user_id, is_pinned)
+    WHERE is_pinned = TRUE;
+
+-- -------------------------------------------------------
+-- PHASE 4 MIGRATION: Add is_pinned to existing deployments
+-- -------------------------------------------------------
+-- If you ran schema.sql before Phase 4, run this once in
+-- Supabase SQL Editor to add the column to an existing table:
+--
+--   ALTER TABLE semantic_memories
+--   ADD COLUMN IF NOT EXISTS is_pinned BOOLEAN NOT NULL DEFAULT FALSE;
+--
+--   CREATE INDEX IF NOT EXISTS idx_semantic_memories_pinned
+--       ON semantic_memories(user_id, is_pinned)
+--       WHERE is_pinned = TRUE;
+--
+-- Safe to run even if the column already exists (IF NOT EXISTS).
+-- -------------------------------------------------------
 
 -- -------------------------------------------------------
 -- STEP 5: Layer 4 — Biometrics Stream Table

@@ -8,7 +8,7 @@ PURPOSE:
     Phase 1: chat, user
     Phase 2: auth (register / login / refresh / logout)
     Phase 3: session (session/active, session/end)
-    Phase 4: memories (added here when implemented)
+    Phase 4: memories (Layer 3 Semantic Memory CRUD)
     Phase 8: compliance (added here when implemented)
 
 CONNECTED TO:
@@ -17,7 +17,7 @@ CONNECTED TO:
 """
 from fastapi import APIRouter
 
-from app.api.v1 import auth, chat, session, user
+from app.api.v1 import auth, chat, memories, session, user
 
 api_router = APIRouter(prefix="/api/v1")
 
@@ -32,3 +32,6 @@ api_router.include_router(user.router, tags=["User Management"])
 
 # Phase 3: Session lifecycle (JWT-protected)
 api_router.include_router(session.router, tags=["Session Lifecycle"])
+
+# Phase 4: Layer 3 Semantic Memory CRUD (JWT-protected)
+api_router.include_router(memories.router, tags=["Semantic Memory"])
