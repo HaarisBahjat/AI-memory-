@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS episodes (
         "energyLevel": null,
         "biometrics": {}
     }'::jsonb,
+    embedding        vector(1536),
     archived_at      TIMESTAMPTZ DEFAULT NULL
     -- archived_at NULL  = active (within 90 days)
     -- archived_at SET   = cold storage (Phase 7 archival policy)
@@ -136,6 +137,13 @@ CREATE INDEX IF NOT EXISTS idx_episodes_user_time
 CREATE INDEX IF NOT EXISTS idx_episodes_active
     ON episodes(user_id, timestamp DESC)
     WHERE archived_at IS NULL;
+
+-- Phase 5: HNSW index for cosine similarity search on episode embeddings
+-- Enables sub-millisecond ANN search on Layer 2 episodic memory
+CREATE INDEX IF NOT EXISTS idx_episodes_embedding_hnsw
+    ON episodes
+    USING hnsw (embedding vector_cosine_ops)
+    WITH (m = 16, ef_construction = 64);
 
 -- -------------------------------------------------------
 -- STEP 6: Layer 3 — Semantic Memories Table (pgvector)

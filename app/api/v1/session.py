@@ -1,6 +1,6 @@
 """
 ============================================================
-app/api/v1/session.py — Session Lifecycle Endpoints (Phase 3)
+app/api/v1/session.py — Session Lifecycle Endpoints (Phase 3 + 5)
 ============================================================
 PURPOSE:
     Two JWT-protected endpoints for session state inspection
@@ -8,26 +8,16 @@ PURPOSE:
 
     GET  /api/v1/session/active
         Returns the user's current session state: TTL, message count,
-        mood delta, and whether the session is new. Useful for front-end
-        clients to display context-window usage indicators or session timers.
+        mood delta, and whether the session is new.
 
     POST /api/v1/session/end
-        Explicitly closes the user's current session. Flushes the Redis
-        message buffer and metadata, and fires a background task stub
-        (placeholder for Phase 5 Episode Synthesis). Safe to call even
-        when no session is active (idempotent).
-
-SECURITY:
-    Both endpoints require a valid Bearer token. The user_id is
-    extracted exclusively from the JWT — callers cannot close
-    another user's session.
+        Closes the session: flushes Redis buffer + metadata, then
+        fires episode_service.run_synthesis() as a non-blocking
+        FastAPI BackgroundTask (Phase 5).
 
 CONNECTED TO:
-    Phase 3 → app/services/session_lifecycle.py (all session logic)
-    Phase 3 → app/api/deps.py (get_current_user dependency)
-    Phase 5 → synthesis_stub() background task will be replaced by
-              the real episode synthesizer
-    Phase 7 → Celery will also call close_session() on nightly TTL sweep
+    Phase 3 -> app/services/session_lifecycle.py
+    Phase 5 -> app/services/episode_service.run_synthesis() (real synthesizer)
 ============================================================
 """
 import structlog
@@ -44,49 +34,14 @@ from app.schemas.session import (
     SessionStateResponse,
 )
 from app.services import session_lifecycle
+from app.services import episode_service
 
 log = structlog.get_logger(__name__)
 router = APIRouter(prefix="/session", tags=["Session Lifecycle"])
 
 
-# -------------------------------------------------------
-# Phase 5 Synthesis Stub
-# -------------------------------------------------------
-# This function will be replaced by the real episode synthesizer
-# in Phase 5. For now, it logs the session summary and returns.
-# It runs as a FastAPI BackgroundTask — non-blocking.
-# -------------------------------------------------------
-
-async def _synthesis_stub(
-    user_id: str,
-    messages: list[SessionMessage],
-    mood_drop_flag: bool,
-    reason: str,
-) -> None:
-    """
-    Phase 5 placeholder: logs the session summary that would be
-    sent to the LLM episode synthesizer.
-
-    Phase 5 will replace this with:
-        - episode_synthesizer.synthesize(user_id, messages, mood_drop_flag)
-        - which calls GPT-4o-mini with JSON Schema mode to extract metrics
-        - and writes a structured row to the `episodes` table
-
-    Args:
-        user_id       : Owner of the session
-        messages      : All flushed messages from the session buffer
-        mood_drop_flag: Whether a significant mood drop was detected
-        reason        : Why the session ended (for audit metadata)
-    """
-    log.info(
-        "Phase 5 synthesis stub invoked",
-        user_id=user_id,
-        message_count=len(messages),
-        mood_drop_flag=mood_drop_flag,
-        close_reason=reason,
-        stub_note="Replace this function with episode_synthesizer.synthesize() in Phase 5",
-    )
-    # Phase 5: await episode_synthesizer.synthesize(user_id, messages, mood_drop_flag)
+# Phase 5: _synthesis_stub replaced by episode_service.run_synthesis()
+# See app/services/episode_service.py for the full implementation.
 
 
 # -------------------------------------------------------
@@ -197,7 +152,7 @@ async def end_session(
     # Only fire synthesis if there was something to synthesize
     if messages:
         background_tasks.add_task(
-            _synthesis_stub,
+            episode_service.run_synthesis,
             user_id=user_id,
             messages=messages,
             mood_drop_flag=mood_drop_flag,

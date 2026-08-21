@@ -65,6 +65,12 @@ class Settings(BaseSettings):
     OPENAI_CHAT_TEMPERATURE: float = 0.3
 
     # -------------------------------------------------------
+    # Phase 5: Episode Synthesis
+    # -------------------------------------------------------
+    EPISODE_SYNTH_TRANSCRIPT_MAX_CHARS: int = 12000  # Truncate long sessions before LLM call
+    EPISODE_SYNTH_MAX_RETRIES: int = 2               # LLM retry attempts before fallback
+
+    # -------------------------------------------------------
     # Memory Retrieval Math
     # These drive the time-decay scoring formula:
     #   S_adjusted = S_raw * exp(-DECAY_LAMBDA * delta_days)

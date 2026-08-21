@@ -20,8 +20,9 @@ CONNECTED TO:
     Phase 10 → extracted_metrics.biometrics enriched with HRV/HR
 ============================================================
 """
-from sqlalchemy import Column, String, DateTime, Text, func
+from sqlalchemy import Column, String, DateTime, Text, func, Boolean
 from sqlalchemy.dialects.postgresql import JSONB
+from pgvector.sqlalchemy import Vector
 from app.core.database import Base
 
 
@@ -45,6 +46,7 @@ class Episode(Base):
                               "biometrics": {}  ← Phase 10 fills this
                             }
         archived_at       : NULL = active; SET = cold storage (Phase 7)
+        embedding         : 1536-dim vector of session_summary for semantic search (Phase 5)
     """
     __tablename__ = "episodes"
 
@@ -65,4 +67,5 @@ class Episode(Base):
             "biometrics": {},
         }
     )
+    embedding = Column(Vector(1536), nullable=True)   # Phase 5: 1536-dim summary vector
     archived_at = Column(DateTime(timezone=True), nullable=True, default=None)
