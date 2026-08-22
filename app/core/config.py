@@ -95,6 +95,24 @@ class Settings(BaseSettings):
     ENABLE_SAFETY_SCREENER: bool = True
 
     # -------------------------------------------------------
+    # Phase 6: Safety Triage Persistence & Alerting
+    # -------------------------------------------------------
+    SAFETY_TRIAGE_RETENTION_DAYS: int = 365          # How long triage_events are kept before archival
+    SAFETY_ALERT_CHANNEL: str = "NONE"               # "NONE" | "EMAIL" | "SLACK"
+    SAFETY_ALERT_RATE_LIMIT_MIN: int = 15            # 1 alert per user per N minutes (Redis-backed)
+    SAFETY_ALERT_REDIS_PREFIX: str = "safety:triage:alert"  # Redis key prefix for rate limiting
+    SAFETY_SESSION_HASH_ENABLED: bool = False         # Enable session_hash dedup on triage_events
+    # Email alert settings (used when SAFETY_ALERT_CHANNEL="EMAIL")
+    SAFETY_ALERT_EMAIL_FROM: str = ""
+    SAFETY_ALERT_EMAIL_TO: str = ""
+    SAFETY_ALERT_SMTP_HOST: str = "smtp.gmail.com"
+    SAFETY_ALERT_SMTP_PORT: int = 587
+    SAFETY_ALERT_SMTP_USER: str = ""
+    SAFETY_ALERT_SMTP_PASSWORD: str = ""
+    # Slack alert settings (used when SAFETY_ALERT_CHANNEL="SLACK")
+    SAFETY_ALERT_SLACK_WEBHOOK_URL: str = ""
+
+    # -------------------------------------------------------
     # Celery / Background Jobs (Phase 7)
     # -------------------------------------------------------
     CRON_CONSOLIDATION_SCHEDULE: str = "0 2 * * *"

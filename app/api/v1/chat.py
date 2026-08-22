@@ -28,9 +28,10 @@ CONNECTED TO:
     Phase 1 → Orchestrates all Phase 1 services
     Phase 2 → get_current_user guards the endpoint
     Phase 3 → session_lifecycle + sensory_service manage session state
-    Phase 5 → Episode insertion added here after LLM response
-    Phase 6 → Safety screener extended with semantic layer
-    Phase 9 → Debug context added to response for benchmarking
+    Phase 5  → Episode insertion added here after LLM response
+    Phase 6  → Safety screener replaced with triage_service.evaluate_and_store
+               (persists triage_events + dispatches Redis-rate-limited alert)
+    Phase 9  → Debug context added to response for benchmarking
 ============================================================
 """
 import structlog
@@ -42,10 +43,9 @@ from app.api.deps import get_current_user
 from app.core.config import get_settings
 from app.core.database import get_db
 from app.core.redis_client import get_redis
-from app.core.safety_triage import evaluate_clinical_safety
 from app.schemas.auth import CurrentUser
 from app.schemas.chat import ChatRequest, ChatResponse, CrisisTriageResponse
-from app.services import retrieval_engine, sensory_service, session_lifecycle
+from app.services import retrieval_engine, sensory_service, session_lifecycle, triage_service
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -110,13 +110,19 @@ async def chat(
 
     # ── STEP 1: CLINICAL SAFETY HARD OVERRIDE ──────────────────────────
     # Must happen before any DB queries or LLM calls.
+    # Phase 6: evaluate_and_store wraps the keyword screener with:
+    #   - Async DB persistence of the triage_event row
+    #   - Redis rate-limited external alert (email/Slack)
     # Crisis detection returns immediately — no session state update,
     # no RAG, no LLM. The crisis triage response is not persisted to
     # the session buffer (it would pollute the conversation context).
     if settings.ENABLE_SAFETY_SCREENER:
-        safety_result = evaluate_clinical_safety(
+        safety_result = await triage_service.evaluate_and_store(
             message=request.message,
             user_id=user_id,
+            session_id=f"sensory:{user_id}:session",
+            db=db,
+            redis=redis,
         )
         if not safety_result.is_safe:
             log.warning(
