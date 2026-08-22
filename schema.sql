@@ -282,6 +282,71 @@ CREATE TABLE IF NOT EXISTS consolidation_logs (
 );
 
 -- -------------------------------------------------------
+-- STEP 8: Phase 6 — Triage Events Table (Crisis Audit Log)
+-- -------------------------------------------------------
+-- Purpose:
+--   Each row is a persisted record of a clinical safety screener
+--   override that fired during a chat session.
+--   Used for regulatory compliance, admin monitoring, and
+--   nightly archival (Phase 7).
+--
+-- Idempotency:
+--   (user_id, session_id, crisis_type) UNIQUE prevents duplicate
+--   rows if the same session triggers the same crisis type twice.
+--   session_hash (optional) enables hash-based dedup on retry.
+--
+-- Connected to:
+--   Phase 6  → Written by triage_service.evaluate_and_store()
+--   Phase 6  → Queried by GET /triage admin endpoints
+--   Phase 7  → Nightly archival sets archived_at
+--   Phase 8  → ON DELETE CASCADE clears all records on user deletion
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS triage_events (
+    id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id      TEXT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    session_id   TEXT NOT NULL,
+    created_at   TIMESTAMPTZ DEFAULT NOW(),
+    crisis_type  TEXT NOT NULL,             -- self_harm | eating_disorder | acute_medical
+    severity     TEXT NOT NULL DEFAULT 'HIGH',
+    triggered_by TEXT,                      -- Regex pattern that matched (audit only)
+    resources    JSONB,                     -- Helpline list shown to the user
+    confidence   DOUBLE PRECISION,          -- Reserved for Phase 6 Layer B/C classifier
+    session_hash TEXT,                      -- SHA-256 dedup hash (optional, if SAFETY_SESSION_HASH_ENABLED)
+    alert_sent   BOOLEAN NOT NULL DEFAULT FALSE,
+    archived_at  TIMESTAMPTZ DEFAULT NULL   -- NULL = active; SET = archived (Phase 7)
+);
+
+-- Primary admin query: find all events for a given user
+CREATE INDEX IF NOT EXISTS idx_triage_events_user
+    ON triage_events(user_id);
+
+-- Admin dashboard: latest events first
+CREATE INDEX IF NOT EXISTS idx_triage_events_created
+    ON triage_events(created_at DESC);
+
+-- Filter by crisis type
+CREATE INDEX IF NOT EXISTS idx_triage_events_crisis_type
+    ON triage_events(crisis_type);
+
+-- Hash-based idempotency lookup
+CREATE UNIQUE INDEX IF NOT EXISTS idx_triage_events_hash
+    ON triage_events(session_hash)
+    WHERE session_hash IS NOT NULL;
+
+-- Partial index: only scan active (non-archived) triage events
+CREATE INDEX IF NOT EXISTS idx_triage_events_active
+    ON triage_events(user_id, created_at DESC)
+    WHERE archived_at IS NULL;
+
+-- -------------------------------------------------------
+-- PHASE 6 MIGRATION: Add triage_events to existing deployments
+-- -------------------------------------------------------
+-- If you ran schema.sql before Phase 6, run the CREATE TABLE above
+-- in your Supabase SQL Editor. It is idempotent (IF NOT EXISTS).
+-- All indexes above are also safe to re-run.
+-- -------------------------------------------------------
+
+-- -------------------------------------------------------
 -- VERIFICATION: List all created tables
 -- -------------------------------------------------------
 SELECT table_name FROM information_schema.tables
