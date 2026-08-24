@@ -347,6 +347,34 @@ CREATE INDEX IF NOT EXISTS idx_triage_events_active
 -- -------------------------------------------------------
 
 -- -------------------------------------------------------
+-- PHASE 7 MIGRATION: consolidation_status on episodes
+-- -------------------------------------------------------
+-- Purpose:
+--   Tracks whether a given episode has been processed by the
+--   nightly consolidation pipeline that extracts semantic facts
+--   into semantic_memories.
+--
+--   States:
+--     PENDING      → episode not yet processed (default)
+--     PROCESSING   → atomically claimed by a worker (prevents double-run)
+--     CONSOLIDATED → facts extracted successfully
+--     FAILED       → extraction failed; eligible for retry
+--
+-- Safe to run even if the column already exists (IF NOT EXISTS).
+-- -------------------------------------------------------
+ALTER TABLE episodes
+ADD COLUMN IF NOT EXISTS consolidation_status TEXT NOT NULL DEFAULT 'PENDING'
+CHECK (consolidation_status IN ('PENDING', 'PROCESSING', 'CONSOLIDATED', 'FAILED'));
+
+-- Covering index for the consolidation worker query:
+--   SELECT * FROM episodes
+--   WHERE consolidation_status = 'PENDING'
+--   FOR UPDATE SKIP LOCKED
+--   LIMIT :batch_size;
+CREATE INDEX IF NOT EXISTS idx_episodes_consolidation_status
+    ON episodes (user_id, consolidation_status);
+
+-- -------------------------------------------------------
 -- VERIFICATION: List all created tables
 -- -------------------------------------------------------
 SELECT table_name FROM information_schema.tables

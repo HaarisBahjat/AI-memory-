@@ -69,3 +69,7 @@ class Episode(Base):
     )
     embedding = Column(Vector(1536), nullable=True)   # Phase 5: 1536-dim summary vector
     archived_at = Column(DateTime(timezone=True), nullable=True, default=None)
+    # Phase 7: Batch consolidation status
+    # PENDING → PROCESSING → CONSOLIDATED | FAILED
+    # FOR UPDATE SKIP LOCKED is used to atomically claim rows without race conditions.
+    consolidation_status = Column(String, nullable=False, default="PENDING", index=True)

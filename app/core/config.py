@@ -77,7 +77,12 @@ class Settings(BaseSettings):
     # -------------------------------------------------------
     DECAY_LAMBDA: float = 0.005          # ~0.5% decay per day
     SIMILARITY_THRESHOLD: float = 0.65   # Minimum score to include in LLM context
-    DEDUP_THRESHOLD: float = 0.88        # Phase 7: update vs. create new vector
+    DEDUP_THRESHOLD: float = 0.88        # Legacy alias — prefer SEMANTIC_MEMORY_SIMILARITY_THRESHOLD
+    # Phase 7 deduplication — configurable without code change:
+    #   cosine distance ≤ threshold → reinforce existing memory
+    #   cosine distance >  threshold → create new memory
+    SEMANTIC_MEMORY_SIMILARITY_THRESHOLD: float = 0.88
+    CONSOLIDATION_BATCH_SIZE: int = 100  # Max episodes per consolidation run
     EPISODIC_ACTIVE_DAYS: int = 14       # Layer 2 retrieval window
     EPISODIC_ARCHIVE_DAYS: int = 90      # Phase 7: cold storage threshold
 
