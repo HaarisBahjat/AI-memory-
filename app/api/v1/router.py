@@ -5,13 +5,14 @@ app/api/v1/router.py — API v1 Route Aggregator
 PURPOSE:
     Registers all v1 sub-routers under the /api/v1 prefix.
 
-    Phase 1: chat, user
-    Phase 2: auth (register / login / refresh / logout)
-    Phase 3: session (session/active, session/end)
-    Phase 4: memories (Layer 3 Semantic Memory CRUD)
-    Phase 5: episodes (Layer 2 Episode list + semantic search)
-    Phase 6: triage (admin crisis triage event CRUD)
-    Phase 8: compliance (added here when implemented)
+    Phase 1 : chat, user
+    Phase 2 : auth (register / login / refresh / logout)
+    Phase 3 : session (session/active, session/end)
+    Phase 4 : memories (Layer 3 Semantic Memory CRUD)
+    Phase 5 : episodes (Layer 2 Episode list + semantic search)
+    Phase 6 : triage (admin crisis triage event CRUD)
+    Phase 7 : system (consolidation trigger + status)
+    Phase 8 : compliance (added here when implemented)
 
 CONNECTED TO:
     main.py → app.include_router(api_router)
@@ -19,7 +20,7 @@ CONNECTED TO:
 """
 from fastapi import APIRouter
 
-from app.api.v1 import auth, chat, episodes, memories, session, triage, user
+from app.api.v1 import auth, chat, episodes, memories, session, system, triage, user
 
 api_router = APIRouter(prefix="/api/v1")
 
@@ -43,3 +44,6 @@ api_router.include_router(episodes.router, tags=["Episodes"])
 
 # Phase 6: Crisis triage event admin endpoints (JWT-protected)
 api_router.include_router(triage.router, tags=["Safety Triage"])
+
+# Phase 7: System admin endpoints — consolidation trigger + status (JWT-protected)
+api_router.include_router(system.router, tags=["System Admin"])

@@ -39,6 +39,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import get_settings
 from app.schemas.memory import MemoryCategory, MemoryFilterParams, MemoryResponse
 
 log = structlog.get_logger(__name__)
@@ -506,3 +507,113 @@ async def increment_reinforcement_count(
         user_id=user_id,
         memory_id=memory_id,
     )
+
+
+# -------------------------------------------------------
+# Phase 7: Semantic Deduplication Upsert
+# -------------------------------------------------------
+
+async def upsert_semantic_fact(
+    db: AsyncSession,
+    user_id: str,
+    category: str,
+    text_content: str,
+    embedding_vector: list[float],
+) -> dict:
+    """
+    Inserts a new semantic memory or reinforces an existing one.
+
+    Called by the Phase 7 consolidation pipeline for each fact
+    extracted from a daily episode.
+
+    Deduplication logic:
+        1. Search semantic_memories for the closest existing row
+           owned by the same user in the same category.
+        2. pgvector's `<=>` operator returns cosine DISTANCE
+           (0 = identical, 2 = maximally different).
+        3. Convert threshold:  similarity = 1 − distance
+           So: distance ≤ (1 − threshold) means "similar enough".
+        4. If closest match is within threshold → reinforce it.
+        5. Otherwise → insert a new memory row.
+
+    Args:
+        db               : Async database session
+        user_id          : Memory owner's UUID
+        category         : Must be one of the MemoryCategory enum values
+        text_content     : Natural-language fact extracted by LLM
+        embedding_vector : 1536-dim float vector from OpenAI
+
+    Returns:
+        dict with keys:
+            action   : "reinforced" | "created"
+            memory_id: UUID of the affected row
+    """
+    settings = get_settings()
+    threshold = settings.SEMANTIC_MEMORY_SIMILARITY_THRESHOLD
+    # pgvector <=> returns cosine DISTANCE; convert to distance threshold
+    distance_threshold = 1.0 - threshold
+
+    vector_str = "[" + ",".join(str(v) for v in embedding_vector) + "]"
+
+    # ── Step 1: Find the nearest neighbour in the same user + category scope ──
+    nearest = await db.execute(
+        text("""
+            SELECT id, (embedding <=> :emb::vector) AS distance
+            FROM semantic_memories
+            WHERE user_id = :uid AND category = :cat
+            ORDER BY distance ASC
+            LIMIT 1
+        """),
+        {"emb": vector_str, "uid": user_id, "cat": category},
+    )
+    row = nearest.mappings().first()
+
+    # ── Step 2: Reinforce if close enough, otherwise insert ──────────────────
+    if row is not None and row["distance"] <= distance_threshold:
+        # Near-duplicate: reinforce the existing memory
+        memory_id = row["id"]
+        await db.execute(
+            text("""
+                UPDATE semantic_memories
+                SET
+                    reinforcement_count = reinforcement_count + 1,
+                    created_at = NOW()
+                WHERE id = :mid AND user_id = :uid
+            """),
+            {"mid": memory_id, "uid": user_id},
+        )
+        log.info(
+            "Memory reinforced (deduplication hit)",
+            user_id=user_id,
+            memory_id=memory_id,
+            category=category,
+            distance=round(row["distance"], 4),
+            threshold=distance_threshold,
+        )
+        return {"action": "reinforced", "memory_id": memory_id}
+    else:
+        # No close match: insert a new memory row
+        new_id = str(uuid.uuid4())
+        await db.execute(
+            text("""
+                INSERT INTO semantic_memories
+                    (id, user_id, category, text, embedding, reinforcement_count, is_pinned)
+                VALUES
+                    (:id, :uid, :cat, :txt, :emb::vector, 1, FALSE)
+            """),
+            {
+                "id": new_id,
+                "uid": user_id,
+                "cat": category,
+                "txt": text_content,
+                "emb": vector_str,
+            },
+        )
+        log.info(
+            "Memory created (new semantic fact)",
+            user_id=user_id,
+            memory_id=new_id,
+            category=category,
+            text_preview=text_content[:80],
+        )
+        return {"action": "created", "memory_id": new_id}
