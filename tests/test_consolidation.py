@@ -1,4 +1,4 @@
-﻿"""
+"""
 ============================================================
 tests/test_consolidation.py -- Phase 7 Consolidation Tests
 ============================================================
@@ -95,11 +95,11 @@ class TestUpsertSemanticFact:
 
         db = AsyncMock()
         existing_id = str(uuid.uuid4())
-        # distance = 0.05 << threshold (1 - 0.88 = 0.12) => reinforce
+        # cos_dist = 0.05 <= SEMANTIC_MEMORY_MAX_COSINE_DISTANCE (0.12) => reinforce
         nearest_result = MagicMock()
         nearest_result.mappings.return_value.first.return_value = {
             "id": existing_id,
-            "distance": 0.05,
+            "cos_dist": 0.05,
         }
         db.execute = AsyncMock(return_value=nearest_result)
 
@@ -113,7 +113,7 @@ class TestUpsertSemanticFact:
 
         assert result["action"] == "reinforced"
         assert result["memory_id"] == existing_id
-        # Should have made 2 execute calls: SELECT + UPDATE
+        # Should have made 2 execute calls: SELECT + UPDATE (by ID only)
         assert db.execute.call_count == 2
 
     @pytest.mark.asyncio
@@ -125,11 +125,11 @@ class TestUpsertSemanticFact:
         from app.services.memory_service import upsert_semantic_fact
 
         db = AsyncMock()
-        # distance = 0.25 > threshold (1 - 0.88 = 0.12) => create
+        # cos_dist = 0.25 > SEMANTIC_MEMORY_MAX_COSINE_DISTANCE (0.12) => create
         nearest_result = MagicMock()
         nearest_result.mappings.return_value.first.return_value = {
             "id": str(uuid.uuid4()),
-            "distance": 0.25,
+            "cos_dist": 0.25,
         }
         db.execute = AsyncMock(return_value=nearest_result)
 

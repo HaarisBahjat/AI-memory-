@@ -531,15 +531,27 @@ async def upsert_semantic_fact(
            owned by the same user in the same category.
         2. pgvector's `<=>` operator returns cosine DISTANCE
            (0 = identical, 2 = maximally different).
-        3. Convert threshold:  similarity = 1 − distance
-           So: distance ≤ (1 − threshold) means "similar enough".
-        4. If closest match is within threshold → reinforce it.
+           Lower distance means more similar. This is NOT a
+           similarity score — do NOT compare it as similarity >= X.
+        3. Compare: distance <= settings.SEMANTIC_MEMORY_MAX_COSINE_DISTANCE
+           (default 0.12, which corresponds to cosine similarity ~0.88)
+        4. If within threshold → reinforce ONLY that specific row (by ID).
         5. Otherwise → insert a new memory row.
 
+    Fix notes (Phase 7 patch):
+        - Fix #1: distance is compared directly (not converted) against
+          SEMANTIC_MEMORY_MAX_COSINE_DISTANCE. Old code converted 0.88
+          similarity → 0.12 distance threshold, which was correct math
+          but the config name was confusingly called "SIMILARITY_THRESHOLD".
+          Now the config name matches the actual comparison value.
+        - Fix #2: UPDATE targets a specific row by `id = :best_id`, not
+          by re-running the distance condition across multiple rows.
+          This prevents accidentally reinforcing more than one memory.
+
     Args:
-        db               : Async database session
+        db               : Async database session (must be within begin() block)
         user_id          : Memory owner's UUID
-        category         : Must be one of the MemoryCategory enum values
+        category         : Must be one of the ALLOWED_CATEGORIES enum values
         text_content     : Natural-language fact extracted by LLM
         embedding_vector : 1536-dim float vector from OpenAI
 
@@ -549,50 +561,53 @@ async def upsert_semantic_fact(
             memory_id: UUID of the affected row
     """
     settings = get_settings()
-    threshold = settings.SEMANTIC_MEMORY_SIMILARITY_THRESHOLD
-    # pgvector <=> returns cosine DISTANCE; convert to distance threshold
-    distance_threshold = 1.0 - threshold
+    max_distance = settings.SEMANTIC_MEMORY_MAX_COSINE_DISTANCE  # e.g. 0.12
 
     vector_str = "[" + ",".join(str(v) for v in embedding_vector) + "]"
 
-    # ── Step 1: Find the nearest neighbour in the same user + category scope ──
+    # ── Step 1: Find the single nearest neighbour (same user + same category) ──
+    # Alias the distance column unambiguously as "cos_dist".
+    # ORDER BY cos_dist ASC ensures the CLOSEST memory is returned first.
     nearest = await db.execute(
         text("""
-            SELECT id, (embedding <=> :emb::vector) AS distance
+            SELECT id, (embedding <=> :emb::vector) AS cos_dist
             FROM semantic_memories
             WHERE user_id = :uid AND category = :cat
-            ORDER BY distance ASC
+            ORDER BY cos_dist ASC
             LIMIT 1
         """),
         {"emb": vector_str, "uid": user_id, "cat": category},
     )
     row = nearest.mappings().first()
 
-    # ── Step 2: Reinforce if close enough, otherwise insert ──────────────────
-    if row is not None and row["distance"] <= distance_threshold:
-        # Near-duplicate: reinforce the existing memory
-        memory_id = row["id"]
+    # ── Step 2: Decision: reinforce the best match OR insert a new row ────────
+    if row is not None and row["cos_dist"] <= max_distance:
+        # Near-duplicate found.
+        # Fix #2: target the specific best-match row by its primary key.
+        # Never update by distance condition (could accidentally hit multiple rows).
+        best_id = row["id"]
         await db.execute(
             text("""
                 UPDATE semantic_memories
                 SET
                     reinforcement_count = reinforcement_count + 1,
                     created_at = NOW()
-                WHERE id = :mid AND user_id = :uid
+                WHERE id = :best_id AND user_id = :uid
             """),
-            {"mid": memory_id, "uid": user_id},
+            {"best_id": best_id, "uid": user_id},
         )
         log.info(
             "Memory reinforced (deduplication hit)",
             user_id=user_id,
-            memory_id=memory_id,
+            memory_id=best_id,
             category=category,
-            distance=round(row["distance"], 4),
-            threshold=distance_threshold,
+            cos_dist=round(row["cos_dist"], 4),
+            max_distance=max_distance,
         )
-        return {"action": "reinforced", "memory_id": memory_id}
+        return {"action": "reinforced", "memory_id": best_id}
+
     else:
-        # No close match: insert a new memory row
+        # No close enough match — insert a new semantic memory row.
         new_id = str(uuid.uuid4())
         await db.execute(
             text("""

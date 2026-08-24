@@ -4,33 +4,44 @@ app/services/consolidation_service.py -- Phase 7 Batch Memory Consolidation
 ============================================================
 PURPOSE:
     Processes daily Episodes and extracts durable, long-term
-    semantic facts (triggers, coping mechanisms, baselines,
-    symptoms, milestones, preferences, goals, patterns) into
-    the `semantic_memories` table.
+    semantic facts into the semantic_memories table.
 
-    This service is NEVER called per chat session. It is
-    designed to be triggered by an external scheduler (cron,
-    GitHub Actions, APScheduler, etc.) via:
-
+    Triggered by an external scheduler via:
         POST /api/v1/system/consolidate
 
-ARCHITECTURE:
-    1. Fetch PENDING episodes (batch of N, via FOR UPDATE SKIP LOCKED)
-    2. Mark each as PROCESSING (atomic claim -- prevents double-run)
-    3. Call LLM with strict JSON schema to extract durable facts
-    4. For each fact: embed + upsert via memory_service.upsert_semantic_fact
-    5. On success -> CONSOLIDATED | On any error -> FAILED (retry later)
+ARCHITECTURE (two-transaction design -- Fix #3):
+    Transaction 1  (short, minimal lock time):
+        SELECT PENDING episodes FOR UPDATE SKIP LOCKED
+        UPDATE status -> PROCESSING
+        COMMIT                        <-- lock released here
 
-WHY BATCH CONSOLIDATION (not per-session)?
-    A single session message like "I am stressed about my exam"
-    does not represent a durable long-term pattern. Batch processing
-    allows the LLM to see multiple sessions worth of context and
-    extract only facts that appear stable and meaningful over time.
+    Long work outside any DB lock:
+        Call LLM  (10-30 seconds)
+        Call OpenAI embedding API
+        All CPU/network work
+
+    Transaction 2 (per-episode, fully atomic -- Fix #5):
+        BEGIN
+          Upsert all extracted facts into semantic_memories
+          UPDATE episode status -> CONSOLIDATED
+        COMMIT
+        -- If ANY step fails: ROLLBACK
+        --   -> episode marked FAILED (no partial memories written)
+
+WHY TWO TRANSACTIONS?
+    Holding a DB row lock during a 10-30 second LLM API call is
+    dangerous in production:
+      - Blocks other DB connections from accessing those rows
+      - Holds a DB connection open for the entire LLM call duration
+      - Under high load, this can exhaust the connection pool
+    By releasing the PROCESSING lock after the claim transaction commits,
+    other queries can see the PROCESSING status and skip those rows cleanly.
 
 CONCURRENT SAFETY:
-    FOR UPDATE SKIP LOCKED ensures that even if multiple workers
-    hit the endpoint simultaneously, each episode is processed
-    exactly once. The PROCESSING state acts as a distributed lock.
+    FOR UPDATE SKIP LOCKED: if Worker B sees a row already locked by
+    Worker A during the claim transaction, it skips it. After Worker A
+    commits PROCESSING, Worker B's own query won't select it (status
+    is no longer PENDING). So each episode is processed exactly once.
 
 CONNECTED TO:
     Phase 5  -> episodes table (source)
@@ -78,7 +89,7 @@ ALLOWED_CATEGORIES = frozenset({
 _EXTRACTION_SYSTEM_PROMPT = """\
 You are a clinical memory extraction assistant.
 
-You will be given a summary of a user's wellness session.
+You will be given a summary of a user wellness session.
 
 Your task is to extract DURABLE, LONG-TERM semantic facts about the user.
 
@@ -154,7 +165,7 @@ async def _extract_facts_from_summary(session_summary: str) -> list:
             raw = response.choices[0].message.content
             parsed = json.loads(raw)
 
-            # The LLM may return either a bare list or {"facts": [...]}
+            # The LLM may return a bare list or {"facts": [...]}
             if isinstance(parsed, list):
                 facts = parsed
             elif isinstance(parsed, dict):
@@ -167,7 +178,7 @@ async def _extract_facts_from_summary(session_summary: str) -> list:
             else:
                 facts = []
 
-            # Validate and filter: only allow known categories + non-empty content
+            # Validate: only allow known categories + non-empty content
             valid_facts = []
             for f in facts:
                 if not isinstance(f, dict):
@@ -186,20 +197,30 @@ async def _extract_facts_from_summary(session_summary: str) -> list:
             return valid_facts
 
         except json.JSONDecodeError as e:
-            log.warning(
-                "Fact extraction JSON parse error",
-                attempt=attempt + 1,
-                error=str(e),
-            )
+            log.warning("Fact extraction JSON parse error", attempt=attempt + 1, error=str(e))
         except Exception as e:
-            log.error(
-                "Fact extraction LLM error",
-                attempt=attempt + 1,
-                error=str(e),
-            )
+            log.error("Fact extraction LLM error", attempt=attempt + 1, error=str(e))
 
     log.error("Fact extraction failed after 2 attempts; returning empty list")
     return []
+
+
+# -------------------------------------------------------
+# Episode finalisation helpers
+# -------------------------------------------------------
+
+async def _mark_episode(episode_id: str, status: str) -> None:
+    """
+    Opens a fresh DB session and updates a single episode's status.
+    Used after long external calls (LLM, embeddings) where we no longer
+    hold any existing session or transaction open.
+    """
+    async with AsyncSessionLocal() as db:
+        await db.execute(
+            text("UPDATE episodes SET consolidation_status = :s WHERE id = :id"),
+            {"s": status, "id": episode_id},
+        )
+        await db.commit()
 
 
 # -------------------------------------------------------
@@ -210,23 +231,34 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
     """
     Top-level consolidation batch runner.
 
-    Processes up to settings.CONSOLIDATION_BATCH_SIZE PENDING
-    episodes per call. Each episode is:
-      1. Atomically claimed (PENDING -> PROCESSING) via FOR UPDATE SKIP LOCKED
-      2. LLM-extracted for durable semantic facts
-      3. Each fact is embedded and upserted via memory_service
-      4. Marked CONSOLIDATED on success, FAILED on error
+    Two-transaction design (Fix #3):
+    ─────────────────────────────────
+    Transaction 1 (short, minimal lock time):
+        SELECT PENDING FOR UPDATE SKIP LOCKED → lock rows
+        UPDATE status = PROCESSING
+        COMMIT                    ← DB lock fully released here
+
+    Long work (outside any lock):
+        LLM call per episode
+        OpenAI embedding API call
+
+    Transaction 2 (per episode, Fix #5):
+        BEGIN
+          Upsert all facts into semantic_memories
+          UPDATE episode status = CONSOLIDATED
+        COMMIT  ← if any step fails: ROLLBACK, then mark FAILED
 
     Args:
-        db : Optional AsyncSession. If None, a fresh session is created.
+        db : Optional AsyncSession. If None, a fresh session is created
+             and closed by this function.
 
     Returns:
         dict with summary stats:
-            processed    : Number of episodes attempted
-            consolidated : Number successfully consolidated
-            failed       : Number that failed
-            created      : Total new memory rows created
-            reinforced   : Total existing memory rows reinforced
+            processed    : Episodes attempted
+            consolidated : Episodes successfully completed
+            failed       : Episodes that errored
+            created      : New memory rows inserted
+            reinforced   : Existing memory rows reinforced
     """
     t_start = time.perf_counter()
     stats = {
@@ -237,17 +269,17 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
         "reinforced": 0,
     }
 
-    log.info(
-        "Consolidation batch started",
-        batch_size=settings.CONSOLIDATION_BATCH_SIZE,
-    )
+    log.info("Consolidation batch started", batch_size=settings.CONSOLIDATION_BATCH_SIZE)
 
     owns_session = db is None
     if owns_session:
         db = AsyncSessionLocal()
 
     try:
-        # Step 1: Atomically claim PENDING episodes
+        # ── Transaction 1: Claim episodes atomically ──────────────────────────
+        # FOR UPDATE SKIP LOCKED: Worker B will skip rows already locked by
+        # Worker A. After this commit, rows show PROCESSING status so no
+        # subsequent query will pick them up again.
         result = await db.execute(
             text("""
                 SELECT id, user_id, session_summary
@@ -265,8 +297,8 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
             log.info("No pending episodes to consolidate")
             return stats
 
-        # Mark all fetched episodes as PROCESSING
         episode_ids = [e["id"] for e in episodes]
+
         await db.execute(
             text("""
                 UPDATE episodes
@@ -276,10 +308,11 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
             {"ids": episode_ids},
         )
         await db.commit()
+        # ── DB lock fully released here. LLM calls happen AFTER this point. ──
 
         log.info("Episodes claimed for processing", count=len(episodes))
 
-        # Step 2: Process each episode individually
+        # ── Process each episode with its own independent transaction ─────────
         for episode in episodes:
             stats["processed"] += 1
             episode_id = episode["id"]
@@ -287,37 +320,33 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
             session_summary = episode["session_summary"]
 
             try:
-                # 2a. Extract durable facts via LLM
+                # Step A: LLM extraction (outside any DB lock/transaction)
                 facts = await _extract_facts_from_summary(session_summary)
 
                 if not facts:
+                    # LLM found nothing durable -- still counts as success
                     log.info(
-                        "No durable facts found; marking consolidated",
+                        "No durable facts extracted; marking consolidated",
                         episode_id=episode_id,
                         user_id=user_id,
                     )
-                    async with AsyncSessionLocal() as inner_db:
-                        await inner_db.execute(
-                            text(
-                                "UPDATE episodes SET consolidation_status = 'CONSOLIDATED' "
-                                "WHERE id = :id"
-                            ),
-                            {"id": episode_id},
-                        )
-                        await inner_db.commit()
+                    await _mark_episode(episode_id, "CONSOLIDATED")
                     stats["consolidated"] += 1
                     continue
 
-                # 2b. Batch-embed all facts in one OpenAI call
+                # Step B: Batch-embed all facts in a single OpenAI API call
                 contents = [f["content"] for f in facts]
                 vectors = await embed_batch(contents)
 
-                # 2c. Upsert each fact (deduplicated) + mark CONSOLIDATED
+                # Step C: Transaction 2 -- upsert facts + mark CONSOLIDATED
+                # Fix #5: all DB writes for this episode are inside one
+                # BEGIN/COMMIT. If ANY upsert fails, ROLLBACK ensures no
+                # partial memories are written and the episode is marked FAILED.
                 episode_created = 0
                 episode_reinforced = 0
 
                 async with AsyncSessionLocal() as inner_db:
-                    async with inner_db.begin():
+                    async with inner_db.begin():  # auto-ROLLBACK on exception
                         for fact, vector in zip(facts, vectors):
                             result = await upsert_semantic_fact(
                                 db=inner_db,
@@ -331,7 +360,8 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
                             else:
                                 episode_reinforced += 1
 
-                        # Mark episode CONSOLIDATED inside same transaction
+                        # Mark CONSOLIDATED inside the same transaction so
+                        # the status change and memory writes are atomic.
                         await inner_db.execute(
                             text(
                                 "UPDATE episodes SET consolidation_status = 'CONSOLIDATED' "
@@ -339,6 +369,7 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
                             ),
                             {"id": episode_id},
                         )
+                    # inner_db.begin() context manager commits here
 
                 stats["consolidated"] += 1
                 stats["created"] += episode_created
@@ -354,6 +385,9 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
                 )
 
             except Exception as e:
+                # Fix #5: If Transaction 2 raised (auto-rolled back by begin()),
+                # no partial memories exist in the DB.
+                # Mark this episode FAILED so it can be retried later.
                 log.error(
                     "Episode consolidation failed; marking FAILED",
                     episode_id=episode_id,
@@ -361,15 +395,7 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
                     error=str(e),
                 )
                 try:
-                    async with AsyncSessionLocal() as err_db:
-                        await err_db.execute(
-                            text(
-                                "UPDATE episodes SET consolidation_status = 'FAILED' "
-                                "WHERE id = :id"
-                            ),
-                            {"id": episode_id},
-                        )
-                        await err_db.commit()
+                    await _mark_episode(episode_id, "FAILED")
                 except Exception as inner_e:
                     log.error(
                         "Could not mark episode as FAILED",

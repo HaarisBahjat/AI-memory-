@@ -77,11 +77,12 @@ class Settings(BaseSettings):
     # -------------------------------------------------------
     DECAY_LAMBDA: float = 0.005          # ~0.5% decay per day
     SIMILARITY_THRESHOLD: float = 0.65   # Minimum score to include in LLM context
-    DEDUP_THRESHOLD: float = 0.88        # Legacy alias — prefer SEMANTIC_MEMORY_SIMILARITY_THRESHOLD
-    # Phase 7 deduplication — configurable without code change:
-    #   cosine distance ≤ threshold → reinforce existing memory
-    #   cosine distance >  threshold → create new memory
-    SEMANTIC_MEMORY_SIMILARITY_THRESHOLD: float = 0.88
+    DEDUP_THRESHOLD: float = 0.88        # Legacy alias — prefer SEMANTIC_MEMORY_MAX_COSINE_DISTANCE
+    # Phase 7 deduplication — pgvector <=> returns cosine DISTANCE (lower = more similar).
+    # A cosine similarity of 0.88 corresponds to a cosine distance of 0.12.
+    # So:  distance <= MAX_COSINE_DISTANCE  ↔  similarity >= 0.88
+    # Configurable via .env without code change.
+    SEMANTIC_MEMORY_MAX_COSINE_DISTANCE: float = 0.12  # 1 - 0.88
     CONSOLIDATION_BATCH_SIZE: int = 100  # Max episodes per consolidation run
     EPISODIC_ACTIVE_DAYS: int = 14       # Layer 2 retrieval window
     EPISODIC_ARCHIVE_DAYS: int = 90      # Phase 7: cold storage threshold
