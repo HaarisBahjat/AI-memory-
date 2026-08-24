@@ -88,6 +88,26 @@ class Settings(BaseSettings):
     EPISODIC_ARCHIVE_DAYS: int = 90      # Phase 7: cold storage threshold
 
     # -------------------------------------------------------
+    # Temporal GraphRAG (Phase 7.5 — Graph Engine)
+    # -------------------------------------------------------
+    # Entry-point vector search (how many entity nodes to seed traversal)
+    GRAPH_SEED_TOP_K: int = 3             # top-k seed nodes via pgvector similarity
+    # Recursive CTE traversal depth (1 = direct neighbours only, 2 = friends-of-friends)
+    GRAPH_MAX_DEPTH: int = 2
+    # Only traverse edges whose valid_from is within this window
+    GRAPH_TIME_WINDOW_DAYS: int = 90      # matches episodic archive horizon
+    # Max paths returned from the traversal before ranking/pruning
+    GRAPH_MAX_PATHS: int = 20
+    # Minimum edge weight to follow during traversal (prunes noisy/weak edges)
+    GRAPH_MIN_EDGE_WEIGHT: float = 0.3
+    # Minimum node-level similarity for entity resolution (merge near-duplicate entities)
+    GRAPH_ENTITY_MERGE_DISTANCE: float = 0.10   # cosine distance <= 0.10 (sim >= 0.90)
+    # Performance targets (ms) — used by Phase 9 benchmark suite for regression alerts
+    GRAPH_SEED_SEARCH_TARGET_MS: int = 30
+    GRAPH_TRAVERSAL_TARGET_MS: int = 50
+    GRAPH_TOTAL_TARGET_MS: int = 100
+
+    # -------------------------------------------------------
     # Security & Auth (Phase 2)
     # -------------------------------------------------------
     JWT_SECRET: str = "change-this-in-production"

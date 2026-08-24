@@ -1,4 +1,4 @@
-﻿"""
+"""
 ============================================================
 app/services/consolidation_service.py -- Phase 7 Batch Memory Consolidation
 ============================================================
@@ -63,6 +63,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import get_settings
 from app.core.database import AsyncSessionLocal
 from app.services.embedding_service import embed_batch
+from app.services.graph_service import update_knowledge_graph
 from app.services.memory_service import upsert_semantic_fact
 
 log = structlog.get_logger(__name__)
@@ -359,6 +360,16 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
                                 episode_created += 1
                             else:
                                 episode_reinforced += 1
+
+                        # Phase 7.5: Also update the Temporal Knowledge Graph.
+                        # Called inside the SAME transaction so graph writes
+                        # and memory writes succeed or fail atomically.
+                        await update_knowledge_graph(
+                            db=inner_db,
+                            user_id=user_id,
+                            session_summary=session_summary,
+                            episode_id=episode_id,
+                        )
 
                         # Mark CONSOLIDATED inside the same transaction so
                         # the status change and memory writes are atomic.

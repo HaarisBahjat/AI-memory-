@@ -62,6 +62,7 @@ import structlog
 from app.core.config import get_settings
 from app.schemas.chat import SessionMessage
 from app.services import sensory_service, embedding_service
+from app.services.temporal_graph_engine import retrieve_graph_context
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -366,6 +367,7 @@ def assemble_system_prompt(
     session_messages: list[SessionMessage],
     episodes: list[dict],
     semantic_memories: list[dict],
+    graph_context: str = "",
 ) -> str:
     """
     Constructs the structured LLM system prompt by combining
@@ -436,9 +438,17 @@ def assemble_system_prompt(
     else:
         memory_text = "(No long-term memory facts retrieved)"
 
+    # Layer 4: Temporal Knowledge Graph (Causal & Relational Context)
+    graph_section = ""
+    if graph_context:
+        graph_section = f"""
+--- CAUSAL KNOWLEDGE GRAPH (Layer 4: Temporal Relationships) ---
+{graph_context}
+"""
+
     prompt = f"""You are a compassionate AI wellness companion. You are speaking with a user who has been sharing their mental and physical health journey with you over time.
 
-You have access to three layers of context about this user:
+You have access to four layers of context about this user:
 
 --- RECENT CONVERSATION (Layer 1: Active Session) ---
 {session_text}
@@ -448,15 +458,16 @@ You have access to three layers of context about this user:
 
 --- LONG-TERM MEMORY FACTS (Layer 3: Verified Patterns) ---
 {memory_text}
-
+{graph_section}
 --- YOUR INSTRUCTIONS ---
 1. Respond with genuine empathy and warmth, as a trusted wellness companion.
 2. Reference specific patterns from the long-term memory facts when relevant (e.g., "I know you tend to feel more anxious before evaluations...").
-3. Keep responses concise, actionable, and grounded in the provided context.
-4. NEVER fabricate health data, diagnoses, or facts not present in the context above.
-5. NEVER provide medical diagnoses or prescription recommendations.
-6. If the user shows signs of crisis or self-harm, immediately refer to emergency resources.
-7. Celebrate progress and milestones visible in the episode timeline.
+3. When the causal knowledge graph is present, use it proactively to anticipate downstream effects (e.g., if the user mentions their exam trigger, warn them about the insomnia pattern it historically causes).
+4. Keep responses concise, actionable, and grounded in the provided context.
+5. NEVER fabricate health data, diagnoses, or facts not present in the context above.
+6. NEVER provide medical diagnoses or prescription recommendations.
+7. If the user shows signs of crisis or self-harm, immediately refer to emergency resources.
+8. Celebrate progress and milestones visible in the episode timeline.
 """
     return prompt
 
@@ -495,20 +506,23 @@ async def run_hybrid_rag_pipeline(
     # ── Step 1: Vectorize incoming message ─────────────────────────
     query_vector = await embedding_service.embed_text(message)
 
-    # ── Step 2: Parallel fetch across all three layers ─────────────
-    # asyncio.gather() runs all three fetches concurrently,
-    # reducing total retrieval latency from ~900ms to ~300ms.
-    session_msgs, episodes, raw_semantic = await asyncio.gather(
+    # ── Step 2: Parallel fetch across all four layers ──────────────
+    # asyncio.gather() runs all four fetches concurrently.
+    # Graph retrieval target: < 100ms total (seed < 30ms + traversal < 50ms)
+    session_msgs, episodes, raw_semantic, graph_context = await asyncio.gather(
         sensory_service.get_active_session(redis, user_id),
         fetch_episodic_context(db, user_id),
         fetch_semantic_memories(db, user_id, query_vector),
+        retrieve_graph_context(db, user_id, query_vector),
     )
 
     # ── Step 3: Time-decay scoring + threshold filtering ────────────
     filtered_memories = filter_by_decay(raw_semantic)
 
     # ── Step 4: Assemble system prompt ─────────────────────────────
-    system_prompt = assemble_system_prompt(session_msgs, episodes, filtered_memories)
+    system_prompt = assemble_system_prompt(
+        session_msgs, episodes, filtered_memories, graph_context
+    )
 
     # ── Step 5: LLM Call (gpt-4o-mini) ─────────────────────────────
     client = embedding_service.get_openai_client()
@@ -551,5 +565,6 @@ async def run_hybrid_rag_pipeline(
             "layer2_episodes": len(episodes),
             "layer3_candidates": len(raw_semantic),
             "layer3_after_decay": len(filtered_memories),
+            "layer4_graph_paths": len(graph_context.splitlines()) if graph_context else 0,
         }
     }

@@ -375,6 +375,118 @@ CREATE INDEX IF NOT EXISTS idx_episodes_consolidation_status
     ON episodes (user_id, consolidation_status);
 
 -- -------------------------------------------------------
+-- PHASE 7.5 MIGRATION: Temporal GraphRAG Schema
+-- -------------------------------------------------------
+-- Adds two tables that form the Temporal Knowledge Graph:
+--
+--   knowledge_nodes   : Named entities extracted from episodes
+--                       (triggers, coping mechanisms, symptoms, etc.)
+--   knowledge_edges   : Directed, time-bounded relationships between
+--                       entities (TRIGGERS, ALLEVIATES, FOLLOWED_BY …)
+--
+-- Run this once in your Supabase SQL Editor.
+-- All statements are idempotent (IF NOT EXISTS / IF NOT EXISTS).
+-- -------------------------------------------------------
+
+-- ── Table 1: Knowledge Nodes ────────────────────────────────────────────────
+-- Represents a named entity observed in the user's sessions.
+--
+-- entity_type values (strict enum):
+--   TRIGGER          : Something that precipitates a negative state
+--   COPING_MECHANISM : Strategy that helps manage a state
+--   SYMPTOM          : Recurring physical/psychological symptom
+--   PERSON           : People mentioned (therapist, family, colleagues)
+--   ACTIVITY         : Activities mentioned (gym, journalling, walks)
+--   BASELINE         : Stable background facts (diagnosis, medication)
+--   GOAL             : Something the user is working towards
+--   EVENT            : One-off significant events (graduation, breakup)
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS knowledge_nodes (
+    id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id           TEXT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    name              TEXT NOT NULL,            -- Canonical entity name (e.g. "Exam Stress")
+    entity_type       TEXT NOT NULL CHECK (
+                          entity_type IN (
+                              'TRIGGER', 'COPING_MECHANISM', 'SYMPTOM',
+                              'PERSON', 'ACTIVITY', 'BASELINE', 'GOAL', 'EVENT'
+                          )
+                      ),
+    description       TEXT,                     -- Optional longer description
+    embedding         vector(1536),             -- Embedding of: name + " " + description
+    first_observed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_observed_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    mention_count     INT NOT NULL DEFAULT 1,   -- Incremented on each reinforcement
+    properties        JSONB NOT NULL DEFAULT '{}'::jsonb
+);
+
+-- Primary lookup: find node by user + exact name
+CREATE UNIQUE INDEX IF NOT EXISTS idx_knodes_user_name
+    ON knowledge_nodes (user_id, name);
+
+-- Filter nodes by type for admin / memory inspector
+CREATE INDEX IF NOT EXISTS idx_knodes_user_type
+    ON knowledge_nodes (user_id, entity_type);
+
+-- HNSW index for sub-30ms entity resolution and seed search
+-- cosine distance operator: <=>
+CREATE INDEX IF NOT EXISTS idx_knodes_hnsw_cosine
+    ON knowledge_nodes USING hnsw (embedding vector_cosine_ops)
+    WITH (m = 16, ef_construction = 64);
+
+
+-- ── Table 2: Knowledge Edges ────────────────────────────────────────────────
+-- Represents a directed, time-bounded relationship between two nodes.
+--
+-- relation_type values (strict enum):
+--   TRIGGERS         : Source entity causes / precipitates target
+--   ALLEVIATES       : Source entity reduces / helps target
+--   WORSENS          : Source entity amplifies target
+--   FOLLOWED_BY      : Source entity temporally precedes target
+--   SUPERSEDES       : Source relation replaces older relation (coping upgrade)
+--   ASSOCIATED_WITH  : Co-occurrence / correlation (direction less clear)
+--   PART_OF          : Target is a component / aspect of source
+--   REDUCED          : Source entity decreased / improved target
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS knowledge_edges (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id         TEXT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    source_node_id  UUID NOT NULL REFERENCES knowledge_nodes(id) ON DELETE CASCADE,
+    target_node_id  UUID NOT NULL REFERENCES knowledge_nodes(id) ON DELETE CASCADE,
+    relation_type   TEXT NOT NULL CHECK (
+                        relation_type IN (
+                            'TRIGGERS', 'ALLEVIATES', 'WORSENS', 'FOLLOWED_BY',
+                            'SUPERSEDES', 'ASSOCIATED_WITH', 'PART_OF', 'REDUCED'
+                        )
+                    ),
+    weight          FLOAT NOT NULL DEFAULT 1.0 CHECK (weight >= 0.0 AND weight <= 1.0),
+    valid_from      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    valid_to        TIMESTAMPTZ,               -- NULL = currently active / ongoing
+    episode_id      UUID REFERENCES episodes(id) ON DELETE SET NULL,
+    evidence        TEXT,                      -- Supporting sentence from session summary
+    observation_count INT NOT NULL DEFAULT 1  -- Incremented each time this edge is re-observed
+);
+
+-- Primary traversal index: walk outgoing edges from a node within time window
+CREATE INDEX IF NOT EXISTS idx_kedges_src_validity
+    ON knowledge_edges (user_id, source_node_id, valid_from DESC)
+    WHERE valid_to IS NULL;                    -- Partial index: only active edges
+
+-- Reverse traversal index: find what edges arrive at a target node
+CREATE INDEX IF NOT EXISTS idx_kedges_tgt
+    ON knowledge_edges (user_id, target_node_id);
+
+-- Relation type filter (for analytics / admin dashboard)
+CREATE INDEX IF NOT EXISTS idx_kedges_relation_type
+    ON knowledge_edges (user_id, relation_type);
+
+
+-- ── Migration note ──────────────────────────────────────────────────────────
+-- The nightly consolidation_service.py now also populates these tables.
+-- No manual data migration of existing episodes is required —
+-- the first consolidation run after this migration will begin building the graph.
+-- -----------------------------------------------------------------------
+
+-- -------------------------------------------------------
 -- VERIFICATION: List all created tables
 -- -------------------------------------------------------
 SELECT table_name FROM information_schema.tables
