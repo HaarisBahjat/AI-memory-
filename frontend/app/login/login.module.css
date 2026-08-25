@@ -1,0 +1,15 @@
+.page{display:flex;min-height:100vh}
+.visual{flex:1;position:relative;background:var(--bg-surface);overflow:hidden;display:flex;align-items:center;justify-content:center;padding:48px}
+.orb1{position:absolute;top:-120px;left:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(124,111,247,.35) 0%,transparent 70%);pointer-events:none}
+.orb2{position:absolute;bottom:-100px;right:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(180,126,255,.2) 0%,transparent 70%);pointer-events:none}
+.visualContent{position:relative;z-index:1}
+.stats{display:flex;gap:32px;margin-top:40px}
+.stat{display:flex;flex-direction:column;gap:4px}
+.statVal{font-size:22px;font-weight:700;color:var(--accent)}
+.statLbl{font-size:12px;color:var(--text-muted);letter-spacing:.03em}
+.formSide{width:480px;display:flex;align-items:center;justify-content:center;padding:48px}
+.formCard{width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px}
+.form{display:flex;flex-direction:column;gap:20px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:13px;font-weight:600;color:var(--text-secondary)}
+.errorBox{background:var(--danger-subtle);border:1px solid rgba(248,113,113,.25);border-radius:var(--radius-md);padding:12px 16px;font-size:13px;color:var(--danger)}

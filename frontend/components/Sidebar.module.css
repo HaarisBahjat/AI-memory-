@@ -1,0 +1,9 @@
+.sidebar{width:220px;min-height:100vh;background:var(--bg-surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 16px;gap:8px;position:fixed;top:0;left:0}
+.logo{display:flex;flex-direction:column;gap:2px;padding:0 8px 24px}
+.logoSub{font-size:11px;color:var(--text-muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.navItem{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius-md);color:var(--text-secondary);font-size:14px;font-weight:500;transition:all var(--ease-fast);text-decoration:none}
+.navItem:hover{background:var(--bg-card);color:var(--text-primary)}
+.navIcon{font-size:18px;width:24px;text-align:center}
+.active{background:var(--accent-subtle);color:var(--accent);border:1px solid var(--border-accent)}
+.logout{margin-top:auto;width:100%;justify-content:center}
