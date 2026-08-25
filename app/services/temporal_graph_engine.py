@@ -1,4 +1,4 @@
-﻿"""
+"""
 ============================================================
 app/services/temporal_graph_engine.py -- Phase 7.5 Temporal Graph Retrieval
 ============================================================
@@ -85,23 +85,31 @@ async def find_seed_nodes(
     top_k = settings.GRAPH_SEED_TOP_K
     vec_str = "[" + ",".join(str(v) for v in query_vector) + "]"
 
-    result = await db.execute(
-        text("""
-            SELECT
-                id,
-                name,
-                entity_type,
-                mention_count,
-                (embedding <=> :emb::vector) AS cos_dist
-            FROM knowledge_nodes
-            WHERE user_id = :uid
-            ORDER BY cos_dist ASC
-            LIMIT :top_k
-        """),
-        {"emb": vec_str, "uid": user_id, "top_k": top_k},
-    )
-    rows = result.mappings().all()
-    seeds = [dict(r) for r in rows]
+    try:
+        result = await db.execute(
+            text("""
+                SELECT
+                    id,
+                    name,
+                    entity_type,
+                    mention_count,
+                    (embedding <=> :emb::vector) AS cos_dist
+                FROM knowledge_nodes
+                WHERE user_id = :uid
+                ORDER BY cos_dist ASC
+                LIMIT :top_k
+            """),
+            {"emb": vec_str, "uid": user_id, "top_k": top_k},
+        )
+        rows = result.mappings().all()
+        seeds = [dict(r) for r in rows]
+    except Exception as e:
+        log.error(
+            "Seed node search failed; skipping graph retrieval",
+            user_id=user_id,
+            error=str(e),
+        )
+        return []
 
     elapsed_ms = round((time.perf_counter() - t0) * 1000, 2)
     target_ms = settings.GRAPH_SEED_SEARCH_TARGET_MS

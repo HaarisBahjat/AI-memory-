@@ -1,4 +1,4 @@
-﻿"""
+"""
 ============================================================
 app/services/graph_service.py -- Phase 7.5 Temporal Graph Builder
 ============================================================
@@ -169,7 +169,13 @@ async def extract_triples(session_summary: str) -> list[dict]:
                 tgt = t.get("target", {})
                 rel = str(t.get("relation", "")).strip().upper()
                 evidence = str(t.get("evidence", "")).strip()[:120]
-                weight = float(t.get("weight", 0.7))
+                weight_raw = t.get("weight", 0.7)
+                # Guard: LLM may return a non-numeric value (e.g. "high").
+                # Use a safe cast with fallback to 0.7 instead of bare float().
+                try:
+                    weight = float(weight_raw)
+                except (TypeError, ValueError):
+                    weight = 0.7
 
                 src_name = str(src.get("name", "")).strip()[:100]
                 src_type = str(src.get("entity_type", "")).strip().upper()
@@ -387,7 +393,7 @@ async def upsert_edge(
             old_weight=row["weight"],
             new_weight=blended_weight,
         )
-        return edge_id
+        return edge_id, "reinforced"
 
     # Insert new edge
     edge_id = str(uuid.uuid4())
@@ -419,7 +425,7 @@ async def upsert_edge(
         source_node_id=source_node_id,
         target_node_id=target_node_id,
     )
-    return edge_id
+    return edge_id, "created"
 
 
 # -------------------------------------------------------
@@ -482,6 +488,12 @@ async def update_knowledge_graph(
                 entity_map[key] = ent
 
     entity_keys = list(entity_map.keys())
+
+    # Guard: if entity_map is empty (all triples invalid), skip embedding
+    if not entity_keys:
+        log.info("No valid entities to embed", user_id=user_id)
+        return stats
+
     entity_names = [entity_map[k]["name"] for k in entity_keys]
     vectors = await embed_batch(entity_names)
 
@@ -516,7 +528,7 @@ async def update_knowledge_graph(
         if not src_id or not tgt_id:
             continue
 
-        edge_id = await upsert_edge(
+        edge_id, action = await upsert_edge(
             db=db,
             user_id=user_id,
             source_node_id=src_id,
@@ -526,7 +538,10 @@ async def update_knowledge_graph(
             evidence=triple["evidence"],
             episode_id=episode_id,
         )
-        stats["edges_created"] += 1
+        if action == "created":
+            stats["edges_created"] += 1
+        else:
+            stats["edges_reinforced"] += 1
 
     log.info(
         "Knowledge graph updated for episode",

@@ -1,4 +1,4 @@
-﻿"""
+"""
 ============================================================
 tests/test_temporal_graph.py -- Phase 7.5 Temporal GraphRAG Tests
 ============================================================
@@ -217,7 +217,7 @@ class TestUpsertEdge:
         empty.mappings.return_value.first.return_value = None
         db.execute = AsyncMock(return_value=empty)
 
-        edge_id = await upsert_edge(
+        edge_id, action = await upsert_edge(
             db=db,
             user_id="user-001",
             source_node_id=str(uuid.uuid4()),
@@ -228,6 +228,7 @@ class TestUpsertEdge:
         )
 
         assert edge_id is not None
+        assert action == "created"
         assert db.execute.call_count == 2  # SELECT + INSERT
 
     @pytest.mark.asyncio
@@ -245,7 +246,7 @@ class TestUpsertEdge:
         }
         db.execute = AsyncMock(return_value=found)
 
-        edge_id = await upsert_edge(
+        edge_id, action = await upsert_edge(
             db=db,
             user_id="user-001",
             source_node_id=str(uuid.uuid4()),
@@ -256,6 +257,7 @@ class TestUpsertEdge:
         )
 
         assert edge_id == existing_id
+        assert action == "reinforced"
         assert db.execute.call_count == 2  # SELECT + UPDATE
 
 
@@ -445,3 +447,208 @@ class TestAssembleSystemPromptWithGraph:
         )
 
         assert "CAUSAL KNOWLEDGE GRAPH" not in result
+
+
+# -------------------------------------------------------
+# 9. weight coercion -- non-numeric LLM weight fallback
+# -------------------------------------------------------
+
+class TestWeightCoercion:
+
+    @pytest.mark.asyncio
+    async def test_non_numeric_weight_falls_back_to_default(self):
+        """When LLM returns weight='high' (string), it safely falls back to 0.7."""
+        from app.services.graph_service import extract_triples
+
+        mock_response = MagicMock()
+        mock_response.choices[0].message.content = '''
+        [
+          {
+            "source": {"name": "Work Deadline", "entity_type": "TRIGGER"},
+            "relation": "TRIGGERS",
+            "target": {"name": "Anxiety", "entity_type": "SYMPTOM"},
+            "evidence": "work causes anxiety",
+            "weight": "high"
+          }
+        ]
+        '''
+        with patch("app.services.graph_service.AsyncOpenAI") as mock_cls:
+            mock_client = AsyncMock()
+            mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
+            mock_cls.return_value = mock_client
+
+            triples = await extract_triples("Work deadline caused anxiety.")
+
+        # Triple should be accepted with fallback weight 0.7
+        assert len(triples) == 1
+        assert triples[0]["weight"] == 0.7
+
+
+# -------------------------------------------------------
+# 10. upsert_edge action tuple -- correct action strings
+# -------------------------------------------------------
+
+class TestUpsertEdgeActions:
+
+    @pytest.mark.asyncio
+    async def test_returns_created_action_for_new_edge(self):
+        """upsert_edge returns ('id', 'created') when inserting a new edge."""
+        from app.services.graph_service import upsert_edge
+
+        db = AsyncMock()
+        empty = MagicMock()
+        empty.mappings.return_value.first.return_value = None
+        db.execute = AsyncMock(return_value=empty)
+
+        edge_id, action = await upsert_edge(
+            db=db,
+            user_id="user-001",
+            source_node_id=str(uuid.uuid4()),
+            target_node_id=str(uuid.uuid4()),
+            relation_type="ALLEVIATES",
+            weight=0.75,
+            evidence="walking helped",
+        )
+
+        assert action == "created"
+        assert edge_id is not None
+
+    @pytest.mark.asyncio
+    async def test_returns_reinforced_action_for_existing_edge(self):
+        """upsert_edge returns ('id', 'reinforced') when reinforcing an existing edge."""
+        from app.services.graph_service import upsert_edge
+
+        db = AsyncMock()
+        existing_id = str(uuid.uuid4())
+        found = MagicMock()
+        found.mappings.return_value.first.return_value = {
+            "id": existing_id,
+            "weight": 0.60,
+            "observation_count": 2,
+        }
+        db.execute = AsyncMock(return_value=found)
+
+        edge_id, action = await upsert_edge(
+            db=db,
+            user_id="user-001",
+            source_node_id=str(uuid.uuid4()),
+            target_node_id=str(uuid.uuid4()),
+            relation_type="ALLEVIATES",
+            weight=0.80,
+            evidence="walking helped again",
+        )
+
+        assert action == "reinforced"
+        assert edge_id == existing_id
+
+
+# -------------------------------------------------------
+# 11. find_seed_nodes DB failure -- must not crash chat
+# -------------------------------------------------------
+
+class TestFindSeedNodesFailure:
+
+    @pytest.mark.asyncio
+    async def test_db_failure_returns_empty_list(self):
+        """If the pgvector seed query raises, find_seed_nodes returns [] (not raise)."""
+        from app.services.temporal_graph_engine import find_seed_nodes
+
+        db = AsyncMock()
+        db.execute = AsyncMock(side_effect=Exception("pgvector index not found"))
+
+        result = await find_seed_nodes(db, "user-001", [0.1] * 1536)
+        assert result == []
+
+
+# -------------------------------------------------------
+# 12. traverse_temporal_subgraph DB failure -- must not crash chat
+# -------------------------------------------------------
+
+class TestTraverseTemporalSubgraphFailure:
+
+    @pytest.mark.asyncio
+    async def test_db_failure_returns_empty_list(self):
+        """If the Recursive CTE raises, traverse returns [] (not raise)."""
+        from app.services.temporal_graph_engine import traverse_temporal_subgraph
+
+        db = AsyncMock()
+        db.execute = AsyncMock(side_effect=Exception("recursive CTE depth exceeded"))
+
+        result = await traverse_temporal_subgraph(db, "user-001", [str(uuid.uuid4())])
+        assert result == []
+
+
+# -------------------------------------------------------
+# 13. update_knowledge_graph -- stats accuracy
+# -------------------------------------------------------
+
+class TestUpdateKnowledgeGraphStats:
+
+    @pytest.mark.asyncio
+    async def test_edges_reinforced_stat_counted_correctly(self):
+        """When an existing edge is reinforced, edges_reinforced increments (not edges_created)."""
+        from app.services import graph_service
+
+        # Patch extract_triples to return one triple
+        async def mock_extract(summary):
+            return [{
+                "source": {"name": "Exam Stress", "entity_type": "TRIGGER"},
+                "relation": "TRIGGERS",
+                "target": {"name": "Insomnia", "entity_type": "SYMPTOM"},
+                "evidence": "evidence text",
+                "weight": 0.85,
+            }]
+
+        # Patch embed_batch to return dummy vectors
+        async def mock_embed_batch(names):
+            return [[0.1] * 1536 for _ in names]
+
+        # Patch resolve_node to return fixed IDs
+        src_id = str(uuid.uuid4())
+        tgt_id = str(uuid.uuid4())
+        call_count = [0]
+        async def mock_resolve_node(**kwargs):
+            call_count[0] += 1
+            return src_id if call_count[0] == 1 else tgt_id
+
+        # Patch upsert_edge to simulate reinforcement
+        async def mock_upsert_edge(**kwargs):
+            return str(uuid.uuid4()), "reinforced"
+
+        db = AsyncMock()
+
+        with patch.object(graph_service, "extract_triples", mock_extract), \
+             patch.object(graph_service, "embed_batch", mock_embed_batch), \
+             patch.object(graph_service, "resolve_node", mock_resolve_node), \
+             patch.object(graph_service, "upsert_edge", mock_upsert_edge):
+
+            stats = await graph_service.update_knowledge_graph(
+                db=db,
+                user_id="user-001",
+                session_summary="Exam stress causes insomnia.",
+            )
+
+        assert stats["edges_created"] == 0
+        assert stats["edges_reinforced"] == 1
+        assert stats["triples_extracted"] == 1
+
+    @pytest.mark.asyncio
+    async def test_empty_entity_map_returns_early(self):
+        """When all triples produce no entities (empty entity_map), returns empty stats."""
+        from app.services import graph_service
+
+        # Return a triple but with invalid names so entity_map stays empty
+        async def mock_extract(summary):
+            return []  # LLM returned nothing valid
+
+        db = AsyncMock()
+
+        with patch.object(graph_service, "extract_triples", mock_extract):
+            stats = await graph_service.update_knowledge_graph(
+                db=db,
+                user_id="user-001",
+                session_summary="Valid summary.",
+            )
+
+        assert stats["triples_extracted"] == 0
+        assert stats["edges_created"] == 0
