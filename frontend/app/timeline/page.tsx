@@ -13,10 +13,22 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 export default function TimelinePage() {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState<string|null>(null);
   const [expanded, setExpanded] = useState<string|null>(null);
 
   useEffect(()=>{
-    episodesApi.list().then((r: any)=>{ setEpisodes(r.data.episodes??[]); setLoading(false); }).catch(()=>setLoading(false));
+    episodesApi.list()
+      .then((r: any)=>{ setEpisodes(r.data.items??[]); setLoading(false); })
+      .catch((err: any)=>{
+        const status = err?.response?.status;
+        console.warn("Timeline fetch failed:", err);
+        if (status === 401) {
+          window.location.href = "/login";
+        } else {
+          setError(`Failed to load timeline (HTTP ${status ?? "network error"})`);
+        }
+        setLoading(false);
+      });
   },[]);
 
   const sorted = [...episodes].sort((a,b)=>new Date(a.timestamp).getTime()-new Date(b.timestamp).getTime());
@@ -51,6 +63,12 @@ export default function TimelinePage() {
           <h1 style={{fontSize:"28px",fontWeight:800}}>Health Timeline</h1>
           <p className="text-muted" style={{fontSize:"14px",marginTop:"6px"}}>{episodes.length} sessions recorded</p>
         </div>
+
+        {error && (
+          <div style={{background:"var(--danger-subtle,#3a1a1a)",border:"1px solid var(--danger,#f66)",borderRadius:"10px",padding:"16px 20px",marginBottom:"20px",color:"var(--danger,#f66)"}}>
+            ⚠️ {error} — <a href="/login" style={{color:"inherit",textDecoration:"underline"}}>Re-login</a> if your session expired.
+          </div>
+        )}
 
         {loading ? (
           <div style={{display:"flex",justifyContent:"center",padding:"60px"}}><span className="spinner" style={{width:"32px",height:"32px"}} /></div>

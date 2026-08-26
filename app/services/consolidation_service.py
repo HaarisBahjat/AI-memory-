@@ -129,7 +129,7 @@ Output format (strict JSON only, no prose):
 # -------------------------------------------------------
 
 def _get_openai_client() -> AsyncOpenAI:
-    return AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+    return AsyncOpenAI(api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_BASE_URL)
 
 
 async def _extract_facts_from_summary(session_summary: str) -> list:
@@ -148,10 +148,14 @@ async def _extract_facts_from_summary(session_summary: str) -> list:
 
     for attempt in range(2):
         try:
+            if attempt == 0:
+                model = settings.OPENAI_CHAT_MODEL
+            else:
+                model = settings.OPENAI_CHAT_MODEL_FALLBACK or settings.OPENAI_CHAT_MODEL
+
             response = await client.chat.completions.create(
-                model=settings.OPENAI_CHAT_MODEL,
+                model=model,
                 temperature=0.1,
-                response_format={"type": "json_object"},
                 messages=[
                     {"role": "system", "content": _EXTRACTION_SYSTEM_PROMPT},
                     {
@@ -163,7 +167,15 @@ async def _extract_facts_from_summary(session_summary: str) -> list:
                     },
                 ],
             )
-            raw = response.choices[0].message.content
+            raw = response.choices[0].message.content or ""
+            # Strip markdown if present
+            raw = raw.strip()
+            if raw.startswith("```"):
+                raw = raw.split("\n", 1)[-1]
+            if raw.endswith("```"):
+                raw = raw.rsplit("```", 1)[0]
+            raw = raw.strip()
+
             parsed = json.loads(raw)
 
             # The LLM may return a bare list or {"facts": [...]}

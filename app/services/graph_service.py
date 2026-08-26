@@ -125,7 +125,7 @@ async def extract_triples(session_summary: str) -> list[dict]:
     if not session_summary or not session_summary.strip():
         return []
 
-    client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+    client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_BASE_URL)
 
     for attempt in range(2):
         try:
@@ -252,7 +252,7 @@ async def resolve_node(
     # Search for nearest existing node in the same type bucket
     nearest = await db.execute(
         text("""
-            SELECT id, name, (embedding <=> :emb::vector) AS cos_dist
+            SELECT id, name, (embedding <=> CAST(:emb AS vector)) AS cos_dist
             FROM knowledge_nodes
             WHERE user_id = :uid AND entity_type = :etype
             ORDER BY cos_dist ASC
@@ -292,7 +292,7 @@ async def resolve_node(
                 (id, user_id, name, entity_type, embedding, description,
                  first_observed_at, last_observed_at, mention_count)
             VALUES
-                (:id, :uid, :name, :etype, :emb::vector, NULL, NOW(), NOW(), 1)
+                (:id, :uid, :name, :etype, CAST(:emb AS vector), NULL, NOW(), NOW(), 1)
         """),
         {
             "id": node_id,

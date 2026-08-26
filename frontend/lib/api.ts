@@ -61,7 +61,7 @@ export const chatApi = {
 
 export const memoriesApi = {
   list: () => api.get<{ memories: Memory[] }>("/memories"),
-  pin: (id: string, pinned: boolean) => api.patch(`/memories/${id}`, { is_pinned: pinned }),
+  pin: (id: string, pinned: boolean) => api.patch(`/memories/${id}/pin`, { pinned: pinned }),
   delete: (id: string) => api.delete(`/memories/${id}`),
 };
 
@@ -71,7 +71,7 @@ export const episodesApi = {
 
 export const adminApi = {
   triggerConsolidate: () => api.post("/system/consolidate"),
-  consolidateStatus: () => api.get("/system/consolidate/status"),
+  consolidateStatus: () => api.get("/system/consolidation/status"),
   triageEvents: () => api.get("/triage"),
 };
 

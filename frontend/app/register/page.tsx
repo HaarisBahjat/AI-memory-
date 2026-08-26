@@ -24,7 +24,9 @@ export default function RegisterPage() {
       login(data.access_token, data.refresh_token);
       router.push("/chat");
     } catch (err: any) {
-      setError(err.response?.data?.detail ?? "Registration failed.");
+      const detail = err.response?.data?.detail;
+      const msg = Array.isArray(detail) ? detail[0].msg : (typeof detail === 'string' ? detail : "Registration failed.");
+      setError(msg);
     } finally { setLoading(false); }
   };
 

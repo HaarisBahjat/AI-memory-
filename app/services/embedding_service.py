@@ -43,7 +43,7 @@ def get_openai_client() -> AsyncOpenAI:
     """Returns (or initializes) the shared AsyncOpenAI client."""
     global _openai_client
     if _openai_client is None:
-        _openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+        _openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_BASE_URL)
     return _openai_client
 
 
@@ -81,6 +81,7 @@ async def embed_text(text: str) -> list[float]:
             model=settings.OPENAI_EMBEDDING_MODEL,  # text-embedding-3-small
             input=text,
             encoding_format="float",  # Return raw floats (not base64)
+            dimensions=1536,
         )
         vector = response.data[0].embedding
         log.debug(
@@ -126,9 +127,11 @@ async def embed_batch(texts: list[str]) -> list[list[float]]:
             model=settings.OPENAI_EMBEDDING_MODEL,
             input=cleaned,
             encoding_format="float",
+            dimensions=1536,
         )
         # Sort by index to maintain input order (API may reorder)
-        sorted_data = sorted(response.data, key=lambda x: x.index)
+        # Gemini API shim sometimes returns None for index, so fallback to 0
+        sorted_data = sorted(response.data, key=lambda x: x.index if getattr(x, "index", None) is not None else 0)
         vectors = [item.embedding for item in sorted_data]
 
         log.debug("Batch embedded", count=len(vectors))

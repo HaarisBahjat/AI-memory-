@@ -16,7 +16,7 @@ export default function MemoriesPage() {
   const [search, setSearch]     = useState("");
 
   useEffect(() => {
-    memoriesApi.list().then((r: any) => { setMemories(r.data.memories ?? []); setLoading(false); }).catch(()=>setLoading(false));
+    memoriesApi.list().then((r: any) => { setMemories(r.data.items ?? []); setLoading(false); }).catch(()=>setLoading(false));
   }, []);
 
   const toggle = async (m: Memory) => {

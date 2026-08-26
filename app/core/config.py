@@ -60,8 +60,10 @@ class Settings(BaseSettings):
     # OpenAI
     # -------------------------------------------------------
     OPENAI_API_KEY: str
+    OPENAI_BASE_URL: str = "https://api.openai.com/v1"
     OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
     OPENAI_CHAT_MODEL: str = "gpt-4o-mini"
+    OPENAI_CHAT_MODEL_FALLBACK: str = ""   # If set, retried on 429 rate-limit errors
     OPENAI_CHAT_TEMPERATURE: float = 0.3
 
     # -------------------------------------------------------

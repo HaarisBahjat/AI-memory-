@@ -570,7 +570,7 @@ async def upsert_semantic_fact(
     # ORDER BY cos_dist ASC ensures the CLOSEST memory is returned first.
     nearest = await db.execute(
         text("""
-            SELECT id, (embedding <=> :emb::vector) AS cos_dist
+            SELECT id, (embedding <=> CAST(:emb AS vector)) AS cos_dist
             FROM semantic_memories
             WHERE user_id = :uid AND category = :cat
             ORDER BY cos_dist ASC
@@ -614,7 +614,7 @@ async def upsert_semantic_fact(
                 INSERT INTO semantic_memories
                     (id, user_id, category, text, embedding, reinforcement_count, is_pinned)
                 VALUES
-                    (:id, :uid, :cat, :txt, :emb::vector, 1, FALSE)
+                    (:id, :uid, :cat, :txt, CAST(:emb AS vector), 1, FALSE)
             """),
             {
                 "id": new_id,

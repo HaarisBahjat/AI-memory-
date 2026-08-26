@@ -177,6 +177,9 @@ class MemoryPinRequest(BaseModel):
 # Response Schemas
 # -------------------------------------------------------
 
+from uuid import UUID
+from pydantic import field_validator
+
 class MemoryResponse(BaseModel):
     """
     Full memory representation returned by all read/write endpoints.
@@ -188,8 +191,8 @@ class MemoryResponse(BaseModel):
     results (fetch_semantic_memories); it is None for
     direct CRUD responses.
     """
-    id: str = Field(description="UUID primary key.")
-    user_id: str = Field(description="Owner's user_id (UUID).")
+    id: str | UUID = Field(description="UUID primary key.")
+    user_id: str | UUID = Field(description="Owner's user_id (UUID).")
     category: MemoryCategory = Field(description="Memory category.")
     text: str = Field(description="Human-readable fact text.")
     reinforcement_count: int = Field(
@@ -201,6 +204,11 @@ class MemoryResponse(BaseModel):
     created_at: datetime = Field(
         description="Creation timestamp. Reset on reinforcement (Phase 7).",
     )
+
+    @field_validator("id", "user_id", mode="before")
+    @classmethod
+    def cast_uuid_to_str(cls, v):
+        return str(v)
 
     model_config = {"from_attributes": True}
 

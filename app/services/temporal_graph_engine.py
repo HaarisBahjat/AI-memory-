@@ -93,7 +93,7 @@ async def find_seed_nodes(
                     name,
                     entity_type,
                     mention_count,
-                    (embedding <=> :emb::vector) AS cos_dist
+                    (embedding <=> CAST(:emb AS vector)) AS cos_dist
                 FROM knowledge_nodes
                 WHERE user_id = :uid
                 ORDER BY cos_dist ASC

@@ -32,14 +32,22 @@ class ExtractedMetrics(BaseModel):
     model_config = {"extra": "ignore"}
 
 
+from uuid import UUID
+from pydantic import field_validator
+
 class EpisodeResponse(BaseModel):
-    id: str = Field(..., description="Episode UUID")
-    user_id: str
+    id: str | UUID = Field(..., description="Episode UUID")
+    user_id: str | UUID
     timestamp: datetime
     session_summary: str
     extracted_metrics: ExtractedMetrics
     archived_at: Optional[datetime] = None
     similarity: Optional[float] = Field(None, ge=0.0, le=1.0)
+
+    @field_validator("id", "user_id", mode="before")
+    @classmethod
+    def cast_uuid_to_str(cls, v):
+        return str(v)
 
     model_config = {"from_attributes": True}
 

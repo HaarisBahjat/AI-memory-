@@ -22,7 +22,9 @@ export default function LoginPage() {
       login(data.access_token, data.refresh_token);
       router.push("/chat");
     } catch (err: any) {
-      setError(err.response?.data?.detail ?? "Login failed. Check credentials.");
+      const detail = err.response?.data?.detail;
+      const msg = Array.isArray(detail) ? detail[0].msg : (typeof detail === 'string' ? detail : "Login failed. Check credentials.");
+      setError(msg);
     } finally { setLoading(false); }
   };
 

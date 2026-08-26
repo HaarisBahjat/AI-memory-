@@ -524,17 +524,39 @@ async def run_hybrid_rag_pipeline(
         session_msgs, episodes, filtered_memories, graph_context
     )
 
-    # ── Step 5: LLM Call (gpt-4o-mini) ─────────────────────────────
+    # ── Step 5: LLM Call (with automatic fallback on 429 rate-limit) ───
     client = embedding_service.get_openai_client()
-    chat_response = await client.chat.completions.create(
-        model=settings.OPENAI_CHAT_MODEL,
+    chat_payload = dict(
         temperature=settings.OPENAI_CHAT_TEMPERATURE,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": message},
         ],
-        max_tokens=500,
     )
+
+    try:
+        chat_response = await client.chat.completions.create(
+            model=settings.OPENAI_CHAT_MODEL,
+            **chat_payload,
+        )
+        model_used = settings.OPENAI_CHAT_MODEL
+    except Exception as primary_err:
+        # Detect 429 / RESOURCE_EXHAUSTED from Gemini free tier quota
+        is_rate_limit = "429" in str(primary_err) or "RESOURCE_EXHAUSTED" in str(primary_err)
+        fallback = settings.OPENAI_CHAT_MODEL_FALLBACK
+        if is_rate_limit and fallback:
+            log.warning(
+                "Primary model rate-limited, falling back",
+                primary_model=settings.OPENAI_CHAT_MODEL,
+                fallback_model=fallback,
+            )
+            chat_response = await client.chat.completions.create(
+                model=fallback,
+                **chat_payload,
+            )
+            model_used = fallback
+        else:
+            raise
 
     response_text = chat_response.choices[0].message.content
     elapsed_ms = round((time.time() - start_time) * 1000)
@@ -542,6 +564,7 @@ async def run_hybrid_rag_pipeline(
     log.info(
         "RAG pipeline complete",
         user_id=user_id,
+        model_used=model_used,
         memories_used=len(filtered_memories),
         episodes_used=len(episodes),
         session_msgs=len(session_msgs),

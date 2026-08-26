@@ -51,7 +51,7 @@ _openai_client: Optional[AsyncOpenAI] = None
 def _get_openai_client() -> AsyncOpenAI:
     global _openai_client
     if _openai_client is None:
-        _openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+        _openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_BASE_URL)
     return _openai_client
 
 
@@ -140,17 +140,32 @@ async def synthesize_episode(
     # Try the LLM call; on any failure return a safe fallback
     for attempt in range(2):  # Try twice before giving up
         try:
+            # Determine which model to try on this attempt
+            if attempt == 0:
+                model = settings.OPENAI_CHAT_MODEL
+            else:
+                model = settings.OPENAI_CHAT_MODEL_FALLBACK or settings.OPENAI_CHAT_MODEL
+
             response = await client.chat.completions.create(
-                model=settings.OPENAI_CHAT_MODEL,
+                model=model,
                 temperature=0.2,  # Low temperature for consistent JSON extraction
-                response_format={"type": "json_object"},
+                # NOTE: response_format=json_object is NOT supported by Gemini OpenAI compat.
+                # Instead, the prompt explicitly instructs the model to output only JSON.
                 messages=[
                     {"role": "system", "content": _SYNTHESIS_SYSTEM_PROMPT},
                     {"role": "user", "content": f"TRANSCRIPT:\n{transcript_text}"},
                 ],
             )
-            raw_json = response.choices[0].message.content
-            parsed = json.loads(raw_json)
+            raw = response.choices[0].message.content or ""
+            # Strip accidental markdown code fences Gemini sometimes adds
+            raw = raw.strip()
+            if raw.startswith("```"):
+                raw = raw.split("\n", 1)[-1]  # drop opening fence line
+            if raw.endswith("```"):
+                raw = raw.rsplit("```", 1)[0]
+            raw = raw.strip()
+
+            parsed = json.loads(raw)
 
             summary = parsed.get("session_summary", "").strip()
             if not summary:
@@ -171,13 +186,17 @@ async def synthesize_episode(
             log.warning(
                 "Episode synthesis JSON parse error",
                 attempt=attempt + 1,
+                model=model,
                 error=str(e),
             )
         except Exception as e:
+            is_rate_limit = "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)
             log.error(
                 "Episode synthesis LLM call failed",
                 attempt=attempt + 1,
-                error=str(e),
+                model=model,
+                rate_limited=is_rate_limit,
+                error=str(e)[:200],
             )
 
     # Both attempts failed: return a minimal safe fallback
@@ -292,7 +311,7 @@ async def run_synthesis(
         return
 
     try:
-        # Step 1: LLM call (safe — never raises)
+        # Step 1: LLM call (safe Â— never raises)
         session_summary, metrics = await synthesize_episode(messages)
 
         # Step 2: DB write in a self-managed session
@@ -322,7 +341,7 @@ async def run_synthesis(
                     error=str(e),
                 )
     except Exception as e:
-        # Absolute safety net — this function must never propagate exceptions
+        # Absolute safety net Â— this function must never propagate exceptions
         log.error(
             "Unexpected error in episode synthesis",
             user_id=user_id,

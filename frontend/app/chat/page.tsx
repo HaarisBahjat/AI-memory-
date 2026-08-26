@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import { chatApi } from "@/lib/api";
 import styles from "./chat.module.css";
@@ -7,17 +8,29 @@ import styles from "./chat.module.css";
 interface Message { role: "user"|"assistant"; content: string; timestamp: Date; graphPaths?: number; memoriesUsed?: number; }
 
 export default function ChatPage() {
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: "Hi! I'm your AI wellness companion. How are you feeling today?", timestamp: new Date() }
   ]);
   const [input, setInput]   = useState("");
   const [loading, setLoading] = useState(false);
+  const [ending, setEnding]   = useState(false);
+  const [countdown, setCountdown] = useState<number|null>(null);
   const [showGraph, setShowGraph] = useState(true);
   const [lastDebug, setLastDebug] = useState<Record<string,number>|null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
+  // Count down and then redirect to timeline
+  useEffect(() => {
+    if (countdown === null) return;
+    if (countdown <= 0) { router.push("/timeline"); return; }
+    const t = setTimeout(() => setCountdown(c => (c ?? 1) - 1), 1000);
+    return () => clearTimeout(t);
+  }, [countdown, router]);
+
 
   const send = async () => {
     const text = input.trim();
@@ -35,6 +48,25 @@ export default function ChatPage() {
     } catch {
       setMessages(m => [...m, { role: "assistant", content: "Sorry, I had trouble connecting. Please try again.", timestamp: new Date() }]);
     } finally { setLoading(false); }
+  };
+
+  const handleEndSession = async () => {
+    if (ending) return;
+    setEnding(true);
+    try {
+      await chatApi.endSession();
+      setMessages([{
+        role: "assistant",
+        content: "✅ Session ended! Generating your Timeline summary... redirecting in 5 seconds.",
+        timestamp: new Date()
+      }]);
+      setCountdown(5); // starts the redirect countdown
+    } catch (e) {
+      console.error(e);
+      setMessages(m => [...m, { role: "assistant", content: "Failed to end session. Please try again.", timestamp: new Date() }]);
+    } finally {
+      setEnding(false);
+    }
   };
 
   const handleKey = (e: React.KeyboardEvent) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } };
@@ -57,7 +89,10 @@ export default function ChatPage() {
                 <span className="badge badge-muted">{lastDebug.elapsed_ms ?? 0}ms</span>
               </div>
             )}
-            <button className="btn btn-ghost btn-sm" onClick={()=>chatApi.endSession()}>End Session</button>
+            <button className="btn btn-ghost btn-sm" onClick={handleEndSession} disabled={ending || countdown !== null}>
+              {ending ? <span className="spinner" style={{width:"14px",height:"14px",marginRight:"6px",display:"inline-block"}} /> : null}
+              {countdown !== null ? `↗ Redirecting in ${countdown}s…` : ending ? "Ending..." : "End Session"}
+            </button>
           </div>
         </div>
 
