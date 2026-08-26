@@ -1,4 +1,4 @@
-﻿"""
+"""
 ============================================================
 app/api/v1/system.py -- Phase 7 System / Admin Endpoints
 ============================================================
@@ -37,7 +37,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 
 from app.core.database import get_db
-from app.api.deps import get_current_user
+from app.api.deps import require_admin
 
 log = structlog.get_logger(__name__)
 
@@ -60,7 +60,7 @@ router = APIRouter(prefix="/system")
 )
 async def trigger_consolidation(
     background_tasks: BackgroundTasks,
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_admin),
 ):
     """
     Trigger the Phase 7 consolidation batch.
@@ -114,7 +114,7 @@ async def _run_consolidation_safe() -> None:
 )
 async def consolidation_status(
     db: AsyncSession = Depends(get_db),
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_admin),
 ):
     """
     Returns a health snapshot of the consolidation pipeline:

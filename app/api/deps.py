@@ -99,7 +99,7 @@ async def get_current_user(
 
     # Verify the user still exists in the DB
     result = await db.execute(
-        text("SELECT user_id, email FROM users WHERE user_id = :uid"),
+        text("SELECT user_id, email, is_admin FROM users WHERE user_id = :uid"),
         {"uid": user_id},
     )
     user_row = result.mappings().first()
@@ -113,4 +113,19 @@ async def get_current_user(
         )
 
     log.debug("Auth dependency: user authenticated", user_id=user_id)
-    return CurrentUser(user_id=user_row["user_id"], email=user_row["email"])
+    return CurrentUser(user_id=user_row["user_id"], email=user_row["email"], is_admin=user_row["is_admin"])
+
+
+async def require_admin(
+    current_user: CurrentUser = Depends(get_current_user),
+) -> CurrentUser:
+    """
+    FastAPI dependency that restricts an endpoint to admins only.
+    """
+    if not current_user.is_admin:
+        log.warning("Auth dependency: non-admin attempted admin action", user_id=current_user.user_id)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Admin access required.",
+        )
+    return current_user

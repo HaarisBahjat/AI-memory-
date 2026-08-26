@@ -1,21 +1,26 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
-import { authApi } from "@/lib/api";
+import { authApi, userApi } from "@/lib/api";
 import styles from "./Sidebar.module.css";
 
 const NAV = [
   { href: "/chat",     icon: "💬", label: "Chat" },
   { href: "/memories", icon: "🧠", label: "Memories" },
   { href: "/timeline", icon: "📈", label: "Timeline" },
-  { href: "/admin",    icon: "⚙️",  label: "Admin" },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
   const router   = useRouter();
   const { logout, refreshToken } = useAuthStore();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    userApi.getProfile().then(r => setIsAdmin(r.data.is_admin)).catch(() => {});
+  }, []);
 
   const handleLogout = async () => {
     try { if (refreshToken) await authApi.logout(refreshToken); } catch {}
@@ -38,6 +43,13 @@ export default function Sidebar() {
             <span>{label}</span>
           </Link>
         ))}
+        {isAdmin && (
+          <Link href="/admin"
+            className={`${styles.navItem} ${pathname.startsWith("/admin") ? styles.active : ""}`}>
+            <span className={styles.navIcon}>⚙️</span>
+            <span>Admin</span>
+          </Link>
+        )}
       </nav>
 
       <button onClick={handleLogout} className={`btn btn-ghost btn-sm ${styles.logout}`}>

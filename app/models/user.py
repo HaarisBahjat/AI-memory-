@@ -3,7 +3,7 @@
 app/models/user.py — User Profile SQLAlchemy Model
 ============================================================
 """
-from sqlalchemy import Column, String, DateTime, func
+from sqlalchemy import Column, String, DateTime, func, Boolean
 from sqlalchemy.dialects.postgresql import JSONB
 from app.core.database import Base
 
@@ -30,6 +30,7 @@ class User(Base):
     email = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False, default="")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    is_admin = Column(Boolean, nullable=False, default=False)
     baseline_profile = Column(
         JSONB,
         nullable=False,

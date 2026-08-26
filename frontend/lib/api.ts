@@ -59,6 +59,10 @@ export const chatApi = {
   endSession: () => api.post("/session/end"),
 };
 
+export const userApi = {
+  getProfile: () => api.get("/user/me"),
+};
+
 export const memoriesApi = {
   list: () => api.get<{ memories: Memory[] }>("/memories"),
   pin: (id: string, pinned: boolean) => api.patch(`/memories/${id}/pin`, { pinned: pinned }),
@@ -73,6 +77,8 @@ export const adminApi = {
   triggerConsolidate: () => api.post("/system/consolidate"),
   consolidateStatus: () => api.get("/system/consolidation/status"),
   triageEvents: () => api.get("/triage"),
+  listUsers: (page: number = 1, pageSize: number = 20) => api.get(`/admin/users?page=${page}&page_size=${pageSize}`),
+  updateUserRole: (id: string, is_admin: boolean) => api.patch(`/admin/users/${id}/role`, { is_admin }),
 };
 
 /* ── Shared types ────────────────────────────────────────────── */

@@ -261,10 +261,10 @@ async def fetch_semantic_memories(
             created_at,
             reinforcement_count,
             is_pinned,
-            1 - (embedding <-> :query_vector::vector) AS similarity_score
+            1 - (embedding <-> CAST(:query_vector AS vector)) AS similarity_score
         FROM semantic_memories
         WHERE user_id = :user_id
-        ORDER BY is_pinned DESC, embedding <-> :query_vector::vector
+        ORDER BY is_pinned DESC, embedding <-> CAST(:query_vector AS vector)
         LIMIT :top_k
     """)
     # Phase 4: ORDER BY is_pinned DESC ensures pinned memories are fetched

@@ -63,7 +63,7 @@ async def get_me(
     """
     result = await db.execute(
         text("""
-            SELECT user_id, email, created_at, baseline_profile
+            SELECT user_id, email, created_at, is_admin, baseline_profile
             FROM users
             WHERE user_id = :uid
         """),
@@ -127,7 +127,7 @@ async def update_baseline(
             UPDATE users
             SET baseline_profile = baseline_profile || :patch::jsonb
             WHERE user_id = :uid
-            RETURNING user_id, email, created_at, baseline_profile
+            RETURNING user_id, email, created_at, is_admin, baseline_profile
         """),
         {"uid": current_user.user_id, "patch": json.dumps(patch)},
     )

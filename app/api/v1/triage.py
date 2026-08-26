@@ -39,7 +39,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user
+from app.api.deps import require_admin
 from app.core.database import get_db
 from app.schemas.auth import CurrentUser
 from app.schemas.triage import (
@@ -104,7 +104,7 @@ async def list_triage_events(
     user_id_filter: Optional[str] = Query(default=None, alias="user_id", description="Filter by user_id"),
     crisis_type: Optional[str] = Query(default=None, description="Filter by crisis type"),
     active_only: bool = Query(default=True, description="Exclude archived events"),
-    current_user: CurrentUser = Depends(get_current_user),
+    current_user: CurrentUser = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ):
     offset = (page - 1) * page_size
@@ -166,7 +166,7 @@ async def list_triage_events(
 )
 async def get_triage_event(
     triage_id: str,
-    current_user: CurrentUser = Depends(get_current_user),
+    current_user: CurrentUser = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
@@ -208,7 +208,7 @@ async def get_triage_event(
 )
 async def archive_triage_event(
     triage_id: str,
-    current_user: CurrentUser = Depends(get_current_user),
+    current_user: CurrentUser = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ):
     now = datetime.now(timezone.utc)

@@ -133,12 +133,11 @@ class LogoutRequest(BaseModel):
 class CurrentUser(BaseModel):
     """
     Represents the authenticated user, resolved from the JWT.
-    Injected into route handlers via Depends(get_current_user).
-    This is NOT a request/response schema — it's an internal
-    data carrier between the dependency and the route handler.
+    Injected by the `get_current_user` dependency into protected routes.
     """
     user_id: str
     email: str
+    is_admin: bool
 
     model_config = {"from_attributes": True}
 
@@ -151,6 +150,7 @@ class UserMeResponse(BaseModel):
     """Response for GET /api/v1/user/me."""
     user_id: str
     email: str
+    is_admin: bool
     created_at: datetime
     baseline_profile: dict[str, Any]
 
