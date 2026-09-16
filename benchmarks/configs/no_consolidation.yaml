@@ -1,0 +1,17 @@
+features:
+  consolidation: false
+  episodic_memory: true
+  knowledge_graph: true
+  semantic_memory: true
+  session_memory: true
+  temporal_layer: true
+graph:
+  max_depth: 2
+  min_edge_weight: 0.3
+  seed_top_k: 3
+label: 'Ablation: Full System - Consolidation'
+retrieval:
+  decay_lambda: 0.005
+  similarity_threshold: 0.4
+  top_k: 5
+system_id: no_consolidation

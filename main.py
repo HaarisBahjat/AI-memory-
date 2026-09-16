@@ -12,32 +12,39 @@ PURPOSE:
     - Swagger UI configuration
 
 HOW IT CONNECTS EVERYTHING:
-    main.py is the assembly point where all Phase 1 components
-    are wired together:
+    main.py is the assembly point where all components are wired:
     - Imports and registers api_router (chat + user endpoints)
     - Starts Redis pool on startup (Layer 1 Sensory Memory)
     - Provides /api/v1/health for infrastructure monitoring
-    - Phase 7: Celery worker will be initialized here
-    - Phase 9: Prometheus metrics exporter registered here
+    - Phase 9.1: Prometheus metrics instrumentator registered here
+      → GET /metrics exposes all Prometheus metrics for scraping
+      → Request count, duration, and status codes auto-tracked
+      → Custom metrics (retrieval latency, token usage) defined in
+        app/core/metrics.py
 
 RUNNING LOCALLY:
     1. Copy .env.example to .env and fill in Supabase + OpenAI keys
     2. Run: uvicorn main:app --reload --port 8000
     3. Open: http://localhost:8000/docs for Swagger UI
-============================================================
-"""
+    4. Open: http://localhost:8000/metrics for Prometheus scrape
+============================================================"""
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import structlog
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.core.config import get_settings
 from app.core.database import ping_database
 from app.core.redis_client import init_redis, close_redis, ping_redis
 from app.api.v1.router import api_router
 from app.schemas.chat import HealthResponse
+
+# Import metrics module so all Prometheus metric objects are registered
+# at process start — must happen before the instrumentator is created.
+import app.core.metrics  # noqa: F401 (side-effect import)
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -55,8 +62,7 @@ async def lifespan(app: FastAPI):
 
     Startup:
     - Initializes Redis connection pool (Layer 1 Sensory Memory)
-    - Phase 7: Will initialize Celery beat scheduler here
-    - Phase 9: Will initialize Prometheus metrics here
+    - Phase 9.1: Prometheus instrumentator exposes /metrics endpoint
 
     Shutdown:
     - Gracefully closes Redis pool
@@ -71,6 +77,11 @@ async def lifespan(app: FastAPI):
     # Initialize Redis (Layer 1 Sensory Memory)
     await init_redis()
     log.info("Layer 1 Sensory Memory (Redis) initialized")
+
+    log.info(
+        "Phase 9.1: Prometheus metrics active",
+        metrics_endpoint="/metrics",
+    )
 
     yield  # Application runs here
 
@@ -132,6 +143,23 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# -------------------------------------------------------
+# Phase 9.1: Prometheus Metrics Instrumentation
+# -------------------------------------------------------
+# Instrumentator auto-tracks every route registered on `app`:
+#   - http_requests_total           (counter, labelled by method/handler/status)
+#   - http_request_duration_seconds (histogram, labelled by handler)
+#
+# .expose(app) adds GET /metrics so Prometheus / Grafana can scrape it.
+# exclude_paths keeps /metrics and /health out of the request latency
+# histograms (they would skew the distribution).
+Instrumentator(
+    should_group_status_codes=False,
+    should_ignore_untemplated=True,
+    excluded_handlers=["/metrics", "/api/v1/health", "/"],
+).instrument(app).expose(app, endpoint="/metrics", include_in_schema=False)
 
 
 # -------------------------------------------------------

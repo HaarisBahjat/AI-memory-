@@ -1,0 +1,11 @@
+# Baseline B: Recency Window
+# RAG with the last N episodic turns (no semantic search).
+
+features:
+  semantic_memory: false
+  temporal_layer: false
+  knowledge_graph: false
+  episodic_window: true
+
+retrieval:
+  top_k: 5

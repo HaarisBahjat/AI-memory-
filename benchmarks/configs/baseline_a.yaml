@@ -1,0 +1,10 @@
+# Baseline A: No Persistent Memory
+# RAG with zero retrieved context (only immediate conversation context).
+
+features:
+  semantic_memory: false
+  temporal_layer: false
+  knowledge_graph: false
+
+retrieval:
+  top_k: 0

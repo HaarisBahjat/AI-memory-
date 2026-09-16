@@ -1,0 +1,53 @@
+{
+  "generated_at": "2026-09-06T15:50:53.095511Z",
+  "storage_analysis": {
+    "raw_episode_count": 1150,
+    "consolidated_memory_count": 300,
+    "record_reduction_ratio": 0.7391,
+    "record_reduction_pct": "73.9%",
+    "raw_text_bytes": 82273,
+    "raw_text_kb": 80.34,
+    "consolidated_text_bytes": 14053,
+    "consolidated_text_kb": 13.72,
+    "text_reduction_ratio": 0.8292,
+    "text_reduction_pct": "82.9%",
+    "embedding_storage_bytes": 1843200,
+    "embedding_storage_kb": 1800.0,
+    "total_consolidated_storage_kb": 1813.72,
+    "total_raw_storage_kb": 80.34,
+    "note": "Embeddings are only stored for consolidated memories (not raw episodes), so total consolidated storage includes significant embedding overhead."
+  },
+  "information_preservation": {
+    "total_episode_facts_checked": 350,
+    "facts_with_consolidated_counterpart": 350,
+    "information_preservation_rate": 1.0,
+    "information_preservation_pct": "100.0%",
+    "episode_to_memory_coverage": 300
+  },
+  "experiment_a_episode_retrieval": {
+    "ground_truth_type": "GT-E",
+    "aggregate_metrics": {
+      "precision_at_5": 0.2,
+      "recall_at_5": 0.6,
+      "f1_at_5": 0.2833,
+      "hit_rate_at_5": 0.6,
+      "mrr": 0.45,
+      "n": 250
+    }
+  },
+  "experiment_b_semantic_retrieval": {
+    "ground_truth_type": "GT-M",
+    "note": "See retrieval_baseline_c_vector.json for F1@5",
+    "latest_f1_at_5": 0.35
+  },
+  "valid_consolidation_claims": [
+    "Record count reduced by 73.9% (1150 episodes \u2192 300 semantic memories)",
+    "Consolidated text bytes: 14,053 vs raw text bytes: 82,273 (82.9% reduction in text)",
+    "Information preservation rate: 100.0%",
+    "GT-E and GT-M retrieval F1 cannot be numerically compared (different object types)"
+  ],
+  "invalid_claims": [
+    "Do NOT claim 'system requires consolidation to function' based on the 0.000 no_consolidation result",
+    "Do NOT claim semantic retrieval F1 'preserves' episode retrieval F1 without a fair common ground truth"
+  ]
+}

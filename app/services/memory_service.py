@@ -519,6 +519,9 @@ async def upsert_semantic_fact(
     category: str,
     text_content: str,
     embedding_vector: list[float],
+    valid_from: Optional[datetime] = None,
+    valid_until: Optional[datetime] = None,
+    fact_id: Optional[str] = None,
 ) -> dict:
     """
     Inserts a new semantic memory or reinforces an existing one.
@@ -570,7 +573,7 @@ async def upsert_semantic_fact(
     # ORDER BY cos_dist ASC ensures the CLOSEST memory is returned first.
     nearest = await db.execute(
         text("""
-            SELECT id, (embedding <=> CAST(:emb AS vector)) AS cos_dist
+            SELECT id, valid_until, (embedding <=> CAST(:emb AS vector)) AS cos_dist
             FROM semantic_memories
             WHERE user_id = :uid AND category = :cat
             ORDER BY cos_dist ASC
@@ -581,20 +584,35 @@ async def upsert_semantic_fact(
     row = nearest.mappings().first()
 
     # ── Step 2: Decision: reinforce the best match OR insert a new row ────────
+    should_insert = True
+    best_id = None
+    
     if row is not None and row["cos_dist"] <= max_distance:
-        # Near-duplicate found.
-        # Fix #2: target the specific best-match row by its primary key.
-        # Never update by distance condition (could accidentally hit multiple rows).
-        best_id = row["id"]
+        existing_vu = row["valid_until"]
+        # Temporal Disjointness Check:
+        # If the existing fact is explicitly expired (valid_until is set in the past),
+        # but the new fact is currently valid (valid_until is None), they are temporally
+        # disjoint facts. Do NOT merge them!
+        if existing_vu is not None and valid_until is None:
+            should_insert = True
+        else:
+            should_insert = False
+            best_id = row["id"]
+
+    if not should_insert:
+        # Near-duplicate found and temporally compatible.
+        # Target the specific best-match row by its primary key.
+        # If the new fact provides a valid_until (i.e. expiring an existing fact), update it.
         await db.execute(
             text("""
                 UPDATE semantic_memories
                 SET
                     reinforcement_count = reinforcement_count + 1,
+                    valid_until = COALESCE(:vu, valid_until),
                     created_at = NOW()
                 WHERE id = :best_id AND user_id = :uid
             """),
-            {"best_id": best_id, "uid": user_id},
+            {"best_id": best_id, "uid": user_id, "vu": valid_until},
         )
         log.info(
             "Memory reinforced (deduplication hit)",
@@ -607,14 +625,14 @@ async def upsert_semantic_fact(
         return {"action": "reinforced", "memory_id": best_id}
 
     else:
-        # No close enough match — insert a new semantic memory row.
-        new_id = str(uuid.uuid4())
+        # No close enough match (or temporally disjoint) — insert a new semantic memory row.
+        new_id = fact_id or str(uuid.uuid4())
         await db.execute(
             text("""
                 INSERT INTO semantic_memories
-                    (id, user_id, category, text, embedding, reinforcement_count, is_pinned)
+                    (id, user_id, category, text, embedding, reinforcement_count, is_pinned, valid_from, valid_until)
                 VALUES
-                    (:id, :uid, :cat, :txt, CAST(:emb AS vector), 1, FALSE)
+                    (:id, :uid, :cat, :txt, CAST(:emb AS vector), 1, FALSE, COALESCE(:vf, NOW()), :vu)
             """),
             {
                 "id": new_id,
@@ -622,6 +640,8 @@ async def upsert_semantic_fact(
                 "cat": category,
                 "txt": text_content,
                 "emb": vector_str,
+                "vf": valid_from,
+                "vu": valid_until,
             },
         )
         log.info(

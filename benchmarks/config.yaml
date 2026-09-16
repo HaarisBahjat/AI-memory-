@@ -1,0 +1,195 @@
+# ============================================================
+# benchmarks/config.yaml — Frozen Experiment Configuration
+# ============================================================
+# PURPOSE:
+#   Single source of truth for all experiment hyperparameters.
+#   Every benchmark script reads from this file so that
+#   reproducing results requires only re-running the scripts
+#   with the same config version — no code changes.
+#
+# REPRODUCIBILITY CONTRACT:
+#   Any change to this file MUST:
+#   1. Increment protocol_version
+#   2. Be committed to version control with a descriptive message
+#   3. Be recorded in the run log with the experiment ID
+#
+# CONNECTED TO:
+#   Phase 9.1 → experiment_protocol.md (references these values)
+#   Phase 9.2 → scripts/rag_benchmark.py
+#   Phase 9.2 → scripts/answer_benchmark.py
+#   Phase 9.2 → scripts/consolidation_benchmark.py
+#   Phase 9.3 → scripts/run_ablation.py
+#   Phase 9.3 → scripts/scalability_benchmark.py
+#   Phase 9.3 → scripts/statistical_analysis.py
+# ============================================================
+
+experiment:
+  # Increment this whenever any parameter changes.
+  # Never re-run a final experiment after changing params without
+  # incrementing this version.
+  protocol_version: "v1.1"
+
+  # Semantic version of the dataset used for evaluation.
+  # Must match the version tag in benchmarks/dataset/synthetic/
+  dataset_version: "v1.0"
+
+  # Fixed random seed ensures deterministic dataset generation,
+  # train/test split, and statistical sampling.
+  # Must not change between a pre-specified run and its replication.
+  random_seed: 42
+
+  # Timestamp format used in result file names: YYYYMMDD_HHMMSS
+  result_dir: "benchmarks/results"
+
+# ──────────────────────────────────────────────────────────
+# Models
+# ──────────────────────────────────────────────────────────
+models:
+  # Embedding model used for ALL systems in this experiment.
+  # Changing this invalidates all cached embeddings.
+  embedding_model: "gemini-embedding-2"
+
+  # Chat / generation model used for the proposed system
+  # and all baselines that require an LLM.
+  chat_model: "gemini-2.5-flash"
+
+  # LLM-as-judge model (Phase 9.2 evaluation).
+  # Should be the same model or stronger than the chat model.
+  judge_model: "gemini-2.5-flash"
+
+  # Temperature for all LLM calls during evaluation.
+  # 0 = deterministic (required for reproducibility).
+  temperature: 0
+
+# ──────────────────────────────────────────────────────────
+# Retrieval Parameters
+# ──────────────────────────────────────────────────────────
+retrieval:
+  # Number of memories returned in retrieval (used for P@K, R@K, etc.)
+  top_k: 5
+
+  # Minimum adjusted similarity score to include in LLM context.
+  # Matches SIMILARITY_THRESHOLD in app/core/config.py.
+  similarity_threshold: 0.65
+
+  # Time-decay lambda. Matches DECAY_LAMBDA in app/core/config.py.
+  # Benchmark sweeps this value for RQ5 efficiency experiments.
+  decay_lambda: 0.005
+
+  # Baseline B: recency window sizes to test (number of turns).
+  recency_window_sizes: [10, 20, 50]
+
+  # Baseline D: time-decay lambda values for recency-decay baseline.
+  recency_decay_lambdas: [0.001, 0.005, 0.01, 0.05]
+
+# ──────────────────────────────────────────────────────────
+# Knowledge Graph Parameters
+# ──────────────────────────────────────────────────────────
+graph:
+  # Maximum traversal depth in recursive CTE.
+  # Matches GRAPH_MAX_DEPTH in app/core/config.py.
+  max_depth: 2
+
+  # Minimum edge weight to follow during traversal.
+  min_edge_weight: 0.3
+
+  # Seed nodes retrieved via HNSW for graph traversal entry.
+  seed_top_k: 3
+
+# ──────────────────────────────────────────────────────────
+# Dataset Parameters
+# ──────────────────────────────────────────────────────────
+dataset:
+  # Core synthetic benchmark
+  num_users: 50
+  episodes_per_user: 20
+  min_words_per_episode: 150
+  max_words_per_episode: 300
+
+  # Query set composition (total = 250 minimum)
+  query_counts:
+    factual: 50
+    temporal: 50
+    historical: 40
+    contradiction: 40
+    multi_hop: 40
+    no_answer: 30
+
+  # Scalability experiment corpus sizes (episodes per user)
+  scalability_sizes: [10, 50, 100, 500, 1000]
+
+  # Human-validated subset
+  human_validated_min_dialogues: 20
+
+# ──────────────────────────────────────────────────────────
+# LLM-as-Judge Validation Parameters (Phase 9.2)
+# ──────────────────────────────────────────────────────────
+judge:
+  # Number of answers to include in the human-rated validation subset.
+  human_validation_size: 100
+
+  # Scoring rubric (0–4 integer scale):
+  #   0 = Completely incorrect
+  #   1 = Mostly incorrect
+  #   2 = Partially correct
+  #   3 = Mostly correct
+  #   4 = Fully correct
+  rubric_min: 0
+  rubric_max: 4
+
+  # Minimum acceptable Cohen's Kappa between human and LLM judge
+  # before we can trust the LLM judge for the full benchmark.
+  min_kappa_threshold: 0.60
+
+# ──────────────────────────────────────────────────────────
+# Statistical Analysis Parameters (Phase 9.3)
+# ──────────────────────────────────────────────────────────
+statistics:
+  # Two-sided confidence level for all confidence intervals.
+  confidence_level: 0.95
+
+  # Multiple comparison correction method applied to all p-values
+  # across the full set of baseline comparisons.
+  # Options: "benjamini-hochberg" | "bonferroni"
+  multiple_comparison_correction: "benjamini-hochberg"
+
+  # Minimum effect size (Cohen's d) considered practically significant.
+  min_effect_size: 0.2
+
+  # Statistical test used for paired system comparisons.
+  # "wilcoxon" = Wilcoxon signed-rank (non-parametric, paired)
+  paired_test: "wilcoxon"
+
+# ──────────────────────────────────────────────────────────
+# Ablation Study Configurations (Phase 9.3)
+# ──────────────────────────────────────────────────────────
+ablation:
+  # Each entry corresponds to a configuration file in benchmarks/configs/
+  systems:
+    - id: "full_system"
+      label: "Full Proposed System"
+      config: "benchmarks/configs/full_system.yaml"
+    - id: "no_temporal"
+      label: "No Temporal Layer"
+      config: "benchmarks/configs/no_temporal.yaml"
+    - id: "no_graph"
+      label: "No Knowledge Graph"
+      config: "benchmarks/configs/no_graph.yaml"
+    - id: "no_consolidation"
+      label: "No Consolidation"
+      config: "benchmarks/configs/no_consolidation.yaml"
+    - id: "semantic_memory"
+      label: "Baseline E: Semantic Memory"
+      config: "benchmarks/configs/semantic_memory.yaml"
+    - id: "recency_decay"
+      label: "Baseline D: Recency-Decay Vector RAG"
+      config: "benchmarks/configs/recency_decay.yaml"
+    - id: "vector_only"
+      label: "Baseline C: Vector RAG"
+      config: "benchmarks/configs/vector_only.yaml"
+    - id: "recency_window"
+      label: "Baseline B: Recency Window"
+      config: "benchmarks/configs/recency_window.yaml"
+    - id: "no_memory"
+      label: "Baseline A: No Long-Term Memory"
+      config: "benchmarks/configs/no_memory.yaml"

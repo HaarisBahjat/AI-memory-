@@ -53,6 +53,7 @@ CONNECTED TO:
 
 import json
 import time
+from datetime import datetime
 from typing import Optional
 
 import structlog
@@ -110,8 +111,10 @@ Rules:
 5. Do NOT extract temporary or one-time facts (e.g. "user had a headache today").
 6. Keep each fact concise (max 300 characters).
 7. Return a JSON array of objects. Each object must have:
-   - "content"  : string (the fact in third-person)
-   - "category" : string (one of the categories above, lowercase)
+   - "content"     : string (the fact in third-person)
+   - "category"    : string (one of the categories above, lowercase)
+   - "valid_from"  : string (ISO8601 date, default to the episode's date if it's a new fact)
+   - "valid_until" : string (ISO8601 date, or null. Use if the episode explicitly indicates an older fact is no longer true)
 
 IMPORTANT: If no durable facts can be extracted, return an EMPTY ARRAY: []
 Do not force facts where none exist.
@@ -167,6 +170,7 @@ async def _extract_facts_from_summary(session_summary: str) -> list:
                     },
                 ],
             )
+            
             raw = response.choices[0].message.content or ""
             # Strip markdown if present
             raw = raw.strip()
@@ -198,8 +202,18 @@ async def _extract_facts_from_summary(session_summary: str) -> list:
                     continue
                 content = str(f.get("content", "")).strip()[:300]
                 category = str(f.get("category", "")).strip().lower()
+                valid_from = f.get("valid_from")
+                valid_until = f.get("valid_until")
+                fact_id = f.get("id")
+                
                 if content and category in ALLOWED_CATEGORIES:
-                    valid_facts.append({"content": content, "category": category})
+                    valid_facts.append({
+                        "id": fact_id,
+                        "content": content,
+                        "category": category,
+                        "valid_from": valid_from,
+                        "valid_until": valid_until,
+                    })
 
             log.info(
                 "Fact extraction complete",
@@ -361,12 +375,26 @@ async def run_batch(db: Optional[AsyncSession] = None) -> dict:
                 async with AsyncSessionLocal() as inner_db:
                     async with inner_db.begin():  # auto-ROLLBACK on exception
                         for fact, vector in zip(facts, vectors):
+                            vf_str = fact.get("valid_from")
+                            vu_str = fact.get("valid_until")
+                            
+                            vf = None
+                            if vf_str:
+                                vf = datetime.fromisoformat(vf_str.replace("Z", "+00:00"))
+                                
+                            vu = None
+                            if vu_str:
+                                vu = datetime.fromisoformat(vu_str.replace("Z", "+00:00"))
+                                
                             result = await upsert_semantic_fact(
                                 db=inner_db,
                                 user_id=user_id,
                                 category=fact["category"],
                                 text_content=fact["content"],
                                 embedding_vector=vector,
+                                valid_from=vf,
+                                valid_until=vu,
+                                fact_id=fact.get("id"),
                             )
                             if result["action"] == "created":
                                 episode_created += 1

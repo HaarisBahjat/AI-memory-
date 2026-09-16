@@ -35,11 +35,13 @@ CONNECTED TO:
 
 import json
 import uuid
+import asyncio
 from datetime import datetime, timezone
 from typing import Optional
 
+import random
 import structlog
-from openai import AsyncOpenAI
+from openai import AsyncOpenAI, RateLimitError
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -105,7 +107,7 @@ Output: strict JSON array, no prose.
 # LLM Triple Extraction
 # -------------------------------------------------------
 
-async def extract_triples(session_summary: str) -> list[dict]:
+async def extract_triples(session_summary: str, _semaphore: asyncio.Semaphore = None) -> list[dict]:
     """
     Calls GPT to extract temporal knowledge graph triples from a session summary.
 
@@ -126,90 +128,107 @@ async def extract_triples(session_summary: str) -> list[dict]:
         return []
 
     client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_BASE_URL)
+    
+    # Use fallback model if available for batch operations (higher rate limits)
+    model_to_use = settings.OPENAI_CHAT_MODEL_FALLBACK or settings.OPENAI_CHAT_MODEL
 
-    for attempt in range(2):
-        try:
-            response = await client.chat.completions.create(
-                model=settings.OPENAI_CHAT_MODEL,
-                temperature=0.1,
-                response_format={"type": "json_object"},
-                messages=[
-                    {"role": "system", "content": _TRIPLE_EXTRACTION_PROMPT},
-                    {
-                        "role": "user",
-                        "content": (
-                            "Extract relationship triples from this session summary:\n\n"
-                            + session_summary[:5000]
-                        ),
-                    },
-                ],
-            )
-            raw = response.choices[0].message.content
-            parsed = json.loads(raw)
+    MAX_RETRIES = 4
+    BASE_DELAY = 5.0
+    
+    # Create a dummy semaphore if none provided to keep code unified
+    sem = _semaphore or asyncio.Semaphore(1)
 
-            # Handle both a bare list and {"triples": [...]} wrapper
-            if isinstance(parsed, list):
-                triples_raw = parsed
-            elif isinstance(parsed, dict):
-                triples_raw = (
-                    parsed.get("triples")
-                    or parsed.get("relationships")
-                    or parsed.get("items")
-                    or []
+    async with sem:
+        for attempt in range(MAX_RETRIES):
+            try:
+                response = await client.chat.completions.create(
+                    model=model_to_use,
+                    temperature=0.1,
+                    response_format={"type": "json_object"},
+                    messages=[
+                        {"role": "system", "content": _TRIPLE_EXTRACTION_PROMPT},
+                        {
+                            "role": "user",
+                            "content": (
+                                f"Extract knowledge graph triples from the following session summary:\n\n{session_summary}"
+                            )
+                        }
+                    ],
                 )
-            else:
-                triples_raw = []
 
-            # Validate each triple
-            valid = []
-            for t in triples_raw:
-                if not isinstance(t, dict):
-                    continue
-                src = t.get("source", {})
-                tgt = t.get("target", {})
-                rel = str(t.get("relation", "")).strip().upper()
-                evidence = str(t.get("evidence", "")).strip()[:120]
-                weight_raw = t.get("weight", 0.7)
-                # Guard: LLM may return a non-numeric value (e.g. "high").
-                # Use a safe cast with fallback to 0.7 instead of bare float().
-                try:
-                    weight = float(weight_raw)
-                except (TypeError, ValueError):
-                    weight = 0.7
+                raw = response.choices[0].message.content or ""
+                parsed = json.loads(raw)
 
-                src_name = str(src.get("name", "")).strip()[:100]
-                src_type = str(src.get("entity_type", "")).strip().upper()
-                tgt_name = str(tgt.get("name", "")).strip()[:100]
-                tgt_type = str(tgt.get("entity_type", "")).strip().upper()
+                # Handle both a bare list and {"triples": [...]} wrapper
+                if isinstance(parsed, list):
+                    triples_raw = parsed
+                elif isinstance(parsed, dict):
+                    triples_raw = (
+                        parsed.get("triples")
+                        or parsed.get("relationships")
+                        or parsed.get("items")
+                        or []
+                    )
+                else:
+                    triples_raw = []
 
-                if (
-                    src_name and tgt_name
-                    and src_type in ALLOWED_ENTITY_TYPES
-                    and tgt_type in ALLOWED_ENTITY_TYPES
-                    and rel in ALLOWED_RELATION_TYPES
-                    and 0.0 < weight <= 1.0
-                ):
-                    valid.append({
-                        "source": {"name": src_name, "entity_type": src_type},
-                        "relation": rel,
-                        "target": {"name": tgt_name, "entity_type": tgt_type},
-                        "evidence": evidence,
-                        "weight": round(weight, 3),
-                    })
+                # Validate each triple
+                valid = []
+                for t in triples_raw:
+                    if not isinstance(t, dict):
+                        continue
+                    src = t.get("source", {})
+                    tgt = t.get("target", {})
+                    rel = str(t.get("relation", "")).strip().upper()
+                    evidence = str(t.get("evidence", "")).strip()[:120]
+                    weight_raw = t.get("weight", 0.7)
+                    # Guard: LLM may return a non-numeric value (e.g. "high").
+                    # Use a safe cast with fallback to 0.7 instead of bare float().
+                    try:
+                        weight = float(weight_raw)
+                    except (TypeError, ValueError):
+                        weight = 0.7
 
-            log.info(
-                "Triple extraction complete",
-                attempt=attempt + 1,
-                valid_triples=len(valid),
-            )
-            return valid
+                    src_name = str(src.get("name", "")).strip()[:100]
+                    src_type = str(src.get("entity_type", "")).strip().upper()
+                    tgt_name = str(tgt.get("name", "")).strip()[:100]
+                    tgt_type = str(tgt.get("entity_type", "")).strip().upper()
 
-        except json.JSONDecodeError as e:
-            log.warning("Triple extraction JSON error", attempt=attempt + 1, error=str(e))
-        except Exception as e:
-            log.error("Triple extraction LLM error", attempt=attempt + 1, error=str(e))
+                    if (
+                        src_name and tgt_name
+                        and src_type in ALLOWED_ENTITY_TYPES
+                        and tgt_type in ALLOWED_ENTITY_TYPES
+                        and rel in ALLOWED_RELATION_TYPES
+                        and 0.0 < weight <= 1.0
+                    ):
+                        valid.append({
+                            "source": {"name": src_name, "entity_type": src_type},
+                            "relation": rel,
+                            "target": {"name": tgt_name, "entity_type": tgt_type},
+                            "evidence": evidence,
+                            "weight": round(weight, 3),
+                        })
 
-    log.error("Triple extraction failed after 2 attempts; returning []")
+                log.info(
+                    "Triple extraction complete",
+                    attempt=attempt + 1,
+                    valid_triples=len(valid),
+                    model=model_to_use
+                )
+                return valid
+
+            except RateLimitError as e:
+                delay = BASE_DELAY * (2 ** attempt) + random.uniform(0, 1)
+                log.warning("Triple extraction rate limited", attempt=attempt + 1, delay=round(delay, 2), error=str(e))
+                await asyncio.sleep(delay)
+            except json.JSONDecodeError as e:
+                log.warning("Triple extraction JSON error", attempt=attempt + 1, error=str(e))
+                await asyncio.sleep(BASE_DELAY)
+            except Exception as e:
+                log.error("Triple extraction LLM error", attempt=attempt + 1, error=str(e))
+                await asyncio.sleep(BASE_DELAY)
+
+    log.error(f"Triple extraction failed after {MAX_RETRIES} attempts; returning []")
     return []
 
 

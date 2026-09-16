@@ -53,8 +53,10 @@ email-validator>=2.0.0            # Required by Pydantic EmailStr field in auth 
 celery==5.4.0                 # Distributed task queue for nightly 02:00 UTC cron jobs
 redis[hiredis]==5.1.1         # Celery broker backend (also serves Layer 1 Sensory Memory)
 
-# --- Logging & Observability (Phase 9) ---
+# --- Logging & Observability (Phase 9.1) ---
 structlog==24.4.0             # Structured JSON logging (used throughout all phases)
+prometheus-client==0.21.1     # Prometheus Python client — exposes /metrics scrape endpoint
+prometheus-fastapi-instrumentator==7.0.0  # Auto-instruments FastAPI routes for Prometheus
 
 # --- Testing ---
 pytest==8.3.3                 # Test runner

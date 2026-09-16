@@ -1,0 +1,14 @@
+{
+  "_comment": "Human-validated benchmark dialogues. Each dialogue is a real or human-authored conversation that has been independently reviewed. This subset validates that synthetic patterns resemble real conversational drift.",
+  "_version": "v1.0",
+  "_schema": {
+    "dialogue_id": "string",
+    "reviewer": "string — anonymized reviewer ID",
+    "review_date": "ISO date string",
+    "is_approved": "boolean — false if reviewer found issues",
+    "reviewer_notes": "string",
+    "turns": "list of {role: user|assistant, content: string, timestamp: ISO}"
+  },
+  "_note": "Populate with at least 20 human-authored or human-validated dialogues before final evaluation.",
+  "dialogues": []
+}

@@ -1,0 +1,16 @@
+consolidation:
+  filter_field: consolidation_run_id
+  run_id: consolidation_run_2026_phase2
+features:
+  consolidation: true
+  episodic_memory: true
+  knowledge_graph: false
+  semantic_memory: true
+  session_memory: true
+  temporal_layer: true
+label: 'Baseline E: Consolidated Semantic Memory'
+retrieval:
+  decay_lambda: 0.005
+  similarity_threshold: 0.4
+  top_k: 5
+system_id: consolidated_semantic

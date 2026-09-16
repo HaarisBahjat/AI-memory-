@@ -1,0 +1,21 @@
+# Results directory — auto-generated benchmark outputs
+# 
+# This directory is populated by running the benchmark scripts.
+# Contents are git-ignored (see .gitignore) because result files
+# can be large and are reproduced from code + dataset.
+#
+# Structure after a benchmark run:
+#   results/
+#   └── <run_id>/              # UUID generated per run
+#       ├── run_metadata.json  # Git hash, config snapshot, timestamps
+#       ├── retrieval_metrics.json
+#       ├── temporal_metrics.json
+#       ├── consolidation_metrics.json
+#       ├── multi_hop_metrics.json
+#       ├── no_answer_metrics.json
+#       ├── latency_metrics.json
+#       ├── cost_metrics.json
+#       ├── ablation_results.json
+#       ├── scalability_results.json
+#       ├── statistical_analysis.json
+#       └── error_analysis.json

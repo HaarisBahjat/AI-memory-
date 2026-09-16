@@ -1,0 +1,82 @@
+{
+  "generated_at": "2026-09-12T12:17:24.522438Z",
+  "test_family": "Wilcoxon Signed-Rank (two-sided, \u03b1=0.05, BH-FDR corrected)",
+  "scipy_available": true,
+  "numpy_available": true,
+  "comparisons": [
+    {
+      "comparison": "Full System vs Vector RAG",
+      "n_users": 10,
+      "n_nonzero_users": 10,
+      "mean_diff": 0.0667,
+      "mean_system_f1": 0.4167,
+      "mean_baseline_f1": 0.35,
+      "wilcoxon_W": 0.0,
+      "p_value": 0.001953,
+      "effect_size_r": 1.0,
+      "effect_size_label": "large",
+      "ci_95_mean_diff": [
+        0.0667,
+        0.0667
+      ],
+      "test": "Wilcoxon Signed-Rank (two-sided)",
+      "alpha": 0.05,
+      "p_value_fdr": 0.001953,
+      "significant_fdr": true,
+      "power_warning": "WARNING: N=10 < 20 paired observations. Wilcoxon signed-rank test requires N\u226520 for 80% power at medium effect size (r=0.3). Results may be underpowered."
+    },
+    {
+      "comparison": "Full System vs No Temporal (Ablation)",
+      "n_users": 10,
+      "n_nonzero_users": 10,
+      "mean_diff": 0.0667,
+      "mean_system_f1": 0.4167,
+      "mean_baseline_f1": 0.35,
+      "wilcoxon_W": 0.0,
+      "p_value": 0.001953,
+      "effect_size_r": 1.0,
+      "effect_size_label": "large",
+      "ci_95_mean_diff": [
+        0.0667,
+        0.0667
+      ],
+      "test": "Wilcoxon Signed-Rank (two-sided)",
+      "alpha": 0.05,
+      "p_value_fdr": 0.001953,
+      "significant_fdr": true,
+      "power_warning": "WARNING: N=10 < 20 paired observations. Wilcoxon signed-rank test requires N\u226520 for 80% power at medium effect size (r=0.3). Results may be underpowered."
+    },
+    {
+      "comparison": "Full System vs No Graph (Ablation)",
+      "n_users": 10,
+      "n_nonzero_users": 0,
+      "mean_diff": 0.0,
+      "ci_95_mean_diff": [
+        0.0,
+        0.0
+      ],
+      "note": "n_nonzero_users=0 < 5; Wilcoxon not applicable. Reporting bootstrap CI only.",
+      "significant_fdr": false,
+      "wilcoxon_W": null,
+      "p_value": null,
+      "p_value_fdr": null,
+      "power_warning": "WARNING: N=10 < 20 paired observations. Wilcoxon signed-rank test requires N\u226520 for 80% power at medium effect size (r=0.3). Results may be underpowered."
+    },
+    {
+      "comparison": "Full System vs No Consolidation (Ablation)",
+      "n_users": 10,
+      "n_nonzero_users": 0,
+      "mean_diff": 0.0,
+      "ci_95_mean_diff": [
+        0.0,
+        0.0
+      ],
+      "note": "n_nonzero_users=0 < 5; Wilcoxon not applicable. Reporting bootstrap CI only.",
+      "significant_fdr": false,
+      "wilcoxon_W": null,
+      "p_value": null,
+      "p_value_fdr": null,
+      "power_warning": "WARNING: N=10 < 20 paired observations. Wilcoxon signed-rank test requires N\u226520 for 80% power at medium effect size (r=0.3). Results may be underpowered."
+    }
+  ]
+}

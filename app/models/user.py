@@ -3,7 +3,7 @@
 app/models/user.py — User Profile SQLAlchemy Model
 ============================================================
 """
-from sqlalchemy import Column, String, DateTime, func, Boolean
+from sqlalchemy import Column, String, DateTime, func, Boolean, Integer
 from sqlalchemy.dialects.postgresql import JSONB
 from app.core.database import Base
 
@@ -17,12 +17,17 @@ class User(Base):
         email            : Unique email address
         password_hash    : Bcrypt-hashed password (Phase 2)
         created_at       : Account creation timestamp
-        baseline_profile : JSONB blob storing evolving health
-                           baseline (avg sleep, known triggers,
-                           effective coping mechanisms).
+        is_admin         : Admin flag (Phase 6)
+        baseline_profile : JSONB blob storing evolving health baseline.
                            Updated by Phase 7 consolidation pipeline
-                           whenever a 'baseline' category memory
-                           is extracted and confirmed.
+                           whenever a 'baseline' category memory is
+                           extracted and confirmed.
+        token_budget     : Maximum cumulative tokens allowed (0 = unlimited).
+                           Set per user by admin for cost control.
+                           Phase 9.1: enforced by cost_service.check_budget()
+        tokens_used      : Running total of tokens consumed across all
+                           LLM operations. Updated by cost_service.record_usage()
+                           after every successful API call.
     """
     __tablename__ = "users"
 
@@ -41,4 +46,19 @@ class User(Base):
             "dataRetentionDays": 365,
             "allowBiometrics": False,
         }
+    )
+    # Phase 9.1: Token budget enforcement
+    # token_budget = 0 means unlimited (no cap enforced).
+    # Values > 0 are checked before each LLM call in cost_service.py.
+    token_budget = Column(
+        Integer,
+        nullable=False,
+        default=0,
+        comment="Maximum cumulative token budget (0 = unlimited)",
+    )
+    tokens_used = Column(
+        Integer,
+        nullable=False,
+        default=0,
+        comment="Cumulative tokens consumed across all LLM operations",
     )

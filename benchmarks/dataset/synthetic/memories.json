@@ -1,0 +1,2704 @@
+{
+  "memories": [
+    {
+      "id": "28a875be-8dc9-5e08-bbe6-1a44903dd71a",
+      "user_id": "user_001",
+      "content": "Deep breathing helps Jordan manage their back pain.",
+      "valid_from": "2026-01-02T12:00:00",
+      "valid_until": "2026-03-03T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "e9ec231c-a5dd-5b08-b5ef-8bca26c79da9"
+    },
+    {
+      "id": "8e910ebf-7c0d-5aa0-8757-804865538a1b",
+      "user_id": "user_001",
+      "content": "meditation helps Jordan manage their back pain.",
+      "valid_from": "2026-03-03T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "25a2a069-89df-5fdd-a1d0-f452b7a6d9d7"
+    },
+    {
+      "id": "9e5979b0-3712-5721-bf42-64f3c0f7c9e2",
+      "user_id": "user_001",
+      "content": "Jordan has a pet dog named Buddy.",
+      "valid_from": "2026-05-02T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "200e1c6a-57ff-59cd-9da2-fcf48f1cca04"
+    },
+    {
+      "id": "2d261ec9-7c50-592b-a268-de9d52a369f8",
+      "user_id": "user_001",
+      "content": "Social isolation increases Jordan's back pain.",
+      "valid_from": "2026-05-03T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "536b98dc-50b1-5466-83ba-eb92934dccd9"
+    },
+    {
+      "id": "a18847c6-dbd4-5ee8-94b4-57e9b4ff4fcc",
+      "user_id": "user_001",
+      "content": "Jordan's back pain leads to poor sleep.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "a835cd5a-8a5a-5ca4-8c5f-9edf42b54acb"
+    },
+    {
+      "id": "a0c0e87e-3bd0-58ed-9604-75876efd9ffb",
+      "user_id": "user_001",
+      "content": "Jordan's poor sleep negatively impacts their relationships.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "6b7862b8-4a32-5f0a-8c6d-5c0453acf884"
+    },
+    {
+      "id": "a1106380-73ec-5e5b-910b-ed548479603c",
+      "user_id": "user_002",
+      "content": "Deep breathing helps Sage manage their anxiety.",
+      "valid_from": "2026-01-14T12:00:00",
+      "valid_until": "2026-03-15T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "577c5d2f-b382-59d1-a6e2-6fee0bfe6a03"
+    },
+    {
+      "id": "989feb95-0daf-5e19-b6cd-9b5bc21ef908",
+      "user_id": "user_002",
+      "content": "meditation helps Sage manage their anxiety.",
+      "valid_from": "2026-03-15T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "d686d68b-8ca0-5dcd-9092-1e67308d715f"
+    },
+    {
+      "id": "3114bb5c-3c79-5cd5-84bb-668d3a25a74e",
+      "user_id": "user_002",
+      "content": "Sage has a pet dog named Luna.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "48f157f0-3630-5003-b665-d8e4ac990c9e"
+    },
+    {
+      "id": "9fa6c4e4-49fd-53cc-8311-bd8c32597866",
+      "user_id": "user_002",
+      "content": "Family drama increases Sage's anxiety.",
+      "valid_from": "2026-05-07T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "3df284c4-4d1a-54c3-8a26-ed28f00cdf25"
+    },
+    {
+      "id": "dfbcebca-07dd-55a4-bf0a-cae760c85ad5",
+      "user_id": "user_002",
+      "content": "Sage's anxiety leads to irritability.",
+      "valid_from": "2026-05-08T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "35f1df8e-e0dd-5223-adb7-1c1519d71990"
+    },
+    {
+      "id": "bbc69503-e642-5cb7-80ba-3acaa9a7442c",
+      "user_id": "user_002",
+      "content": "Sage's irritability negatively impacts their relationships.",
+      "valid_from": "2026-05-09T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "5541d201-ce0f-5e05-804b-cd694491ee89"
+    },
+    {
+      "id": "256e2c8b-9325-5f5c-a566-05cf8ada9dfe",
+      "user_id": "user_003",
+      "content": "Journaling helps Cameron manage their social anxiety.",
+      "valid_from": "2026-01-09T12:00:00",
+      "valid_until": "2026-03-10T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "ef5c771d-aa36-573b-8a03-d8fab8dba6bf"
+    },
+    {
+      "id": "c0403bb1-0be3-569f-9c81-ddd29879b3bd",
+      "user_id": "user_003",
+      "content": "talking to a therapist helps Cameron manage their social anxiety.",
+      "valid_from": "2026-03-10T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "ab5cee9c-ba45-5861-9789-ab10821470c6"
+    },
+    {
+      "id": "2b04a729-5754-5dca-997b-fe1fe367abe7",
+      "user_id": "user_003",
+      "content": "Cameron has a pet dog named Luna.",
+      "valid_from": "2026-04-19T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "cd92ebba-99e2-5b28-bb30-6b6d4b75e7c4"
+    },
+    {
+      "id": "7de0cacd-19ff-5fe1-b78a-103c793228cb",
+      "user_id": "user_003",
+      "content": "Lack of sleep increases Cameron's social anxiety.",
+      "valid_from": "2026-04-20T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "1f579fb1-9f24-5116-b9a2-60a0a42b82c2"
+    },
+    {
+      "id": "00965d9e-4d77-5fc2-a43d-db3cc2c953d2",
+      "user_id": "user_003",
+      "content": "Cameron's social anxiety leads to loss of appetite.",
+      "valid_from": "2026-04-21T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "eb315c3e-41d8-57a7-b2d5-5eb2aeb53075"
+    },
+    {
+      "id": "bf41ecaf-817d-5163-b991-023234fcb1fd",
+      "user_id": "user_003",
+      "content": "Cameron's loss of appetite negatively impacts their social life.",
+      "valid_from": "2026-04-22T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "ffeec2bc-7e96-5ed5-9c03-86a1229e5395"
+    },
+    {
+      "id": "df92aa47-dbdc-56a2-a94a-25e9bbc4a8e4",
+      "user_id": "user_004",
+      "content": "Walking helps Taylor manage their social anxiety.",
+      "valid_from": "2026-01-29T12:00:00",
+      "valid_until": "2026-03-30T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "3aa16fc6-522b-5f8c-8114-f930c429b50c"
+    },
+    {
+      "id": "0cfd192a-0b78-5565-bf95-30aa18a0613b",
+      "user_id": "user_004",
+      "content": "running helps Taylor manage their social anxiety.",
+      "valid_from": "2026-03-30T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "5a7097c8-afe1-5efc-8935-16ee07344e50"
+    },
+    {
+      "id": "fdc52125-d465-5030-83d0-30b1664b17b3",
+      "user_id": "user_004",
+      "content": "Taylor has a pet cat named Charlie.",
+      "valid_from": "2026-05-25T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "8334792a-8e3d-58a4-b2a2-eef2ce0e05c1"
+    },
+    {
+      "id": "2e8f3367-2066-5e11-b0ad-49e39248a5bb",
+      "user_id": "user_004",
+      "content": "Lack of sleep increases Taylor's social anxiety.",
+      "valid_from": "2026-05-26T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "c35f13df-cc65-5103-97cc-918003b5370b"
+    },
+    {
+      "id": "6014272e-8660-5dae-8353-92a72e031cab",
+      "user_id": "user_004",
+      "content": "Taylor's social anxiety leads to irritability.",
+      "valid_from": "2026-05-27T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "605b93c5-6cc1-5eea-94cc-a6f5146b5f6c"
+    },
+    {
+      "id": "9e45950f-3ecd-513c-954b-9207be2bd307",
+      "user_id": "user_004",
+      "content": "Taylor's irritability negatively impacts their work performance.",
+      "valid_from": "2026-05-28T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "a8c227e8-4fc5-5c2f-b4b4-d83aba053cf1"
+    },
+    {
+      "id": "47e3327b-cef9-5c5e-be41-3fe55f62c338",
+      "user_id": "user_005",
+      "content": "Journaling helps Avery manage their anxiety.",
+      "valid_from": "2026-01-12T12:00:00",
+      "valid_until": "2026-03-13T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "21ad37ce-6c0f-57ab-a42c-03b8139a9235"
+    },
+    {
+      "id": "b6435e94-2df8-58c1-8ed4-a43b072c1c7f",
+      "user_id": "user_005",
+      "content": "talking to a therapist helps Avery manage their anxiety.",
+      "valid_from": "2026-03-13T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "1e09ce93-a408-58ad-abe3-f0d5f0548320"
+    },
+    {
+      "id": "88fa6796-7182-50e3-8f89-acea1c7f4fe6",
+      "user_id": "user_005",
+      "content": "Avery has a pet bird named Charlie.",
+      "valid_from": "2026-05-14T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "3607f074-5e42-5f34-b33c-cfde0a6f1229"
+    },
+    {
+      "id": "a7ceae34-3f59-53f8-a394-bc7de882b3ed",
+      "user_id": "user_005",
+      "content": "Financial pressure increases Avery's anxiety.",
+      "valid_from": "2026-05-15T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "7eb927ee-8dd2-5ef7-bfd4-60262e979ee4"
+    },
+    {
+      "id": "519b5c0a-b6bd-5027-bee9-d34ee951bc0f",
+      "user_id": "user_005",
+      "content": "Avery's anxiety leads to irritability.",
+      "valid_from": "2026-05-16T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "da65971e-d845-5e8f-ba6c-4b1226ec2cbf"
+    },
+    {
+      "id": "8172daf4-550f-5441-8ca9-1323235f1dc7",
+      "user_id": "user_005",
+      "content": "Avery's irritability negatively impacts their work performance.",
+      "valid_from": "2026-05-17T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "99e34c7d-82a6-5e63-8af6-f14efae69bbb"
+    },
+    {
+      "id": "0281fcfc-955a-5c2b-bd85-7fe8793a713c",
+      "user_id": "user_006",
+      "content": "Deep breathing helps Parker manage their back pain.",
+      "valid_from": "2026-01-18T12:00:00",
+      "valid_until": "2026-03-19T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "dcc7e80d-ea9a-5376-89d6-9ea83a723e6c"
+    },
+    {
+      "id": "f0939fb8-da46-5bca-b865-e627e4ee9631",
+      "user_id": "user_006",
+      "content": "meditation helps Parker manage their back pain.",
+      "valid_from": "2026-03-19T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "f146942c-0d36-5c9c-a46b-9965484940a5"
+    },
+    {
+      "id": "498c3021-f0b2-58e8-900d-3f4ec6ab44c7",
+      "user_id": "user_006",
+      "content": "Parker has a pet cat named Charlie.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "bc11ebec-0417-58fc-bbed-fd164e97f32e"
+    },
+    {
+      "id": "d273d272-e881-5d7b-a864-9a05dde5d67b",
+      "user_id": "user_006",
+      "content": "Work stress increases Parker's back pain.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "d099544f-5e59-50ea-ad62-92906576a6d4"
+    },
+    {
+      "id": "249555fb-e340-5d20-b52b-f0387dab28c7",
+      "user_id": "user_006",
+      "content": "Parker's back pain leads to low energy.",
+      "valid_from": "2026-05-07T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "641a0381-dc49-5a1f-9b66-3d5136fce7bf"
+    },
+    {
+      "id": "a4b16a2f-960f-5f56-bc9a-102a144951f1",
+      "user_id": "user_006",
+      "content": "Parker's low energy negatively impacts their daily productivity.",
+      "valid_from": "2026-05-08T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "b576e85b-8851-5a7b-9bc5-4035aecb89aa"
+    },
+    {
+      "id": "e8b75f0c-5d71-5407-8d42-3139973a0135",
+      "user_id": "user_007",
+      "content": "Journaling helps Taylor manage their back pain.",
+      "valid_from": "2026-01-03T12:00:00",
+      "valid_until": "2026-03-04T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "37ed5480-3057-5569-bcb9-e2cfc7bf7acc"
+    },
+    {
+      "id": "ab7bac1a-2762-5a76-9b0a-49f3dbb33c97",
+      "user_id": "user_007",
+      "content": "talking to a therapist helps Taylor manage their back pain.",
+      "valid_from": "2026-03-04T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "e971bef3-f7d9-5c60-a271-4bf18c2a8cfe"
+    },
+    {
+      "id": "064e8f19-a660-583d-9c10-94db6a4339a2",
+      "user_id": "user_007",
+      "content": "Taylor has a pet dog named Charlie.",
+      "valid_from": "2026-04-28T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "9033f6ee-eca6-5ba4-b3e7-4785681e2c89"
+    },
+    {
+      "id": "dd5687b7-335a-5ec6-beaa-df039de3316d",
+      "user_id": "user_007",
+      "content": "Work stress increases Taylor's back pain.",
+      "valid_from": "2026-04-29T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "909ed169-2cde-5851-a73a-1025217ba776"
+    },
+    {
+      "id": "249059c9-9f40-5f5c-8528-ba8ce84dbc4b",
+      "user_id": "user_007",
+      "content": "Taylor's back pain leads to low energy.",
+      "valid_from": "2026-04-30T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "81634db2-1c09-5a60-b3a7-a4a1398b43b7"
+    },
+    {
+      "id": "9a113d4e-4a2f-5ca7-8a2e-4c8ff1ce1cea",
+      "user_id": "user_007",
+      "content": "Taylor's low energy negatively impacts their daily productivity.",
+      "valid_from": "2026-05-01T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "a20687b2-2942-5e43-958d-2d50f8b78b55"
+    },
+    {
+      "id": "7963ba8a-bc1f-514e-8e4b-440747d4ff95",
+      "user_id": "user_008",
+      "content": "Listening to music helps Blake manage their back pain.",
+      "valid_from": "2026-01-16T12:00:00",
+      "valid_until": "2026-03-17T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "1b65ca10-f1fa-525a-8aef-de7207323cc7"
+    },
+    {
+      "id": "80171e2d-35c0-56e6-a762-5bf41d6aedff",
+      "user_id": "user_008",
+      "content": "playing an instrument helps Blake manage their back pain.",
+      "valid_from": "2026-03-17T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "9611bc04-a7ff-5207-8f17-76c1d252605b"
+    },
+    {
+      "id": "c1ae9f4b-ff5d-53a5-8873-96f4aa44e055",
+      "user_id": "user_008",
+      "content": "Blake has a pet cat named Charlie.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "e9b8ba50-88d0-5503-ad91-01edd36db4ac"
+    },
+    {
+      "id": "dbba61ad-bccb-58e9-9ea7-0b6fbfb6f8ab",
+      "user_id": "user_008",
+      "content": "Social isolation increases Blake's back pain.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "8119ddae-f617-57cb-a853-465e0a7f5549"
+    },
+    {
+      "id": "998902c0-5247-5b1d-9693-636b29970a6c",
+      "user_id": "user_008",
+      "content": "Blake's back pain leads to loss of appetite.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "971fdced-e81e-52a2-ba63-fb51ba9d397e"
+    },
+    {
+      "id": "c0307045-e545-56fa-a21d-652675e4d2e9",
+      "user_id": "user_008",
+      "content": "Blake's loss of appetite negatively impacts their relationships.",
+      "valid_from": "2026-05-07T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "5b35ec2d-6f3b-5225-bab2-1d020eda76f7"
+    },
+    {
+      "id": "e267ee6c-dfc9-59b8-9f8c-c78028c1238a",
+      "user_id": "user_009",
+      "content": "Deep breathing helps Skyler manage their stress.",
+      "valid_from": "2026-01-08T12:00:00",
+      "valid_until": "2026-03-09T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "88d4eb4c-629a-5f2c-a59f-fb09e1ac29d5"
+    },
+    {
+      "id": "46caf29d-0d66-5026-88b8-d8c8f107007f",
+      "user_id": "user_009",
+      "content": "meditation helps Skyler manage their stress.",
+      "valid_from": "2026-03-09T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "01bcf394-965c-503f-b3d1-10f5d3c59fca"
+    },
+    {
+      "id": "35260bff-748a-5ea2-b4ff-de64d6e74830",
+      "user_id": "user_009",
+      "content": "Skyler has a pet dog named Charlie.",
+      "valid_from": "2026-04-28T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "0beaff92-c9b5-5ee4-9153-9ca77202abf3"
+    },
+    {
+      "id": "91e43260-216e-5dfd-8b05-e9ce97a2ce08",
+      "user_id": "user_009",
+      "content": "Social isolation increases Skyler's stress.",
+      "valid_from": "2026-04-29T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "20f2e1f8-c3a8-5a1d-9bff-6f4791beb9a9"
+    },
+    {
+      "id": "272e0260-5191-508e-8426-9a53ed6fe0aa",
+      "user_id": "user_009",
+      "content": "Skyler's stress leads to poor sleep.",
+      "valid_from": "2026-04-30T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "92ab3e96-4644-5c08-821f-9bf341e9b5a8"
+    },
+    {
+      "id": "4f306039-6230-5b3c-ab21-3d43fb61d445",
+      "user_id": "user_009",
+      "content": "Skyler's poor sleep negatively impacts their relationships.",
+      "valid_from": "2026-05-01T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "66fe5010-f71f-5117-a149-3c083a9447d5"
+    },
+    {
+      "id": "329023ba-5232-5632-9761-a484e76eb2f4",
+      "user_id": "user_010",
+      "content": "Yoga helps Cameron manage their anxiety.",
+      "valid_from": "2026-01-09T12:00:00",
+      "valid_until": "2026-03-10T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "2b59b7bb-c3dc-5add-855d-a86ba5f31a77"
+    },
+    {
+      "id": "ac3de3b1-e895-545b-a893-0ec2a2605543",
+      "user_id": "user_010",
+      "content": "swimming helps Cameron manage their anxiety.",
+      "valid_from": "2026-03-10T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "b2feac05-7751-5b1c-80f3-dbc76b6813cd"
+    },
+    {
+      "id": "ea275743-1f91-5dde-a381-f9b07bf4c844",
+      "user_id": "user_010",
+      "content": "Cameron has a pet bird named Buddy.",
+      "valid_from": "2026-05-03T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "f17d7ede-da94-501f-b2b0-1c9f3072d9b6"
+    },
+    {
+      "id": "d1a72b16-4a74-5888-b8ab-70c6d87bc284",
+      "user_id": "user_010",
+      "content": "Financial pressure increases Cameron's anxiety.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "e58b08f4-d266-59aa-9443-f1979b2f99de"
+    },
+    {
+      "id": "5d27f8e5-602f-5893-adb9-03ec4b75e74d",
+      "user_id": "user_010",
+      "content": "Cameron's anxiety leads to loss of appetite.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "4bda655f-66c8-53bf-8a28-16a0c20fcd39"
+    },
+    {
+      "id": "182c2e26-baf2-583a-9206-1470ef6f6b3e",
+      "user_id": "user_010",
+      "content": "Cameron's loss of appetite negatively impacts their social life.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "7e330964-80bf-5f1c-8f91-196fdce249a2"
+    },
+    {
+      "id": "55097ef2-718d-5874-875b-14a05f22f1de",
+      "user_id": "user_011",
+      "content": "Journaling helps Logan manage their stress.",
+      "valid_from": "2026-01-20T12:00:00",
+      "valid_until": "2026-03-21T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "995b5f1f-a2e2-535c-aa07-fba495091e34"
+    },
+    {
+      "id": "c582f165-30d2-5bbf-b44b-db9185f313ab",
+      "user_id": "user_011",
+      "content": "talking to a therapist helps Logan manage their stress.",
+      "valid_from": "2026-03-21T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "42b4b47c-baf7-55a5-95cc-89cf0424e3f5"
+    },
+    {
+      "id": "580cf009-1750-5095-b145-3377cbcb07ea",
+      "user_id": "user_011",
+      "content": "Logan has a pet cat named Buddy.",
+      "valid_from": "2026-05-13T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "8cdc9e14-fac7-5023-983a-ba7667d05d7e"
+    },
+    {
+      "id": "a284f74f-10e0-59c7-b62f-97d963fe3a32",
+      "user_id": "user_011",
+      "content": "Financial pressure increases Logan's stress.",
+      "valid_from": "2026-05-14T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "6bf2621c-faa9-53f3-b0b2-6a4a90afa451"
+    },
+    {
+      "id": "9f416eff-f8ab-5bfc-83ae-f514ad63fc17",
+      "user_id": "user_011",
+      "content": "Logan's stress leads to poor sleep.",
+      "valid_from": "2026-05-15T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "468ad6e4-4e58-5324-b78e-686ec622bf34"
+    },
+    {
+      "id": "e4647dcd-7466-57a2-9428-3b78ce4c8e60",
+      "user_id": "user_011",
+      "content": "Logan's poor sleep negatively impacts their overall health.",
+      "valid_from": "2026-05-16T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "e6a8ad1b-cac8-5cd7-a42e-7afd3c4265dc"
+    },
+    {
+      "id": "22c401d5-306d-5e45-a5a9-ac5595d1814e",
+      "user_id": "user_012",
+      "content": "Yoga helps Morgan manage their social anxiety.",
+      "valid_from": "2026-01-30T12:00:00",
+      "valid_until": "2026-03-31T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "09a7b4a2-eabd-5a69-8f5d-67fa27aef2c9"
+    },
+    {
+      "id": "1687a7fe-5126-5595-8564-ebff834044d5",
+      "user_id": "user_012",
+      "content": "swimming helps Morgan manage their social anxiety.",
+      "valid_from": "2026-03-31T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "4ae9ff89-02c0-56b2-a3a3-2a5620a603fb"
+    },
+    {
+      "id": "e9031d10-84df-5468-9c0d-2e1c50103e4a",
+      "user_id": "user_012",
+      "content": "Morgan has a pet cat named Buddy.",
+      "valid_from": "2026-05-19T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "8596d828-34ce-558f-85ad-490ba0bbf7be"
+    },
+    {
+      "id": "dbb1e87d-c6be-5c50-96d7-9fcca897c2c8",
+      "user_id": "user_012",
+      "content": "Financial pressure increases Morgan's social anxiety.",
+      "valid_from": "2026-05-20T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "0bd1ca18-e865-55af-9a9f-9b4de90e9782"
+    },
+    {
+      "id": "d5b1e473-4b26-5ba8-ae44-256d148c8309",
+      "user_id": "user_012",
+      "content": "Morgan's social anxiety leads to poor sleep.",
+      "valid_from": "2026-05-21T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "0e1f0ef0-165e-5e1e-a9d7-806b52189fcd"
+    },
+    {
+      "id": "576fb3fb-b46a-5346-a743-718aa9d27868",
+      "user_id": "user_012",
+      "content": "Morgan's poor sleep negatively impacts their relationships.",
+      "valid_from": "2026-05-22T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "d43a3291-74f8-5be8-84be-32a06c5f4ffa"
+    },
+    {
+      "id": "c02f05ce-4bf3-55b0-a3b1-986e797f6906",
+      "user_id": "user_013",
+      "content": "Deep breathing helps Taylor manage their stress.",
+      "valid_from": "2026-01-03T12:00:00",
+      "valid_until": "2026-03-04T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "fa4242f3-b282-5b22-a887-fa57b0cc526b"
+    },
+    {
+      "id": "c6ca2ffa-af33-5452-90c0-abbae4f0110f",
+      "user_id": "user_013",
+      "content": "meditation helps Taylor manage their stress.",
+      "valid_from": "2026-03-04T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "750c34a5-f9e0-518d-bca1-168553b882db"
+    },
+    {
+      "id": "f8c24d1e-33c0-5a6a-a611-9fd0a4fd1ea1",
+      "user_id": "user_013",
+      "content": "Taylor has a pet dog named Luna.",
+      "valid_from": "2026-04-24T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "3ccda144-8d5c-5b2a-8b26-75a78c89aa35"
+    },
+    {
+      "id": "55e40587-f845-55e3-a8a1-14c525cf4516",
+      "user_id": "user_013",
+      "content": "Lack of sleep increases Taylor's stress.",
+      "valid_from": "2026-04-25T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "0fa22961-d8da-544f-aad0-d7f6fe424493"
+    },
+    {
+      "id": "05b60382-6203-53b1-8079-f5a9a00d6266",
+      "user_id": "user_013",
+      "content": "Taylor's stress leads to poor sleep.",
+      "valid_from": "2026-04-26T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "7533b4b2-c26b-5bea-b2b9-1e0bd4dea6f7"
+    },
+    {
+      "id": "5e549150-16e8-572c-a62e-cb5210195b02",
+      "user_id": "user_013",
+      "content": "Taylor's poor sleep negatively impacts their work performance.",
+      "valid_from": "2026-04-27T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "50897b5c-39ae-50e9-a4cc-f9b2abf0072c"
+    },
+    {
+      "id": "6f0168d0-2c39-5df9-83a3-c7e953903894",
+      "user_id": "user_014",
+      "content": "Journaling helps Parker manage their anxiety.",
+      "valid_from": "2026-01-31T12:00:00",
+      "valid_until": "2026-04-01T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "6666632c-77ec-52cb-b73c-8d7fb8243790"
+    },
+    {
+      "id": "cfd92223-88dc-59a9-a157-8b2378980853",
+      "user_id": "user_014",
+      "content": "talking to a therapist helps Parker manage their anxiety.",
+      "valid_from": "2026-04-01T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "917b0304-2caf-53c2-a66b-44e4975ae9c3"
+    },
+    {
+      "id": "fe083736-0e22-5a15-a126-0933ffb80422",
+      "user_id": "user_014",
+      "content": "Parker has a pet dog named Charlie.",
+      "valid_from": "2026-05-18T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "1eac0838-1d4c-5fe5-943d-2bafee1832d3"
+    },
+    {
+      "id": "9c133bbb-ae11-5d97-ac62-6a222065894f",
+      "user_id": "user_014",
+      "content": "Work stress increases Parker's anxiety.",
+      "valid_from": "2026-05-19T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "924863e4-2bb0-5c89-8e03-82d747342921"
+    },
+    {
+      "id": "9259a291-f8b3-556d-bee9-09ff7b8c45fc",
+      "user_id": "user_014",
+      "content": "Parker's anxiety leads to irritability.",
+      "valid_from": "2026-05-20T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "66bd5057-685a-5217-b83e-8fe844268433"
+    },
+    {
+      "id": "65c72b4f-e2de-5840-93eb-4acf9b43bc70",
+      "user_id": "user_014",
+      "content": "Parker's irritability negatively impacts their social life.",
+      "valid_from": "2026-05-21T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "686d0e07-cc31-5770-be27-2eac71941241"
+    },
+    {
+      "id": "76e24ec1-7a5e-536a-bbe1-409be170c70f",
+      "user_id": "user_015",
+      "content": "Yoga helps Jordan manage their back pain.",
+      "valid_from": "2026-01-02T12:00:00",
+      "valid_until": "2026-03-03T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "18b73db3-f3ac-5eaa-a503-a312d1161102"
+    },
+    {
+      "id": "8e8a49f9-d326-5dcc-b3cd-f0503d99ce43",
+      "user_id": "user_015",
+      "content": "swimming helps Jordan manage their back pain.",
+      "valid_from": "2026-03-03T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "c26bf882-37e5-516b-944a-5e3da33a9f25"
+    },
+    {
+      "id": "e869a402-0af4-5640-8735-e3dde0849ff7",
+      "user_id": "user_015",
+      "content": "Jordan has a pet cat named Luna.",
+      "valid_from": "2026-04-24T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "1727e9f2-1c15-5c62-afe3-3bcc69709c5d"
+    },
+    {
+      "id": "b935a5c9-352b-51d6-8077-84c012ceea7b",
+      "user_id": "user_015",
+      "content": "Social isolation increases Jordan's back pain.",
+      "valid_from": "2026-04-25T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "a8f46ddb-8480-5921-a705-296473b350f2"
+    },
+    {
+      "id": "f95a2b03-7892-5b4c-830f-5c75e0cbc444",
+      "user_id": "user_015",
+      "content": "Jordan's back pain leads to low energy.",
+      "valid_from": "2026-04-26T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "d457892b-07d0-5b7a-b703-17b09777ce46"
+    },
+    {
+      "id": "29ce128a-8b7d-5375-976f-e2b778ca255c",
+      "user_id": "user_015",
+      "content": "Jordan's low energy negatively impacts their social life.",
+      "valid_from": "2026-04-27T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "5a11eadd-efa5-5321-8f8e-8c5604e49ccc"
+    },
+    {
+      "id": "bcc11f09-67aa-5e04-9643-12b72f88a1f3",
+      "user_id": "user_016",
+      "content": "Deep breathing helps Dakota manage their stress.",
+      "valid_from": "2026-01-19T12:00:00",
+      "valid_until": "2026-03-20T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "31ba8fce-129b-5f38-9e83-649800e3a793"
+    },
+    {
+      "id": "b8796a62-18ee-5424-8377-cf1bb5b947f8",
+      "user_id": "user_016",
+      "content": "meditation helps Dakota manage their stress.",
+      "valid_from": "2026-03-20T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "61a37422-3a11-5f58-a857-45bc4c6f091d"
+    },
+    {
+      "id": "45d84309-3904-5c0c-a175-5aae3bb70855",
+      "user_id": "user_016",
+      "content": "Dakota has a pet bird named Buddy.",
+      "valid_from": "2026-05-12T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "c93d904b-2a99-5e50-963f-c19d98ac9585"
+    },
+    {
+      "id": "291799c7-1d23-5b00-b74a-94aa43c8abde",
+      "user_id": "user_016",
+      "content": "Work stress increases Dakota's stress.",
+      "valid_from": "2026-05-13T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "bbf5eb55-24ed-57ac-bcf8-30fcd5d6d31c"
+    },
+    {
+      "id": "615d9b3f-c523-5638-9a78-b3e8f444976b",
+      "user_id": "user_016",
+      "content": "Dakota's stress leads to irritability.",
+      "valid_from": "2026-05-14T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "f9d741e2-2783-5608-9266-dc71af790db1"
+    },
+    {
+      "id": "634e7d54-73c1-5a0f-9902-f0b61b767e36",
+      "user_id": "user_016",
+      "content": "Dakota's irritability negatively impacts their relationships.",
+      "valid_from": "2026-05-15T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "e1a7e82e-35e4-5a82-ac07-094fa242c531"
+    },
+    {
+      "id": "ccae47dc-dab3-598e-89be-de4ac819c2cf",
+      "user_id": "user_017",
+      "content": "Journaling helps Skyler manage their anxiety.",
+      "valid_from": "2026-01-08T12:00:00",
+      "valid_until": "2026-03-09T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "602a39d3-0775-5089-bc90-7b07bc60a8fa"
+    },
+    {
+      "id": "ef90eeb4-c993-55ff-8cd6-f05c3a87b692",
+      "user_id": "user_017",
+      "content": "talking to a therapist helps Skyler manage their anxiety.",
+      "valid_from": "2026-03-09T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "5432626b-3a39-57d2-8af2-6a763a1c36fd"
+    },
+    {
+      "id": "7c8294c2-e52d-5ed3-8319-2ed594a80634",
+      "user_id": "user_017",
+      "content": "Skyler has a pet dog named Luna.",
+      "valid_from": "2026-05-03T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "dd35c3c0-a7af-590e-ba06-8b37b51ad6cb"
+    },
+    {
+      "id": "6f940798-d6ca-5c20-9789-3768697c04a9",
+      "user_id": "user_017",
+      "content": "Social isolation increases Skyler's anxiety.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "2c5cace9-c7fb-52f7-98cc-2155f71900ef"
+    },
+    {
+      "id": "b4533d79-976f-5b12-aecd-2823a8cb3d0b",
+      "user_id": "user_017",
+      "content": "Skyler's anxiety leads to irritability.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "576e3108-a12d-5e0b-8577-0d09e937626f"
+    },
+    {
+      "id": "dc3c39c7-afee-5b20-9089-3c33cf366619",
+      "user_id": "user_017",
+      "content": "Skyler's irritability negatively impacts their overall health.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "29d5fbdd-0da4-597f-9247-a3e9ff9d71bd"
+    },
+    {
+      "id": "758f58e7-5464-5a21-97f9-28ef549faefa",
+      "user_id": "user_018",
+      "content": "Yoga helps Drew manage their back pain.",
+      "valid_from": "2026-01-10T12:00:00",
+      "valid_until": "2026-03-11T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "2004b35d-8ed6-5eb5-a87a-6a75f065de28"
+    },
+    {
+      "id": "564e7503-9c46-50a2-bd8e-63648bbe9b22",
+      "user_id": "user_018",
+      "content": "swimming helps Drew manage their back pain.",
+      "valid_from": "2026-03-11T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "7a58a6e3-ad2b-5709-af7d-6f34f125b154"
+    },
+    {
+      "id": "9876f7b4-abc7-573d-9b66-53db88a80d63",
+      "user_id": "user_018",
+      "content": "Drew has a pet dog named Charlie.",
+      "valid_from": "2026-05-03T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "607acef7-8918-55eb-b9ba-8c7d9d271ac9"
+    },
+    {
+      "id": "e6c6e162-afa3-536e-a78e-d631b84a8415",
+      "user_id": "user_018",
+      "content": "Lack of sleep increases Drew's back pain.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "b050ad23-1490-5039-bf05-2cf53f1865da"
+    },
+    {
+      "id": "f627922e-c41c-5fb6-8a61-e163cec49728",
+      "user_id": "user_018",
+      "content": "Drew's back pain leads to poor sleep.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "6fbce759-00f7-512c-8a97-f1f07fc5a8d3"
+    },
+    {
+      "id": "902a4b38-21fe-5559-b2db-fe182326ee1d",
+      "user_id": "user_018",
+      "content": "Drew's poor sleep negatively impacts their relationships.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "e313daa7-280e-563e-aab3-a85e954374ce"
+    },
+    {
+      "id": "7354be58-c291-5e0a-b0fc-48311ecfd3f4",
+      "user_id": "user_019",
+      "content": "Yoga helps Blake manage their stress.",
+      "valid_from": "2026-01-16T12:00:00",
+      "valid_until": "2026-03-17T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "2615567b-26a1-547b-bab8-e4497cb54551"
+    },
+    {
+      "id": "2ed5d3d6-0774-5e97-b376-5f3900dd8ab1",
+      "user_id": "user_019",
+      "content": "swimming helps Blake manage their stress.",
+      "valid_from": "2026-03-17T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "22123255-4e8f-5c84-a67a-79255f00b5da"
+    },
+    {
+      "id": "55034fd9-e120-56bd-a090-3be5c6165641",
+      "user_id": "user_019",
+      "content": "Blake has a pet cat named Luna.",
+      "valid_from": "2026-05-03T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "bbc07d55-aad5-5240-955a-9b0d4d3bd176"
+    },
+    {
+      "id": "949aea75-06a2-5a58-b371-f4f400081700",
+      "user_id": "user_019",
+      "content": "Financial pressure increases Blake's stress.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "335fabaf-6aa9-577c-81e9-0f77f6a722fc"
+    },
+    {
+      "id": "36c84964-7501-5b0a-ab89-9dafd1f5e621",
+      "user_id": "user_019",
+      "content": "Blake's stress leads to irritability.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "7bbacbd3-cca0-5fc3-a0a0-538565072f4d"
+    },
+    {
+      "id": "4c163b8d-c7d8-5174-b6f7-99d47291fbd9",
+      "user_id": "user_019",
+      "content": "Blake's irritability negatively impacts their relationships.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "a04f1e18-fa1b-56a9-9efe-d5d0ba3bc7ff"
+    },
+    {
+      "id": "268c8294-314e-5b95-8d82-a90d29351ab0",
+      "user_id": "user_020",
+      "content": "Walking helps Dakota manage their stress.",
+      "valid_from": "2026-01-30T12:00:00",
+      "valid_until": "2026-03-31T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "d78f10b9-0215-5dff-8aa3-95417cbb08a4"
+    },
+    {
+      "id": "429463ab-eb5b-574f-aa98-fde587a1def2",
+      "user_id": "user_020",
+      "content": "running helps Dakota manage their stress.",
+      "valid_from": "2026-03-31T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "922dfa77-c229-5310-bb9e-780cf013cde1"
+    },
+    {
+      "id": "6269a7d6-6d94-538c-b58a-f84c7fe82b04",
+      "user_id": "user_020",
+      "content": "Dakota has a pet cat named Luna.",
+      "valid_from": "2026-05-17T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "390429b2-61e2-583d-8529-234b0d4e585d"
+    },
+    {
+      "id": "e6deabaa-594f-57c4-9d43-681ceba4f832",
+      "user_id": "user_020",
+      "content": "Social isolation increases Dakota's stress.",
+      "valid_from": "2026-05-18T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "3f4535c8-4df4-542a-8048-f9bae6d3f301"
+    },
+    {
+      "id": "516a8355-2062-5044-84fb-4857ce2a81e3",
+      "user_id": "user_020",
+      "content": "Dakota's stress leads to loss of appetite.",
+      "valid_from": "2026-05-19T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "6e08bab2-e60f-549a-ba60-54b2f61c5126"
+    },
+    {
+      "id": "65431e25-7333-592f-aac5-c699f61dee77",
+      "user_id": "user_020",
+      "content": "Dakota's loss of appetite negatively impacts their relationships.",
+      "valid_from": "2026-05-20T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "51e61bb3-5d8d-57d2-92e5-4f833c5d4a06"
+    },
+    {
+      "id": "aa0e79c0-cd89-5daa-b61e-603efed732c3",
+      "user_id": "user_021",
+      "content": "Listening to music helps Elliot manage their social anxiety.",
+      "valid_from": "2026-01-15T12:00:00",
+      "valid_until": "2026-03-16T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "9b40d0d2-ba6d-5117-8abb-d168328f0335"
+    },
+    {
+      "id": "be3897ac-843a-57bc-85c7-1488f64d9cd4",
+      "user_id": "user_021",
+      "content": "playing an instrument helps Elliot manage their social anxiety.",
+      "valid_from": "2026-03-16T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "ef5e0a38-9209-59da-aefd-dd98f4ca66c5"
+    },
+    {
+      "id": "439801db-62fd-5d9b-ac17-2bdc6a2c7507",
+      "user_id": "user_021",
+      "content": "Elliot has a pet bird named Luna.",
+      "valid_from": "2026-05-01T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "b9a32553-4b11-589f-8025-b792b0f14daf"
+    },
+    {
+      "id": "9f374a04-5e39-5c9d-b72b-47896d87bff0",
+      "user_id": "user_021",
+      "content": "Work stress increases Elliot's social anxiety.",
+      "valid_from": "2026-05-02T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "979281ff-ce71-544c-a8e1-2c1442e541b6"
+    },
+    {
+      "id": "de852eef-1ef0-576a-9a19-8e4de2a6821b",
+      "user_id": "user_021",
+      "content": "Elliot's social anxiety leads to poor sleep.",
+      "valid_from": "2026-05-03T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "8f8d715c-9196-595b-a9e2-d198a2f41671"
+    },
+    {
+      "id": "2590bffe-82cf-5e0a-b385-92b738f72f14",
+      "user_id": "user_021",
+      "content": "Elliot's poor sleep negatively impacts their social life.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "ac555f8d-954b-58eb-ab90-13be7d6f2f61"
+    },
+    {
+      "id": "c992ddc5-9ca6-52bf-b170-2f608464ee7b",
+      "user_id": "user_022",
+      "content": "Yoga helps Blake manage their anxiety.",
+      "valid_from": "2026-01-16T12:00:00",
+      "valid_until": "2026-03-17T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "4146606d-e396-5c97-9a6e-f7723ca11ba4"
+    },
+    {
+      "id": "b3619059-f5a5-577d-b0fa-138604c0db44",
+      "user_id": "user_022",
+      "content": "swimming helps Blake manage their anxiety.",
+      "valid_from": "2026-03-17T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "bcc3b88c-1fb4-5ad1-b791-6359ee581981"
+    },
+    {
+      "id": "3cbfeb2a-18a7-5515-a963-42546c227ea0",
+      "user_id": "user_022",
+      "content": "Blake has a pet cat named Charlie.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "56b1cb0e-2068-5eba-91da-47676ada67c1"
+    },
+    {
+      "id": "a55207cb-934b-5c8e-9283-d8b35ad47e82",
+      "user_id": "user_022",
+      "content": "Lack of sleep increases Blake's anxiety.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "23db792e-d087-58ae-a574-1c9efc6aa0f4"
+    },
+    {
+      "id": "c207140f-d213-571d-b923-9c29e8da1b08",
+      "user_id": "user_022",
+      "content": "Blake's anxiety leads to trouble concentrating.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "3f8cbc4a-1bbf-5a77-8ba5-124b8ba5a0f3"
+    },
+    {
+      "id": "1542af24-081b-57ef-82e5-530aa66f8e7b",
+      "user_id": "user_022",
+      "content": "Blake's trouble concentrating negatively impacts their overall health.",
+      "valid_from": "2026-05-07T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "13d37017-db01-5e82-b086-664f7c440a80"
+    },
+    {
+      "id": "f949f705-9ca3-5fd6-b434-5b05004bc69f",
+      "user_id": "user_023",
+      "content": "Listening to music helps Sage manage their back pain.",
+      "valid_from": "2026-01-14T12:00:00",
+      "valid_until": "2026-03-15T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "ac52ad07-f118-5d56-ba64-f6f2c979806e"
+    },
+    {
+      "id": "628d6b40-f480-50d9-abd3-d584c46be269",
+      "user_id": "user_023",
+      "content": "playing an instrument helps Sage manage their back pain.",
+      "valid_from": "2026-03-15T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "76bcaa4c-7eca-5f30-8f40-dcfad5fe13f8"
+    },
+    {
+      "id": "be8387ce-3f5f-514b-8ea7-e047cd66d752",
+      "user_id": "user_023",
+      "content": "Sage has a pet cat named Buddy.",
+      "valid_from": "2026-05-10T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "b85066ea-df5e-52c6-a0fc-4a66ef088ee1"
+    },
+    {
+      "id": "fb1947e7-73bb-5975-a711-ff1c589f3f9c",
+      "user_id": "user_023",
+      "content": "Financial pressure increases Sage's back pain.",
+      "valid_from": "2026-05-11T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "cf8d870c-0c3a-54a1-a1af-ef7a029a020e"
+    },
+    {
+      "id": "df4bc9fd-375f-5a23-b311-08b1913717c1",
+      "user_id": "user_023",
+      "content": "Sage's back pain leads to poor sleep.",
+      "valid_from": "2026-05-12T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "cb6866ca-399a-5556-8c57-756d110e49cb"
+    },
+    {
+      "id": "cdc53b70-aa4c-52b0-b9db-6e7a7ee1ee5e",
+      "user_id": "user_023",
+      "content": "Sage's poor sleep negatively impacts their daily productivity.",
+      "valid_from": "2026-05-13T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "45db23df-f070-5662-8fbc-7d71c9b1074c"
+    },
+    {
+      "id": "b3b1370a-2759-5b72-adaf-d7b08bdc7158",
+      "user_id": "user_024",
+      "content": "Journaling helps Taylor manage their back pain.",
+      "valid_from": "2026-01-03T12:00:00",
+      "valid_until": "2026-03-04T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "879ee492-1be4-56b8-ab63-c6e115f171ed"
+    },
+    {
+      "id": "d2df2dc7-9a47-5ebc-8955-0633d6e5b43e",
+      "user_id": "user_024",
+      "content": "talking to a therapist helps Taylor manage their back pain.",
+      "valid_from": "2026-03-04T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "5fc7f366-19f6-529d-9eae-8b993c4c96cc"
+    },
+    {
+      "id": "102b1186-2824-50f6-976b-04a384d817f9",
+      "user_id": "user_024",
+      "content": "Taylor has a pet cat named Buddy.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "b6e481b5-ffc3-5baa-8b07-00cc3a5ef2ab"
+    },
+    {
+      "id": "d7359d66-8dbc-5d75-b6a9-31ebf5a6cc5d",
+      "user_id": "user_024",
+      "content": "Financial pressure increases Taylor's back pain.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "0a3f40d8-50ce-5ee8-b480-b3bb8cc53c29"
+    },
+    {
+      "id": "70ba3037-a124-5deb-b9ad-b9996b784a74",
+      "user_id": "user_024",
+      "content": "Taylor's back pain leads to trouble concentrating.",
+      "valid_from": "2026-05-07T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "d61185a8-f747-544f-82e3-177634636cfa"
+    },
+    {
+      "id": "f1fd1909-9d78-5337-9d5c-732fd5e21b3f",
+      "user_id": "user_024",
+      "content": "Taylor's trouble concentrating negatively impacts their daily productivity.",
+      "valid_from": "2026-05-08T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "309cbf49-7b9f-5b26-9155-149bb85b344a"
+    },
+    {
+      "id": "93e6e49c-701f-5cc8-90b8-a4f15e976344",
+      "user_id": "user_025",
+      "content": "Journaling helps Taylor manage their anxiety.",
+      "valid_from": "2026-01-03T12:00:00",
+      "valid_until": "2026-03-04T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "d19eb1a7-840c-56db-b233-62443cd83610"
+    },
+    {
+      "id": "a29a14a8-5023-5b6f-b10f-b3c7f2d01308",
+      "user_id": "user_025",
+      "content": "talking to a therapist helps Taylor manage their anxiety.",
+      "valid_from": "2026-03-04T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "3a1ce76a-d484-56d6-8cda-05863810591b"
+    },
+    {
+      "id": "c22ddfa7-5831-5221-bfcd-596ad1a749ea",
+      "user_id": "user_025",
+      "content": "Taylor has a pet dog named Luna.",
+      "valid_from": "2026-04-23T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "7d845937-4611-5a77-b452-ba90e58d8283"
+    },
+    {
+      "id": "7caba9cb-3ac3-56fb-89d5-ae8e74b7ded2",
+      "user_id": "user_025",
+      "content": "Financial pressure increases Taylor's anxiety.",
+      "valid_from": "2026-04-24T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "41248d4a-f41a-56e3-9b37-ddeb9a0b9b4e"
+    },
+    {
+      "id": "578a548a-07c5-5ce7-be4e-c7d3cd3eb918",
+      "user_id": "user_025",
+      "content": "Taylor's anxiety leads to loss of appetite.",
+      "valid_from": "2026-04-25T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "719ffa69-8f4d-50ba-a19d-8b58f88b750e"
+    },
+    {
+      "id": "dd75f10d-d861-578b-8482-c7aec7d18bee",
+      "user_id": "user_025",
+      "content": "Taylor's loss of appetite negatively impacts their social life.",
+      "valid_from": "2026-04-26T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "7564ca8c-303f-5a02-a3e8-d8b1ebd55031"
+    },
+    {
+      "id": "9e171a8b-3c85-56d8-b93a-5cf47b8e023f",
+      "user_id": "user_026",
+      "content": "Yoga helps Elliot manage their anxiety.",
+      "valid_from": "2026-01-24T12:00:00",
+      "valid_until": "2026-03-25T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "4ed756b0-6a04-521f-920b-757c466474ef"
+    },
+    {
+      "id": "3cf8c0c8-f452-5e65-9b44-72a203a6b3bc",
+      "user_id": "user_026",
+      "content": "swimming helps Elliot manage their anxiety.",
+      "valid_from": "2026-03-25T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "bd7f2a6b-5c87-582b-bfe6-753c3a1334eb"
+    },
+    {
+      "id": "85877fb7-07a6-5a68-ad44-fdcc4c45c0fc",
+      "user_id": "user_026",
+      "content": "Elliot has a pet bird named Buddy.",
+      "valid_from": "2026-05-17T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "3d18d3f3-2773-5b99-9694-87c90f7fe7ae"
+    },
+    {
+      "id": "8347f7e6-95ec-5521-858b-2e78249bcfe6",
+      "user_id": "user_026",
+      "content": "Social isolation increases Elliot's anxiety.",
+      "valid_from": "2026-05-18T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "96afb998-307a-57b1-ab2b-cc9d4126b1c3"
+    },
+    {
+      "id": "662a1d81-eef3-5ef8-97f6-0dd04d51ebb0",
+      "user_id": "user_026",
+      "content": "Elliot's anxiety leads to low energy.",
+      "valid_from": "2026-05-19T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "eb45ca27-9441-55d7-8ba6-6a4bba93f142"
+    },
+    {
+      "id": "1e9bebfd-28a9-5b19-84ab-0cd68ea3d88f",
+      "user_id": "user_026",
+      "content": "Elliot's low energy negatively impacts their daily productivity.",
+      "valid_from": "2026-05-20T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "2ad22ea9-112c-5faf-8d5e-64af4482d322"
+    },
+    {
+      "id": "0701b5b0-71dd-506e-9445-126d2f57d746",
+      "user_id": "user_027",
+      "content": "Deep breathing helps Jordan manage their anxiety.",
+      "valid_from": "2026-01-22T12:00:00",
+      "valid_until": "2026-03-23T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "520c2673-a99e-552c-b241-e624d69d5fd9"
+    },
+    {
+      "id": "bb2abc5f-2d9f-512d-a1e6-bce9bf7fb1a2",
+      "user_id": "user_027",
+      "content": "meditation helps Jordan manage their anxiety.",
+      "valid_from": "2026-03-23T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "2a05521e-35c1-54e6-ab29-244ea4b77774"
+    },
+    {
+      "id": "a50df994-8736-599c-b11d-630917b2c52e",
+      "user_id": "user_027",
+      "content": "Jordan has a pet bird named Charlie.",
+      "valid_from": "2026-05-22T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "0f238c1c-87a2-5a75-b47a-4900b816d7cb"
+    },
+    {
+      "id": "ed0fb555-2f3a-5d78-9bfd-f7d91e0636cd",
+      "user_id": "user_027",
+      "content": "Lack of sleep increases Jordan's anxiety.",
+      "valid_from": "2026-05-23T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "8508f054-c317-513f-b6f2-5c0b17d00119"
+    },
+    {
+      "id": "d42f7e0d-e9ab-52a5-9e00-df8c7285769b",
+      "user_id": "user_027",
+      "content": "Jordan's anxiety leads to poor sleep.",
+      "valid_from": "2026-05-24T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "221d9f81-c12d-5d63-988b-69eb10f7e938"
+    },
+    {
+      "id": "d7cce0ed-541c-5589-850e-2c274a984755",
+      "user_id": "user_027",
+      "content": "Jordan's poor sleep negatively impacts their work performance.",
+      "valid_from": "2026-05-25T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "f023cfc8-be1c-53c8-87c5-c9b2c81a6787"
+    },
+    {
+      "id": "397c4498-dcae-537a-9493-d6ff2677efd9",
+      "user_id": "user_028",
+      "content": "Journaling helps Casey manage their back pain.",
+      "valid_from": "2026-01-30T12:00:00",
+      "valid_until": "2026-03-31T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "02585a11-cd64-5704-8bc5-bd07392f5299"
+    },
+    {
+      "id": "7adbfc7b-a46f-5b56-a4c2-928b0fad6d5a",
+      "user_id": "user_028",
+      "content": "talking to a therapist helps Casey manage their back pain.",
+      "valid_from": "2026-03-31T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "50e644a4-644d-583d-ae7d-18bb987ebaf8"
+    },
+    {
+      "id": "23ab155a-dc47-5638-b40c-677d6219bc4e",
+      "user_id": "user_028",
+      "content": "Casey has a pet bird named Buddy.",
+      "valid_from": "2026-05-26T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "57a2601a-3c5c-51bc-b4cc-b3b6718e2ab0"
+    },
+    {
+      "id": "7de60e47-d916-5593-9eb6-e59516e2d771",
+      "user_id": "user_028",
+      "content": "Work stress increases Casey's back pain.",
+      "valid_from": "2026-05-27T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "3a7ce144-365c-5b56-9164-ce01785397d2"
+    },
+    {
+      "id": "ebaef042-01ed-5458-8b0a-6dd7321ac16e",
+      "user_id": "user_028",
+      "content": "Casey's back pain leads to low energy.",
+      "valid_from": "2026-05-28T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "7a0982e2-88dc-511a-87fb-ad40ece20532"
+    },
+    {
+      "id": "d894d26e-e3e2-58be-9488-68aedacf17bd",
+      "user_id": "user_028",
+      "content": "Casey's low energy negatively impacts their overall health.",
+      "valid_from": "2026-05-29T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "9f8464b8-373e-5945-84c6-76bb667a6638"
+    },
+    {
+      "id": "1fa86e63-7d28-5ef1-a4a5-f1024188f157",
+      "user_id": "user_029",
+      "content": "Listening to music helps Quinn manage their anxiety.",
+      "valid_from": "2026-01-11T12:00:00",
+      "valid_until": "2026-03-12T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "b109be69-47ed-5ffe-ad51-6970452259a6"
+    },
+    {
+      "id": "22911434-ad82-5820-96fd-853cac892f73",
+      "user_id": "user_029",
+      "content": "playing an instrument helps Quinn manage their anxiety.",
+      "valid_from": "2026-03-12T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "871a6843-30ad-5f11-aeed-0a4cef6fc93f"
+    },
+    {
+      "id": "4b293b29-5013-5bcf-a496-bbeaa545a3e6",
+      "user_id": "user_029",
+      "content": "Quinn has a pet dog named Charlie.",
+      "valid_from": "2026-04-22T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "728372cd-b5c6-56ee-a6f4-93477933a554"
+    },
+    {
+      "id": "fa440e23-af52-5361-89d6-5a0b44260ae5",
+      "user_id": "user_029",
+      "content": "Social isolation increases Quinn's anxiety.",
+      "valid_from": "2026-04-23T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "7e032329-13b5-5496-9d3b-92cd5a0f8f56"
+    },
+    {
+      "id": "37a9cbc1-fabc-570e-80ba-bb9be60d2807",
+      "user_id": "user_029",
+      "content": "Quinn's anxiety leads to trouble concentrating.",
+      "valid_from": "2026-04-24T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "346c3477-53ff-5efe-a78b-8e809771f83e"
+    },
+    {
+      "id": "27a12ecd-cddc-5822-8974-543e533fcc50",
+      "user_id": "user_029",
+      "content": "Quinn's trouble concentrating negatively impacts their daily productivity.",
+      "valid_from": "2026-04-25T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "ac4e85c9-65f7-5773-824b-2008c3d22b91"
+    },
+    {
+      "id": "e8595c5e-f06d-5cff-9948-aa004d56d70d",
+      "user_id": "user_030",
+      "content": "Listening to music helps Taylor manage their stress.",
+      "valid_from": "2026-01-03T12:00:00",
+      "valid_until": "2026-03-04T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "9dd31c2c-1c68-5ec7-b38d-f1f68322cb43"
+    },
+    {
+      "id": "57ca5891-95a2-5809-87c9-96905e7dc3d5",
+      "user_id": "user_030",
+      "content": "playing an instrument helps Taylor manage their stress.",
+      "valid_from": "2026-03-04T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "d82bd0f1-3160-560d-89f0-1b00b0f331ce"
+    },
+    {
+      "id": "bb89e0a0-d1b9-55fc-b28f-6bf55894c422",
+      "user_id": "user_030",
+      "content": "Taylor has a pet cat named Luna.",
+      "valid_from": "2026-04-30T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "72e355d3-5780-5c8d-809c-5729192529dc"
+    },
+    {
+      "id": "c8ae47c8-5ea0-5ff3-8290-22c57c14bf5c",
+      "user_id": "user_030",
+      "content": "Social isolation increases Taylor's stress.",
+      "valid_from": "2026-05-01T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "11b4ec92-7347-5d61-a331-2431a3dd7a33"
+    },
+    {
+      "id": "5d0d70ee-4eee-5281-9256-4861cda2c56c",
+      "user_id": "user_030",
+      "content": "Taylor's stress leads to trouble concentrating.",
+      "valid_from": "2026-05-02T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "e1a5fb43-ecb5-5f0e-86c5-17b671a17403"
+    },
+    {
+      "id": "0f00e6d2-10de-5ae3-9b77-0b51ae8d4d4f",
+      "user_id": "user_030",
+      "content": "Taylor's trouble concentrating negatively impacts their relationships.",
+      "valid_from": "2026-05-03T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "25f364aa-e52d-5419-96a5-bcb545d410f0"
+    },
+    {
+      "id": "2497086d-c08a-595a-9f92-9d46281a3fbe",
+      "user_id": "user_031",
+      "content": "Yoga helps Cameron manage their anxiety.",
+      "valid_from": "2026-01-09T12:00:00",
+      "valid_until": "2026-03-10T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "72edcd80-ae1e-53eb-a2be-595ba1097b52"
+    },
+    {
+      "id": "58d1875f-9be4-5656-abc8-a594199147ab",
+      "user_id": "user_031",
+      "content": "swimming helps Cameron manage their anxiety.",
+      "valid_from": "2026-03-10T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "db1481d9-faf6-57b2-8c5e-3f7538772ec5"
+    },
+    {
+      "id": "8071600d-bdeb-599c-a781-e68df2a7fbad",
+      "user_id": "user_031",
+      "content": "Cameron has a pet cat named Buddy.",
+      "valid_from": "2026-05-07T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "c84f726b-2f1c-50c3-b47c-a2ce27e640e0"
+    },
+    {
+      "id": "48026444-13df-5c12-8bb1-6914b2ab3e99",
+      "user_id": "user_031",
+      "content": "Financial pressure increases Cameron's anxiety.",
+      "valid_from": "2026-05-08T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "626039eb-26b0-5e69-b49d-c1e7a9d87e50"
+    },
+    {
+      "id": "2f6c9a6f-04a2-5afb-b835-350dcd5e7ea1",
+      "user_id": "user_031",
+      "content": "Cameron's anxiety leads to poor sleep.",
+      "valid_from": "2026-05-09T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "06c7a580-3150-5cf8-98ff-af0f4f8cb207"
+    },
+    {
+      "id": "493d4f83-9aac-5f91-a5c0-02edc06d7c16",
+      "user_id": "user_031",
+      "content": "Cameron's poor sleep negatively impacts their relationships.",
+      "valid_from": "2026-05-10T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "f5c50706-a126-55fd-982f-8dfa5b671e99"
+    },
+    {
+      "id": "64c6d5c3-b8cf-5921-90d5-b651ca390c60",
+      "user_id": "user_032",
+      "content": "Listening to music helps Logan manage their anxiety.",
+      "valid_from": "2026-01-28T12:00:00",
+      "valid_until": "2026-03-29T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "71dea924-e9c5-57ec-85d0-0e298ddbaebf"
+    },
+    {
+      "id": "61ce57ea-4d5f-5fe3-8897-6c1c97ebfdc8",
+      "user_id": "user_032",
+      "content": "playing an instrument helps Logan manage their anxiety.",
+      "valid_from": "2026-03-29T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "dc0c4c47-e3f4-5fee-b388-cda438d21bcb"
+    },
+    {
+      "id": "57d2469c-720d-5a03-9a89-8c5372fc8eaa",
+      "user_id": "user_032",
+      "content": "Logan has a pet dog named Charlie.",
+      "valid_from": "2026-05-23T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "006cde0f-49c5-5af8-810d-e860f1f57f80"
+    },
+    {
+      "id": "edf2d43a-23d0-5b43-9053-9b4af6bd8550",
+      "user_id": "user_032",
+      "content": "Financial pressure increases Logan's anxiety.",
+      "valid_from": "2026-05-24T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "e0176212-2719-5330-b124-fbf885f70869"
+    },
+    {
+      "id": "bf8eff54-3ca0-5017-ac7d-24c205f8c5a4",
+      "user_id": "user_032",
+      "content": "Logan's anxiety leads to trouble concentrating.",
+      "valid_from": "2026-05-25T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "5498ba11-4591-51b3-b51d-348b571cc8c2"
+    },
+    {
+      "id": "8b31c0e1-599f-5a6f-82ed-db382f795b9a",
+      "user_id": "user_032",
+      "content": "Logan's trouble concentrating negatively impacts their work performance.",
+      "valid_from": "2026-05-26T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "2f3dc3b8-2d64-56b8-b721-51017dc182aa"
+    },
+    {
+      "id": "b6b32d48-e36f-5225-be55-6f24acfc6660",
+      "user_id": "user_033",
+      "content": "Journaling helps Elliot manage their social anxiety.",
+      "valid_from": "2026-01-15T12:00:00",
+      "valid_until": "2026-03-16T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "9033dfc2-e6f5-5779-8ae6-1ebdefe4509b"
+    },
+    {
+      "id": "0f2c67bc-afff-5fce-9088-392e85533c79",
+      "user_id": "user_033",
+      "content": "talking to a therapist helps Elliot manage their social anxiety.",
+      "valid_from": "2026-03-16T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "e7cde5cb-bc3e-50ed-afed-8766bf7a9f6c"
+    },
+    {
+      "id": "16ceb863-5f1e-5cac-bc6c-9e3c4a9f59bd",
+      "user_id": "user_033",
+      "content": "Elliot has a pet dog named Luna.",
+      "valid_from": "2026-05-09T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "50406f22-3e5e-509e-845a-7c8a87603a97"
+    },
+    {
+      "id": "9aa65359-e10c-5485-945c-17fc5e5ddf77",
+      "user_id": "user_033",
+      "content": "Lack of sleep increases Elliot's social anxiety.",
+      "valid_from": "2026-05-10T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "b96e0665-4afe-5540-975d-c5731cdaaa7f"
+    },
+    {
+      "id": "5269a076-15e5-5e22-b92b-ec34d348c2cd",
+      "user_id": "user_033",
+      "content": "Elliot's social anxiety leads to irritability.",
+      "valid_from": "2026-05-11T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "a3a261a5-67d0-5aae-b138-3cbf473c34b7"
+    },
+    {
+      "id": "239a046c-ca80-594d-9954-a0065ccfb2de",
+      "user_id": "user_033",
+      "content": "Elliot's irritability negatively impacts their work performance.",
+      "valid_from": "2026-05-12T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "70427e6e-0eb1-5539-8f76-4866592f1bd3"
+    },
+    {
+      "id": "fefe3dd4-01f7-5d18-ad59-bb50a3819f70",
+      "user_id": "user_034",
+      "content": "Journaling helps Avery manage their social anxiety.",
+      "valid_from": "2026-01-12T12:00:00",
+      "valid_until": "2026-03-13T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "06ff7ac3-aeea-5e25-a63e-eed65e3c6942"
+    },
+    {
+      "id": "20a26568-842d-5754-abd3-2399d12cd581",
+      "user_id": "user_034",
+      "content": "talking to a therapist helps Avery manage their social anxiety.",
+      "valid_from": "2026-03-13T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "8e23cd48-e65a-518f-afb0-c177899b432a"
+    },
+    {
+      "id": "946c564e-bcc8-5a69-a3c0-632934ef7e42",
+      "user_id": "user_034",
+      "content": "Avery has a pet bird named Charlie.",
+      "valid_from": "2026-04-28T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "84595242-cc6d-57c9-b91f-ad314c2e976a"
+    },
+    {
+      "id": "51ede97e-e603-54c6-be94-209f340dd6b4",
+      "user_id": "user_034",
+      "content": "Work stress increases Avery's social anxiety.",
+      "valid_from": "2026-04-29T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "3be18d3e-a6da-5c37-8811-610e85722d5d"
+    },
+    {
+      "id": "944089ef-1b0f-55aa-a72f-79274217f0ea",
+      "user_id": "user_034",
+      "content": "Avery's social anxiety leads to low energy.",
+      "valid_from": "2026-04-30T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "22ed4d34-bab9-546b-a0c5-c82efea44456"
+    },
+    {
+      "id": "c1f5af60-146f-5476-8a28-7887ec2d8202",
+      "user_id": "user_034",
+      "content": "Avery's low energy negatively impacts their work performance.",
+      "valid_from": "2026-05-01T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "b8c4340d-97f0-5ffd-a1e0-86a0cba2d586"
+    },
+    {
+      "id": "7257e2e1-91e7-5004-8125-664301cf3ff9",
+      "user_id": "user_035",
+      "content": "Deep breathing helps Cameron manage their back pain.",
+      "valid_from": "2026-01-26T12:00:00",
+      "valid_until": "2026-03-27T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "2ba86cab-b87c-5fba-85cd-2dcfd818707c"
+    },
+    {
+      "id": "b0cc9ae4-e1cc-5271-bbc4-4ab7115ec9e2",
+      "user_id": "user_035",
+      "content": "meditation helps Cameron manage their back pain.",
+      "valid_from": "2026-03-27T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "c43fb823-fe36-5d3e-ab07-20de9ec242b0"
+    },
+    {
+      "id": "312025b5-7094-5d35-8874-ced37de4d1a8",
+      "user_id": "user_035",
+      "content": "Cameron has a pet bird named Charlie.",
+      "valid_from": "2026-05-20T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "d14e6bfc-a01e-503d-8578-edfdcc2b593a"
+    },
+    {
+      "id": "ca76b83a-ee65-5876-bc79-3c3b8e52675b",
+      "user_id": "user_035",
+      "content": "Family drama increases Cameron's back pain.",
+      "valid_from": "2026-05-21T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "7ae6a1e6-7c15-564b-902b-84e1af2f64ff"
+    },
+    {
+      "id": "e29ccd1e-d8b3-5810-ae4b-3abdd0e8447f",
+      "user_id": "user_035",
+      "content": "Cameron's back pain leads to low energy.",
+      "valid_from": "2026-05-22T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "94bce4a9-edbf-57f9-a49d-eb111e4e5754"
+    },
+    {
+      "id": "cf291064-550e-54ea-b6a4-add7b74713ae",
+      "user_id": "user_035",
+      "content": "Cameron's low energy negatively impacts their social life.",
+      "valid_from": "2026-05-23T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "648cb7da-3c5b-5d85-9bc5-63a5b5cee9d4"
+    },
+    {
+      "id": "45760f2a-63c4-56c4-964d-5c3ee1757c15",
+      "user_id": "user_036",
+      "content": "Listening to music helps Jamie manage their anxiety.",
+      "valid_from": "2026-01-27T12:00:00",
+      "valid_until": "2026-03-28T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "cf8cf40d-f829-5ae6-a1c0-2caba8ffd75b"
+    },
+    {
+      "id": "ce5b7495-2a46-5d8f-a5c8-95a5272883d0",
+      "user_id": "user_036",
+      "content": "playing an instrument helps Jamie manage their anxiety.",
+      "valid_from": "2026-03-28T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "9be5736f-3613-5d65-af07-272fc27d5b0a"
+    },
+    {
+      "id": "1479b231-99e5-5a33-9a21-4cb16e3a0138",
+      "user_id": "user_036",
+      "content": "Jamie has a pet bird named Buddy.",
+      "valid_from": "2026-05-19T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "8020971c-2e2b-5992-9594-dc554569d98c"
+    },
+    {
+      "id": "f0ed423c-ab8d-5e81-add3-f98bacc34125",
+      "user_id": "user_036",
+      "content": "Social isolation increases Jamie's anxiety.",
+      "valid_from": "2026-05-20T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "0a0b79a0-a2e6-5ecb-b55a-f03c20473cea"
+    },
+    {
+      "id": "59e2966f-de59-598e-bd78-cf1394a9d9ca",
+      "user_id": "user_036",
+      "content": "Jamie's anxiety leads to poor sleep.",
+      "valid_from": "2026-05-21T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "7372071b-fc8c-5994-84ab-b4c7d67d810b"
+    },
+    {
+      "id": "a4ef0724-9f51-5315-889e-c234401f1f42",
+      "user_id": "user_036",
+      "content": "Jamie's poor sleep negatively impacts their work performance.",
+      "valid_from": "2026-05-22T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "1a179aa9-1888-5b94-a20e-622da85f3cfc"
+    },
+    {
+      "id": "0090b846-d1bf-5341-9b99-a45af674990e",
+      "user_id": "user_037",
+      "content": "Listening to music helps Morgan manage their social anxiety.",
+      "valid_from": "2026-01-05T12:00:00",
+      "valid_until": "2026-03-06T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "5681d902-bb32-5c75-85b8-9bbf766eab32"
+    },
+    {
+      "id": "12f9d0c6-d984-515d-a1cc-5093957b18a1",
+      "user_id": "user_037",
+      "content": "playing an instrument helps Morgan manage their social anxiety.",
+      "valid_from": "2026-03-06T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "0721682a-299f-51df-9a7b-9c44c34240cc"
+    },
+    {
+      "id": "ec87fdc1-c907-53da-ab41-12200300ad40",
+      "user_id": "user_037",
+      "content": "Morgan has a pet cat named Luna.",
+      "valid_from": "2026-04-16T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "1790fbfa-ac9e-56cd-bef9-dc4ca7873556"
+    },
+    {
+      "id": "0e53250e-2970-5cd0-8552-e40d7755f4af",
+      "user_id": "user_037",
+      "content": "Financial pressure increases Morgan's social anxiety.",
+      "valid_from": "2026-04-17T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "f1d1ef51-ad0c-5c09-b897-22a690dd1910"
+    },
+    {
+      "id": "f4b3b7e3-4e4b-5978-bd2b-6653fcd73b9e",
+      "user_id": "user_037",
+      "content": "Morgan's social anxiety leads to trouble concentrating.",
+      "valid_from": "2026-04-18T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "10b49cbc-a31f-56e7-b522-90500b307f4d"
+    },
+    {
+      "id": "c3758274-3e98-5eb2-967b-7b4af7d88914",
+      "user_id": "user_037",
+      "content": "Morgan's trouble concentrating negatively impacts their overall health.",
+      "valid_from": "2026-04-19T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "4c3ca12d-4e98-576b-9d81-c711eefc2f8b"
+    },
+    {
+      "id": "ce0d5a02-f4f0-58ad-85a1-2afdf4927235",
+      "user_id": "user_038",
+      "content": "Yoga helps Cameron manage their social anxiety.",
+      "valid_from": "2026-01-09T12:00:00",
+      "valid_until": "2026-03-10T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "48f9fe3f-c42d-5820-a5b3-b2afbd73abc1"
+    },
+    {
+      "id": "7a12e483-9eac-545c-8760-07c7bca7e77f",
+      "user_id": "user_038",
+      "content": "swimming helps Cameron manage their social anxiety.",
+      "valid_from": "2026-03-10T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "6edd5b5e-837f-546b-9058-e2ae0569c83c"
+    },
+    {
+      "id": "d4be4ce8-63c9-5294-872c-6d641d66cb8b",
+      "user_id": "user_038",
+      "content": "Cameron has a pet bird named Buddy.",
+      "valid_from": "2026-05-07T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "94bc34aa-91e3-568f-ad11-505c9a9e7ce2"
+    },
+    {
+      "id": "edec7164-abdf-59f2-a1ca-06d3654a9bf9",
+      "user_id": "user_038",
+      "content": "Work stress increases Cameron's social anxiety.",
+      "valid_from": "2026-05-08T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "e2d55f2b-6036-5c89-a539-0cb5853602af"
+    },
+    {
+      "id": "29a93a2d-2e1b-51b7-a23f-9180dd361baa",
+      "user_id": "user_038",
+      "content": "Cameron's social anxiety leads to irritability.",
+      "valid_from": "2026-05-09T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "e548e3db-5011-599b-8cfb-93099c1f5272"
+    },
+    {
+      "id": "d6acd989-2954-539b-b25a-edae9535d05c",
+      "user_id": "user_038",
+      "content": "Cameron's irritability negatively impacts their social life.",
+      "valid_from": "2026-05-10T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "ccd6d623-e29c-5eca-b015-160a0dbc3315"
+    },
+    {
+      "id": "72a28b9b-9b8a-529f-9f3e-832f591cfd53",
+      "user_id": "user_039",
+      "content": "Listening to music helps Reese manage their social anxiety.",
+      "valid_from": "2026-01-17T12:00:00",
+      "valid_until": "2026-03-18T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "1ab3aef2-086c-5ec2-9d15-8d98efa7f36c"
+    },
+    {
+      "id": "9e55ad9f-dbed-5da2-a9c5-8d7397e1c66f",
+      "user_id": "user_039",
+      "content": "playing an instrument helps Reese manage their social anxiety.",
+      "valid_from": "2026-03-18T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "deee4d1a-f405-5dad-9243-4171d3bee519"
+    },
+    {
+      "id": "d9f80f78-60d1-54c5-af11-87afdf1010c3",
+      "user_id": "user_039",
+      "content": "Reese has a pet cat named Luna.",
+      "valid_from": "2026-05-18T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "cd440485-3011-5c81-9924-c33028e9f4e6"
+    },
+    {
+      "id": "0d26a8b0-945e-5785-bbd9-db987883985f",
+      "user_id": "user_039",
+      "content": "Lack of sleep increases Reese's social anxiety.",
+      "valid_from": "2026-05-19T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "0a5c149b-2caf-5ba9-aacf-15bfff211208"
+    },
+    {
+      "id": "4efdb564-ab0b-5a81-99be-df40e5cb2e30",
+      "user_id": "user_039",
+      "content": "Reese's social anxiety leads to trouble concentrating.",
+      "valid_from": "2026-05-20T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "f16896e1-10f8-5622-9f12-7ebb6c3a8652"
+    },
+    {
+      "id": "6d77d0cd-adc2-5775-95f5-af9dc8fc5bef",
+      "user_id": "user_039",
+      "content": "Reese's trouble concentrating negatively impacts their social life.",
+      "valid_from": "2026-05-21T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "e5188ff5-2a74-5199-9ea7-f348dc209513"
+    },
+    {
+      "id": "6879e893-3e0f-5e4b-99c8-9c61f54b76c4",
+      "user_id": "user_040",
+      "content": "Yoga helps Morgan manage their social anxiety.",
+      "valid_from": "2026-01-05T12:00:00",
+      "valid_until": "2026-03-06T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "c5291e4c-1110-52b4-9e96-dd21eec7c25f"
+    },
+    {
+      "id": "3e9e5e66-3f77-59e4-ab65-f29e8a79005c",
+      "user_id": "user_040",
+      "content": "swimming helps Morgan manage their social anxiety.",
+      "valid_from": "2026-03-06T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "2219722a-a2c2-5ed3-b883-cbaa1ac09eaa"
+    },
+    {
+      "id": "11ec7581-0b92-5d9e-8743-dc2a23f07667",
+      "user_id": "user_040",
+      "content": "Morgan has a pet cat named Charlie.",
+      "valid_from": "2026-04-27T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "332f953b-909b-5827-83d6-e203c19c47e5"
+    },
+    {
+      "id": "d585c519-85a0-52a7-a87e-7d8fcae46f5f",
+      "user_id": "user_040",
+      "content": "Family drama increases Morgan's social anxiety.",
+      "valid_from": "2026-04-28T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "944560cc-7ac5-5be7-a452-9da51caa3e5d"
+    },
+    {
+      "id": "ede39100-b746-5fb3-b90d-e0eb64b145f1",
+      "user_id": "user_040",
+      "content": "Morgan's social anxiety leads to trouble concentrating.",
+      "valid_from": "2026-04-29T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "093e692a-99c5-57b3-9916-bd5dea363616"
+    },
+    {
+      "id": "6dba3b3a-5e7f-5f1a-8bc2-6a528be29082",
+      "user_id": "user_040",
+      "content": "Morgan's trouble concentrating negatively impacts their work performance.",
+      "valid_from": "2026-04-30T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "16cbda13-f079-54da-a699-d6deb4096ef5"
+    },
+    {
+      "id": "0f5855cf-f72a-54cd-a825-a724881b17c8",
+      "user_id": "user_041",
+      "content": "Walking helps Blake manage their social anxiety.",
+      "valid_from": "2026-01-16T12:00:00",
+      "valid_until": "2026-03-17T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "12d28bd2-3d16-53c1-9590-dc2178f45a34"
+    },
+    {
+      "id": "6cde3889-cc19-5e1b-871a-b67fdc327b7a",
+      "user_id": "user_041",
+      "content": "running helps Blake manage their social anxiety.",
+      "valid_from": "2026-03-17T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "ad858995-6e5e-5d70-97ad-e4fa39b52d91"
+    },
+    {
+      "id": "b941ffdf-273f-5ebd-9b84-2f8837d83530",
+      "user_id": "user_041",
+      "content": "Blake has a pet cat named Buddy.",
+      "valid_from": "2026-05-11T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "7005cbfe-d779-5477-b018-c4307dfb1265"
+    },
+    {
+      "id": "4da1f801-70f3-5762-b648-deaa847bbbcd",
+      "user_id": "user_041",
+      "content": "Financial pressure increases Blake's social anxiety.",
+      "valid_from": "2026-05-12T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "43c5a258-f861-5317-9c70-db3888625b45"
+    },
+    {
+      "id": "3bb38537-d1c2-56ac-b104-2b6e3a37d95b",
+      "user_id": "user_041",
+      "content": "Blake's social anxiety leads to loss of appetite.",
+      "valid_from": "2026-05-13T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "01fdcdd2-a0d3-53ae-9a3c-c3e312991fc5"
+    },
+    {
+      "id": "8bead251-6731-5faf-b6cc-7462c9ec06f1",
+      "user_id": "user_041",
+      "content": "Blake's loss of appetite negatively impacts their social life.",
+      "valid_from": "2026-05-14T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "08eaacab-9efa-5af4-9398-05f3b056297a"
+    },
+    {
+      "id": "910d9bc0-8d6d-5a29-aa35-c34d17af2b28",
+      "user_id": "user_042",
+      "content": "Journaling helps Drew manage their anxiety.",
+      "valid_from": "2026-01-24T12:00:00",
+      "valid_until": "2026-03-25T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "4d0d2afa-cccd-5692-87c6-4630a8b5a95f"
+    },
+    {
+      "id": "27eaac28-a0c1-55ff-b364-9efd7fe86698",
+      "user_id": "user_042",
+      "content": "talking to a therapist helps Drew manage their anxiety.",
+      "valid_from": "2026-03-25T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "f43bcf86-0b26-5320-8644-8ca2c065eaa3"
+    },
+    {
+      "id": "8203ca09-1a7a-5cb4-b118-dedbcf52f757",
+      "user_id": "user_042",
+      "content": "Drew has a pet dog named Luna.",
+      "valid_from": "2026-05-23T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "3fb4a812-90a5-5bad-ba80-ade8626c2f73"
+    },
+    {
+      "id": "ad6bb183-0ee8-5674-9aef-b2b8bb4ca9c0",
+      "user_id": "user_042",
+      "content": "Work stress increases Drew's anxiety.",
+      "valid_from": "2026-05-24T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "555ff5c8-3df5-533c-84a9-0e2f3255e345"
+    },
+    {
+      "id": "f8935cf0-d1b5-57c7-8ad1-a0ccb3178bff",
+      "user_id": "user_042",
+      "content": "Drew's anxiety leads to trouble concentrating.",
+      "valid_from": "2026-05-25T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "6c689ad6-e1b1-58b8-8bbb-2b38cbecd10b"
+    },
+    {
+      "id": "8a9c206a-3380-5fd9-9a5c-d2632160708b",
+      "user_id": "user_042",
+      "content": "Drew's trouble concentrating negatively impacts their work performance.",
+      "valid_from": "2026-05-26T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "a67fbc2f-e038-516e-8690-ee670e325a2e"
+    },
+    {
+      "id": "f24a9e34-964b-5db7-b43a-38ff5d7dc4ed",
+      "user_id": "user_043",
+      "content": "Listening to music helps Jamie manage their anxiety.",
+      "valid_from": "2026-01-07T12:00:00",
+      "valid_until": "2026-03-08T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "ddf837fb-a2ea-5cc2-b58d-7d65d7dfb89b"
+    },
+    {
+      "id": "18b8b7db-14ce-59d5-8efb-e6a9a1ab0e90",
+      "user_id": "user_043",
+      "content": "playing an instrument helps Jamie manage their anxiety.",
+      "valid_from": "2026-03-08T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "175ab7a4-36f6-5105-a4c7-8708cfbc0355"
+    },
+    {
+      "id": "e6624d1e-d732-5631-9581-0d440900a46b",
+      "user_id": "user_043",
+      "content": "Jamie has a pet bird named Buddy.",
+      "valid_from": "2026-05-14T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "d3c28490-f0a6-5807-818b-6292a1454df6"
+    },
+    {
+      "id": "43217693-99fb-5d71-b3c3-c86f91c600ee",
+      "user_id": "user_043",
+      "content": "Social isolation increases Jamie's anxiety.",
+      "valid_from": "2026-05-15T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "2c7c6597-b6a6-5534-b500-813e35b6017f"
+    },
+    {
+      "id": "a38558c6-93eb-5ab4-bf11-7294c9d827cd",
+      "user_id": "user_043",
+      "content": "Jamie's anxiety leads to low energy.",
+      "valid_from": "2026-05-16T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "d770db19-8837-5f25-9d58-c2f168c9e03b"
+    },
+    {
+      "id": "394f219c-bdf1-5511-98b7-68ad174cda28",
+      "user_id": "user_043",
+      "content": "Jamie's low energy negatively impacts their relationships.",
+      "valid_from": "2026-05-17T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "a2d0e055-f08a-5f07-b0e7-038af1ed4095"
+    },
+    {
+      "id": "951b1bf4-6a62-55cb-8906-e2fff2d67e2c",
+      "user_id": "user_044",
+      "content": "Walking helps Alex manage their back pain.",
+      "valid_from": "2026-01-26T12:00:00",
+      "valid_until": "2026-03-27T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "6f31cc1d-29e0-5b0f-9c87-4306eb84a839"
+    },
+    {
+      "id": "91bd73dd-ce66-5d5d-8942-a2bbd6b6f7d0",
+      "user_id": "user_044",
+      "content": "running helps Alex manage their back pain.",
+      "valid_from": "2026-03-27T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "3db7aca0-9ae4-5041-a65a-a2e6aa6919b4"
+    },
+    {
+      "id": "0fd2ac31-aa89-5c42-bb09-1d54b2a319a7",
+      "user_id": "user_044",
+      "content": "Alex has a pet cat named Luna.",
+      "valid_from": "2026-05-12T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "68bd03f0-2e0c-57c5-98ee-1707014593fd"
+    },
+    {
+      "id": "196a0c3e-11de-50e3-ba04-35419bfbd3e5",
+      "user_id": "user_044",
+      "content": "Social isolation increases Alex's back pain.",
+      "valid_from": "2026-05-13T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "07e623d6-33bd-5736-9029-cb34ffa2efdc"
+    },
+    {
+      "id": "cf116e1e-eb21-5811-88ca-ed06cfe6ab0d",
+      "user_id": "user_044",
+      "content": "Alex's back pain leads to trouble concentrating.",
+      "valid_from": "2026-05-14T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "bee752ac-2893-51ec-80da-364edfd5218f"
+    },
+    {
+      "id": "540ba84a-2af9-531b-8c38-31842f4de3ca",
+      "user_id": "user_044",
+      "content": "Alex's trouble concentrating negatively impacts their daily productivity.",
+      "valid_from": "2026-05-15T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "7de5a7d9-32c9-57b2-93c3-564451657e17"
+    },
+    {
+      "id": "ddbe655b-f15f-5b11-8b89-598915c70223",
+      "user_id": "user_045",
+      "content": "Yoga helps Morgan manage their stress.",
+      "valid_from": "2026-01-05T12:00:00",
+      "valid_until": "2026-03-06T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "3c876fef-6f59-5dfc-ba8e-58958f823d74"
+    },
+    {
+      "id": "5fe68173-d27e-50f4-a36c-dc2e8b388388",
+      "user_id": "user_045",
+      "content": "swimming helps Morgan manage their stress.",
+      "valid_from": "2026-03-06T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "459f0e7f-be63-55d1-a92a-3456bb8bd06e"
+    },
+    {
+      "id": "2a6da473-fba7-598f-b091-caff524733df",
+      "user_id": "user_045",
+      "content": "Morgan has a pet bird named Luna.",
+      "valid_from": "2026-04-29T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "26eb665a-c5cb-5725-9b71-ac32c4cac1ce"
+    },
+    {
+      "id": "231e1f6e-022f-54aa-8975-b59e172c582c",
+      "user_id": "user_045",
+      "content": "Work stress increases Morgan's stress.",
+      "valid_from": "2026-04-30T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "41719edf-98c0-5981-b61a-14e883ffbb43"
+    },
+    {
+      "id": "8e49e3fd-bf75-54c7-9a02-9bb54707032e",
+      "user_id": "user_045",
+      "content": "Morgan's stress leads to trouble concentrating.",
+      "valid_from": "2026-05-01T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "2ae3fc29-d09c-5c7a-a9a5-16c6c896c0b9"
+    },
+    {
+      "id": "093e03a7-8bed-5e1f-8426-d2d473be97b2",
+      "user_id": "user_045",
+      "content": "Morgan's trouble concentrating negatively impacts their work performance.",
+      "valid_from": "2026-05-02T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "84ab5a4b-2051-5ffa-ad03-e72623372675"
+    },
+    {
+      "id": "853611af-df61-5037-91f1-42fb4f683519",
+      "user_id": "user_046",
+      "content": "Listening to music helps Rowan manage their stress.",
+      "valid_from": "2026-01-13T12:00:00",
+      "valid_until": "2026-03-14T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "c35ee3d9-ea56-5bcd-ac07-bc29c8fd688a"
+    },
+    {
+      "id": "a23c3e53-eceb-5a26-8e82-b88313db585e",
+      "user_id": "user_046",
+      "content": "playing an instrument helps Rowan manage their stress.",
+      "valid_from": "2026-03-14T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "f69c9e64-9d3e-58ff-9ad6-0aab13e6de45"
+    },
+    {
+      "id": "884f6ecf-fd97-5467-8c6c-285559c2e618",
+      "user_id": "user_046",
+      "content": "Rowan has a pet dog named Luna.",
+      "valid_from": "2026-05-02T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "8da5ec1c-0d47-57b1-8c35-cf44fa03ccb3"
+    },
+    {
+      "id": "1372363f-53bb-50e9-83ad-b3aa8865451d",
+      "user_id": "user_046",
+      "content": "Family drama increases Rowan's stress.",
+      "valid_from": "2026-05-03T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "34393041-628e-5bc5-a68e-8421e13041ff"
+    },
+    {
+      "id": "748bac20-0527-5f87-91e8-0ed1cc7c16e5",
+      "user_id": "user_046",
+      "content": "Rowan's stress leads to low energy.",
+      "valid_from": "2026-05-04T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "a735ff37-758e-5d64-a416-2b0e46ef0753"
+    },
+    {
+      "id": "f516900e-def7-52fa-8e99-f4ba93bd5a3e",
+      "user_id": "user_046",
+      "content": "Rowan's low energy negatively impacts their overall health.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "a6b8ae85-166e-546f-97cd-9eba9a95b28d"
+    },
+    {
+      "id": "6c8be79e-c680-57ad-8795-f4ea86ebca69",
+      "user_id": "user_047",
+      "content": "Deep breathing helps Taylor manage their back pain.",
+      "valid_from": "2026-01-03T12:00:00",
+      "valid_until": "2026-03-04T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "2b2769a6-4732-5686-88bc-7b055384858a"
+    },
+    {
+      "id": "cf371f17-af1d-59f6-856c-bc44758c2bd7",
+      "user_id": "user_047",
+      "content": "meditation helps Taylor manage their back pain.",
+      "valid_from": "2026-03-04T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "4408b895-6ea4-54a2-a5b4-82675f40140e"
+    },
+    {
+      "id": "78565af1-ee34-5a0a-a60f-c464038d5882",
+      "user_id": "user_047",
+      "content": "Taylor has a pet dog named Charlie.",
+      "valid_from": "2026-04-20T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "c5d58aaa-f78b-5c5b-a311-64b2fa8f1b28"
+    },
+    {
+      "id": "1028ed7f-7e7b-5522-9912-8553b7cacf1b",
+      "user_id": "user_047",
+      "content": "Work stress increases Taylor's back pain.",
+      "valid_from": "2026-04-21T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "5475e94e-4b5a-5c40-9662-74173a308804"
+    },
+    {
+      "id": "49750bbe-29dc-5d5e-95d2-b7241729337d",
+      "user_id": "user_047",
+      "content": "Taylor's back pain leads to irritability.",
+      "valid_from": "2026-04-22T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "ce5a7365-35e4-504b-9714-c2cfdaae99a6"
+    },
+    {
+      "id": "119d96f8-8548-5ea7-8514-125d51ed1a61",
+      "user_id": "user_047",
+      "content": "Taylor's irritability negatively impacts their daily productivity.",
+      "valid_from": "2026-04-23T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "ec99ddd4-3318-5ff4-8e3b-817359ca9659"
+    },
+    {
+      "id": "5f5e83d9-cb2a-5940-af76-13c4e8f8f936",
+      "user_id": "user_048",
+      "content": "Journaling helps Jamie manage their anxiety.",
+      "valid_from": "2026-01-07T12:00:00",
+      "valid_until": "2026-03-08T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "d355db5a-43e2-557a-9283-99968df929bb"
+    },
+    {
+      "id": "ad6c4e2c-0d0d-58ed-aaea-52b185ba47f8",
+      "user_id": "user_048",
+      "content": "talking to a therapist helps Jamie manage their anxiety.",
+      "valid_from": "2026-03-08T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "6a4475d3-30a3-5e25-a6c1-13ebf1f6b46f"
+    },
+    {
+      "id": "a23273e8-7646-5656-b702-5226706ac76a",
+      "user_id": "user_048",
+      "content": "Jamie has a pet dog named Buddy.",
+      "valid_from": "2026-04-26T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "5b5ad6cf-3542-569a-9653-36d9b358eaa1"
+    },
+    {
+      "id": "10144f4f-af7a-5a2e-9a7c-43fa50afb588",
+      "user_id": "user_048",
+      "content": "Work stress increases Jamie's anxiety.",
+      "valid_from": "2026-04-27T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "f42b00ad-75c0-5511-b16a-4125b3dfc803"
+    },
+    {
+      "id": "b9cd3a22-a9fe-57ae-9d97-f831a427a903",
+      "user_id": "user_048",
+      "content": "Jamie's anxiety leads to irritability.",
+      "valid_from": "2026-04-28T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "edcc08a9-d2c2-572a-954c-635b01d22b11"
+    },
+    {
+      "id": "2d1913a8-a102-5b76-a05e-fcc67a0deae4",
+      "user_id": "user_048",
+      "content": "Jamie's irritability negatively impacts their relationships.",
+      "valid_from": "2026-04-29T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "d5d2f653-f171-5b50-bd69-fa560bcccd1a"
+    },
+    {
+      "id": "b06a47b6-912f-5a4f-94d8-0c020fb5cd18",
+      "user_id": "user_049",
+      "content": "Deep breathing helps Taylor manage their stress.",
+      "valid_from": "2026-01-03T12:00:00",
+      "valid_until": "2026-03-04T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "60a3f0ff-06db-5d4a-a172-9433cb0b3358"
+    },
+    {
+      "id": "0b4631a3-8a47-5555-a8f9-cdaff0cf0fa9",
+      "user_id": "user_049",
+      "content": "meditation helps Taylor manage their stress.",
+      "valid_from": "2026-03-04T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "7311e42f-be76-593e-87e4-ab2f24fbeb98"
+    },
+    {
+      "id": "5ea50eb7-eb74-5c83-bab4-976806d91ba5",
+      "user_id": "user_049",
+      "content": "Taylor has a pet bird named Buddy.",
+      "valid_from": "2026-05-05T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "0cf04989-7afd-51a8-abae-1d3a762291ea"
+    },
+    {
+      "id": "0c39d2f9-2010-55f9-ba3f-18033846fe5b",
+      "user_id": "user_049",
+      "content": "Family drama increases Taylor's stress.",
+      "valid_from": "2026-05-06T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "b09de365-aa56-512e-be08-2eddfb7d1f8f"
+    },
+    {
+      "id": "ddb77722-b9db-51b1-870b-5fc24cc994a1",
+      "user_id": "user_049",
+      "content": "Taylor's stress leads to loss of appetite.",
+      "valid_from": "2026-05-07T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "031db9d9-5577-592c-aa3d-f4a096f971e3"
+    },
+    {
+      "id": "cb37f4a3-59b3-54cd-86ba-40e8c54d17a4",
+      "user_id": "user_049",
+      "content": "Taylor's loss of appetite negatively impacts their relationships.",
+      "valid_from": "2026-05-08T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "32f0b225-85f5-5af3-99b6-f936ed5dc159"
+    },
+    {
+      "id": "5e5254ae-e593-5760-8a06-fe5dc964716b",
+      "user_id": "user_050",
+      "content": "Walking helps Sage manage their back pain.",
+      "valid_from": "2026-01-14T12:00:00",
+      "valid_until": "2026-03-15T12:00:00",
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "6456a573-a966-5e84-a274-73cc6bb2c096"
+    },
+    {
+      "id": "5c5b8b70-a8d2-5a6b-8d1e-ac591861b75b",
+      "user_id": "user_050",
+      "content": "running helps Sage manage their back pain.",
+      "valid_from": "2026-03-15T12:00:00",
+      "valid_until": null,
+      "category": "COPING_MECHANISM",
+      "source_episode_id": "de388447-0555-5cfb-a504-dcfc99456202"
+    },
+    {
+      "id": "b7f4be09-32c8-5660-a23b-214f2d389063",
+      "user_id": "user_050",
+      "content": "Sage has a pet bird named Buddy.",
+      "valid_from": "2026-04-26T12:00:00",
+      "valid_until": null,
+      "category": "FACT",
+      "source_episode_id": "e6e5d2c8-0735-5641-8f79-5203c5da299d"
+    },
+    {
+      "id": "dccdd05b-0519-5f12-b781-c402e63f4aa2",
+      "user_id": "user_050",
+      "content": "Family drama increases Sage's back pain.",
+      "valid_from": "2026-04-27T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_A",
+      "source_episode_id": "3ec148c2-0444-54fd-a85c-25ce0b42522a"
+    },
+    {
+      "id": "5bbca207-3428-5b67-9a04-1c3c9c77b437",
+      "user_id": "user_050",
+      "content": "Sage's back pain leads to poor sleep.",
+      "valid_from": "2026-04-28T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_B",
+      "source_episode_id": "db63b0ff-201d-5de8-9ce8-1242c2415582"
+    },
+    {
+      "id": "b066ef1c-ce62-52ca-8a4c-474ad9017ae9",
+      "user_id": "user_050",
+      "content": "Sage's poor sleep negatively impacts their overall health.",
+      "valid_from": "2026-04-29T12:00:00",
+      "valid_until": null,
+      "category": "MULTI_HOP_C",
+      "source_episode_id": "130c44b1-e156-56fa-aff7-50c9ca790aad"
+    }
+  ]
+}

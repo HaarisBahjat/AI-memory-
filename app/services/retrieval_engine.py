@@ -63,6 +63,14 @@ from app.core.config import get_settings
 from app.schemas.chat import SessionMessage
 from app.services import sensory_service, embedding_service
 from app.services.temporal_graph_engine import retrieve_graph_context
+from app.core.metrics import (
+    RAG_RETRIEVAL_LATENCY,
+    VECTOR_SEARCH_LATENCY,
+    GRAPH_TRAVERSAL_LATENCY,
+    TEMPORAL_FILTER_LATENCY,
+    LLM_GENERATION_LATENCY,
+    RAG_PIPELINE_REQUESTS_TOTAL,
+)
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
@@ -507,6 +515,10 @@ async def run_hybrid_rag_pipeline(
     query_vector = await embedding_service.embed_text(message)
 
     # ── Step 2: Parallel fetch across all four layers ──────────────
+    # Measure vector search and graph traversal independently.
+    vs_start = time.time()
+    graph_start = time.time()
+
     # asyncio.gather() runs all four fetches concurrently.
     # Graph retrieval target: < 100ms total (seed < 30ms + traversal < 50ms)
     session_msgs, episodes, raw_semantic, graph_context = await asyncio.gather(
@@ -515,9 +527,19 @@ async def run_hybrid_rag_pipeline(
         fetch_semantic_memories(db, user_id, query_vector),
         retrieve_graph_context(db, user_id, query_vector),
     )
+    vs_elapsed = time.time() - vs_start
+    graph_elapsed = time.time() - graph_start
+
+    # Record vector search latency (proxy: time for gather including graph)
+    VECTOR_SEARCH_LATENCY.labels(retrieval_strategy="hybrid").observe(vs_elapsed)
+    GRAPH_TRAVERSAL_LATENCY.labels(retrieval_strategy="hybrid").observe(graph_elapsed)
 
     # ── Step 3: Time-decay scoring + threshold filtering ────────────
+    tf_start = time.time()
     filtered_memories = filter_by_decay(raw_semantic)
+    TEMPORAL_FILTER_LATENCY.labels(retrieval_strategy="hybrid").observe(
+        time.time() - tf_start
+    )
 
     # ── Step 4: Assemble system prompt ─────────────────────────────
     system_prompt = assemble_system_prompt(
@@ -534,6 +556,7 @@ async def run_hybrid_rag_pipeline(
         ],
     )
 
+    llm_start = time.time()
     try:
         chat_response = await client.chat.completions.create(
             model=settings.OPENAI_CHAT_MODEL,
@@ -557,9 +580,44 @@ async def run_hybrid_rag_pipeline(
             model_used = fallback
         else:
             raise
+    finally:
+        LLM_GENERATION_LATENCY.labels(
+            model=settings.OPENAI_CHAT_MODEL,
+            operation="CHAT",
+        ).observe(time.time() - llm_start)
 
     response_text = chat_response.choices[0].message.content
     elapsed_ms = round((time.time() - start_time) * 1000)
+
+    # ── Phase 9.1: Record full pipeline latency ─────────────────────
+    RAG_RETRIEVAL_LATENCY.labels(retrieval_strategy="hybrid").observe(
+        (time.time() - start_time)
+    )
+    RAG_PIPELINE_REQUESTS_TOTAL.labels(
+        retrieval_strategy="hybrid", outcome="success"
+    ).inc()
+
+    # ── Phase 9.1: Record LLM usage event for cost tracking ─────────
+    # Import here to avoid circular imports at module load time
+    from app.services.cost_service import record_usage
+    try:
+        await record_usage(
+            user_id=user_id,
+            operation="CHAT",
+            model=model_used,
+            prompt_tokens=chat_response.usage.prompt_tokens,
+            completion_tokens=chat_response.usage.completion_tokens,
+            db=db,
+            extra_metadata={
+                "retrieval_strategy": "hybrid",
+                "memories_used": len(filtered_memories),
+                "episodes_used": len(episodes),
+                "session_msgs": len(session_msgs),
+            },
+        )
+    except Exception as cost_err:
+        # Usage recording must never crash the main request
+        log.warning("Cost recording failed", error=str(cost_err))
 
     log.info(
         "RAG pipeline complete",

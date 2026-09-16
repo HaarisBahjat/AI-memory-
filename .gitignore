@@ -39,3 +39,18 @@ Thumbs.db
 
 # MyPy
 .mypy_cache/
+
+# Phase 9 Benchmark results — auto-generated, reproduced from code+dataset
+# The .gitkeep in benchmarks/results/ keeps the directory tracked.
+benchmarks/results/*/
+benchmarks/results/*.txt
+benchmarks/cache/
+
+# Auto-generated output files
+leakage_results.txt
+scalability_results.txt
+stats_output.txt
+stats_output_final.txt
+
+# Scratch / one-off scripts
+scratch/

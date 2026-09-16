@@ -1,0 +1,13 @@
+features:
+  consolidation: true
+  episodic_memory: true
+  knowledge_graph: false
+  semantic_memory: true
+  session_memory: true
+  temporal_layer: true
+label: 'Ablation: Full System - Knowledge Graph'
+retrieval:
+  decay_lambda: 0.005
+  similarity_threshold: 0.4
+  top_k: 5
+system_id: no_graph

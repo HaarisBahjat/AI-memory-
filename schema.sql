@@ -186,6 +186,8 @@ CREATE TABLE IF NOT EXISTS semantic_memories (
     embedding            vector(1536),    -- OpenAI text-embedding-3-small output
     reinforcement_count  INT DEFAULT 1,   -- Incremented on deduplication hit (Phase 7)
     is_pinned            BOOLEAN NOT NULL DEFAULT FALSE,  -- Phase 4: bypass time-decay when TRUE
+    valid_from           TIMESTAMPTZ DEFAULT NOW(),
+    valid_until          TIMESTAMPTZ DEFAULT NULL,
     created_at           TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -485,6 +487,80 @@ CREATE INDEX IF NOT EXISTS idx_kedges_relation_type
 -- No manual data migration of existing episodes is required —
 -- the first consolidation run after this migration will begin building the graph.
 -- -----------------------------------------------------------------------
+
+-- -------------------------------------------------------
+-- PHASE 9.1 MIGRATION: Token Budget on Users Table
+-- -------------------------------------------------------
+-- Adds per-user token budget enforcement columns.
+-- token_budget = 0 means unlimited (no cap enforced).
+-- tokens_used  = running total across all LLM operations.
+--
+-- Safe to run on existing deployments (IF NOT EXISTS).
+-- -------------------------------------------------------
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS token_budget INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS tokens_used INTEGER NOT NULL DEFAULT 0;
+
+-- -------------------------------------------------------
+-- PHASE 9.1: LLM Usage Events Table
+-- -------------------------------------------------------
+-- Purpose:
+--   Records every LLM API call made by the system with
+--   token counts and estimated cost. Supports:
+--   - Per-user token budget enforcement
+--   - Production cost monitoring
+--   - Research cost evaluation (Phase 9 benchmarking)
+--
+-- Operations logged:
+--   CHAT            → run_hybrid_rag_pipeline() chat completion
+--   CONSOLIDATION   → nightly episode → semantic consolidation
+--   EMBEDDING       → text embedding API calls
+--   GRAPH_EXTRACTION→ knowledge graph entity/edge extraction
+--   EVALUATION      → LLM-as-judge scoring (Phase 9.2)
+--
+-- Connected to:
+--   Phase 9.1 → cost_service.py writes events after each LLM call
+--   Phase 9.2 → benchmark scripts query this table for cost analysis
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS llm_usage_events (
+    id                  TEXT PRIMARY KEY,
+    user_id             TEXT NOT NULL,
+    operation           TEXT NOT NULL CHECK (
+                            operation IN (
+                                'CHAT', 'CONSOLIDATION', 'EMBEDDING',
+                                'GRAPH_EXTRACTION', 'EVALUATION'
+                            )
+                        ),
+    model               TEXT NOT NULL,
+    prompt_tokens       INTEGER NOT NULL DEFAULT 0,
+    completion_tokens   INTEGER NOT NULL DEFAULT 0,
+    total_tokens        INTEGER NOT NULL DEFAULT 0,
+    estimated_api_cost  DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+    session_id          TEXT,
+    extra_metadata      TEXT,    -- JSON string: retrieval_strategy, memory_count, etc.
+    created_at          TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Fast user-scoped cost queries (e.g. tokens used by user this month)
+CREATE INDEX IF NOT EXISTS idx_llm_usage_events_user
+    ON llm_usage_events(user_id);
+
+-- Time-range queries for cost reports
+CREATE INDEX IF NOT EXISTS idx_llm_usage_events_created
+    ON llm_usage_events(created_at DESC);
+
+-- Filter by operation type (research benchmark cost breakdown)
+CREATE INDEX IF NOT EXISTS idx_llm_usage_events_operation
+    ON llm_usage_events(user_id, operation, created_at DESC);
+
+
+-- -------------------------------------------------------
+-- PHASE 0 MIGRATION (PAPER-READY BENCHMARK): Temporal Metadata
+-- -------------------------------------------------------
+ALTER TABLE semantic_memories ADD COLUMN IF NOT EXISTS valid_from TIMESTAMPTZ DEFAULT NOW();
+ALTER TABLE semantic_memories ADD COLUMN IF NOT EXISTS valid_until TIMESTAMPTZ DEFAULT NULL;
 
 -- -------------------------------------------------------
 -- VERIFICATION: List all created tables
